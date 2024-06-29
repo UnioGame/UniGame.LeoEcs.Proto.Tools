@@ -36,7 +36,8 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
         public static ProtoItChain ViewChain<TModel>()
             where TModel : IViewModel
         {
-            return ViewChain().Inc<ViewComponent<TModel>>();
+            return ViewChain()
+                .Inc<ViewComponent<TModel>>();
         }
     }
     
@@ -94,11 +95,18 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TModel GetViewModel<TModel>(this ProtoWorld world, int entity) 
+        public static TModel GetViewModel<TModel>(this ProtoWorld world, ProtoEntity entity) 
             where TModel : class
         {
             ref var viewModelComponent = ref world.GetComponent<ViewModelComponent>(entity);
             return viewModelComponent.Model as TModel;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TModel GetViewModel<TModel>(this ProtoWorld world, int entity) 
+            where TModel : class
+        {
+            return GetViewModel<TModel>(world, (ProtoEntity)entity);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

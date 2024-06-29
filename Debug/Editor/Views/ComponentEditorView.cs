@@ -71,7 +71,6 @@
                 if(pool == null)continue;
                 if(pool.ItemType() != value.GetType()) continue;
                 
-                pool.Del(entity);
                 pool.SetRaw(entity,value);
                 
                 break;

@@ -34,7 +34,8 @@
             if (_worldType == fieldType)
             {
                 var value = field.GetValue(target);
-                if(value==null) return;
+                if(value!=null) return;
+                
                 field.SetValue(target,world);
                 return;
             }

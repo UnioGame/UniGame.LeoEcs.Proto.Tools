@@ -63,7 +63,7 @@
             ref var typeIdComponent = ref world.GetOrAddComponent<TypeIdComponent>(entity);
             typeIdComponent.Value = (uint) typeof(TData).GetTypeId();
             
-            //ref var dataComponent = ref world.GetOrAddComponent<ViewComponent<TData>>(entity);
+            ref var dataComponent = ref world.GetOrAddComponent<ViewComponent<TData>>(entity);
             ref var viewComponent = ref world.GetOrAddComponent<ViewComponent>(entity);
             ref var viewStatusComponent = ref world.GetOrAddComponent<ViewStatusComponent>(entity);
 
