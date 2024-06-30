@@ -44,9 +44,6 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         public List<EcsConfigGroup> ecsUpdateGroups = new List<EcsConfigGroup>();
         
 #if ODIN_INSPECTOR || TRI_INSPECTOR
-        [FormerlySerializedAs("aspectDataData")]
-        [FormerlySerializedAs("aspectData")]
-        [FormerlySerializedAs("aspects")]
         [InlineProperty]
         [HideLabel]
 #endif  
