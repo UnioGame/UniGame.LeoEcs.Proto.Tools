@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Abstract;
     using Leopotam.EcsProto;
 
     [Serializable]

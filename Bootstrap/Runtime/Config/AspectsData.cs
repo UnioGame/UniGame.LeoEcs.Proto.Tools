@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Core.Runtime.SerializableType;
+    using LeoEcs.Bootstrap.Runtime.Abstract;
     using Sirenix.OdinInspector;
+    using UnityEngine;
 
     [Serializable]
     public class AspectsData
@@ -15,6 +17,11 @@
         [ListDrawerSettings(ListElementLabelName = "@name")]
 #endif
         public List<AspectData> aspects = new List<AspectData>();
+        
+        [PropertySpace]
+        [SerializeReference]
+        public List<IProtoAspectFactory> factories = new();
+        
     }
 
     [Serializable]

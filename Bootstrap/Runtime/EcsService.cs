@@ -65,7 +65,13 @@
             var worldConfig = config.WorldConfiguration.Create();
             var aspectsData = config.AspectsData;
             var worldAspect = new WorldAspect();
-
+            
+            foreach (var factory in aspectsData.factories)
+            {
+                var aspect = factory.Create();
+                worldAspect.AddAspect(aspect);
+            }
+            
             foreach (var aspect in aspectsData.aspects)
             {
                 if (!aspect.enabled) continue;
@@ -79,6 +85,7 @@
                 var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
                 worldAspect.AddAspect(aspectInstance);
             }
+
 
             var protoWorld = new ProtoWorld(worldAspect, worldConfig);
             return protoWorld;

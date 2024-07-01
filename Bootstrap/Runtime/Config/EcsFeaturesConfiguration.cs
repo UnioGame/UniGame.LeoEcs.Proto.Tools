@@ -48,7 +48,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [HideLabel]
 #endif  
         public AspectsData aspectsData = new AspectsData();
-             
+        
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineProperty]
 #endif       
@@ -97,6 +97,20 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
                 });
             }
 
+            aspectsData.factories.Clear();
+            var aspectsFactories = TypeCache.GetTypesDerivedFrom(typeof(IProtoAspectFactory));
+            foreach (var aspectsFactory in aspectsFactories)
+            {
+                if(aspectsFactory.IsAbstract || aspectsFactory.IsInterface) continue;
+                if(!aspectsFactory.HasDefaultConstructor()) continue;
+                
+                var factory = aspectsFactory.CreateWithDefaultConstructor() as IProtoAspectFactory;
+                if(factory == null) continue;
+                
+                factory.EditorInitialize();
+                aspectsData.factories.Add(factory);
+            }
+            
             this.MarkDirty();
 
 #endif
