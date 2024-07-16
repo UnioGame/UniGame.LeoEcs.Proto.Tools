@@ -1,6 +1,9 @@
 ﻿namespace UniGame.LeoEcsLite.LeoEcs.Shared.Components
 {
     using System;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using Core.Runtime;
     using Leopotam.EcsLite;
     using UniModules.UniCore.Runtime.DataFlow;
 
@@ -15,14 +18,38 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct LifeTimeComponent : IEcsAutoReset<LifeTimeComponent>
+    public struct LifeTimeComponent : IEcsAutoReset<LifeTimeComponent>,ILifeTime
     {
-        public LifeTime Value;
+        private LifeTime _value;
+        
+        public bool IsTerminated => _value.isTerminated;
+        
+        public CancellationToken Token => _value.Token;
         
         public void AutoReset(ref LifeTimeComponent c)
         {
-            c.Value ??= LifeTime.Create();
-            c.Value.Restart();
+            c._value ??= LifeTime.Create();
+            c._value.Restart();
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ILifeTime AddCleanUpAction(Action cleanAction)
+        {
+            return _value.AddCleanUpAction(cleanAction);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ILifeTime AddDispose(IDisposable item)
+        {
+            return _value.AddDispose(item);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ILifeTime AddRef(object o)
+        {
+            return _value.AddRef(o);
+        }
+
+       
     }
 }
