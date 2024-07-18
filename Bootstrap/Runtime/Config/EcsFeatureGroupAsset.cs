@@ -112,6 +112,9 @@
         [FormerlySerializedAs("pluginName")]
         public string name;
         public bool enabled;
+        
+        [HideLabel]
+        [InlineProperty]
         [SerializeReference]
         public IEcsServicePlugin plugin;
     }

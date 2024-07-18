@@ -110,6 +110,18 @@ namespace UniGame.LeoEcs.Shared.Extensions
         [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
 #endif
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TAspect Aspect<TAspect>(this ProtoWorld world)
+            where TAspect : class, IProtoAspect
+        {
+            var aspect = world.Aspect(typeof(TAspect));
+            return aspect as TAspect;
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref TComponent GetComponent<TComponent>(this ProtoWorld world, int entity)
             where TComponent : struct
         {

@@ -49,9 +49,6 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
 #endif  
         public AspectsData aspectsData = new AspectsData();
         
-#if ODIN_INSPECTOR || TRI_INSPECTOR
-        [InlineProperty]
-#endif       
 #if ODIN_INSPECTOR 
         [ListDrawerSettings(ListElementLabelName = "@name")]
 #endif

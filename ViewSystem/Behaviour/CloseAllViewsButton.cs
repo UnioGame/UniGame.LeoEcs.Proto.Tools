@@ -13,7 +13,7 @@
     using UnityEngine;
     using UnityEngine.UI;
 
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class CloseAllViewsButton : MonoBehaviour, IEcsComponentConverter, ILifeTimeContext
     {
         #region inspector

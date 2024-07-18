@@ -1,8 +1,9 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
 {
     using System;
+    using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using UniGame.LeoEcs.Bootstrap.Runtime;
+    using Runtime;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -13,6 +14,18 @@
     [Serializable]
     public abstract class EcsAspect : ProtoAspectInject, IEcsAspect
     {
+        public ProtoWorld world;
         
+        public sealed override void Init(ProtoWorld aspectWorld)
+        {
+            this.world = aspectWorld;
+            OnInit(aspectWorld);
+            base.Init(world);
+        }
+
+        protected virtual void OnInit(ProtoWorld aspectWorld)
+        {
+            
+        }
     }
 }

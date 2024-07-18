@@ -196,7 +196,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SelectMonoConverter(GameObject gameObject,List<IEcsComponentConverter> converters)
         {
-            var container = gameObject.GetComponent<LeoEcsMonoConverter>();
+            var container = gameObject.GetComponent<ProtoEcsMonoConverter>();
             if (container == null) return;
             
             converters.AddRange(container.serializableConverters);

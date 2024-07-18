@@ -11,7 +11,7 @@
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;
 
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public abstract class EcsUiView<TViewModel> : View<TViewModel>,
         IEcsComponentConverter,
         IConverterEntityDestroyHandler,

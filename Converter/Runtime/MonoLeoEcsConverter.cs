@@ -7,7 +7,7 @@
     using UnityEngine;
 
     [Serializable]
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public abstract class MonoLeoEcsConverter : MonoBehaviour, IEcsComponentConverter
     {
         [SerializeField]

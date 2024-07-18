@@ -13,7 +13,7 @@ namespace UniGame.LeoEcs.ViewSystem.Behavriour
     using UnityEngine;
     using UnityEngine.UI;
 
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class OpenViewButton : MonoBehaviour, IEcsComponentConverter, ILifeTimeContext
     {
         #region inspector

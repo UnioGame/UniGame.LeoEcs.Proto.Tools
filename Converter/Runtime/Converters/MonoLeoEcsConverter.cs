@@ -17,7 +17,7 @@
     using Sirenix.OdinInspector;
 #endif
     
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class MonoLeoEcsConverter<TConverter> : 
         MonoBehaviour,
         IEcsComponentConverter,

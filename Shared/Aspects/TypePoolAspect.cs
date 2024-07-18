@@ -20,7 +20,8 @@
 
         public override void Init(ProtoWorld world)
         {
-            base.Init(world);
+            if (world.HasAspect(this.GetType()))
+                return; 
             
             foreach (Type poolType in componentTypes)
             {
@@ -29,6 +30,8 @@
                 if(pool == null) continue;
                 world.AddPool(pool);
             }
+            
+            base.Init(world);
         }
     }
 }

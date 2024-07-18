@@ -11,7 +11,7 @@
     using UniModules.UniGame.UISystem.Runtime;
     using UnityEngine;
 
-    [RequireComponent(typeof(LeoEcsMonoConverter))]
+    [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class EcsViewConverter : MonoLeoEcsConverter, 
         IEcsViewConverter
     {

@@ -25,7 +25,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Sirenix.OdinInspector;
 #endif
     
-    public class LeoEcsMonoConverter : 
+    public class ProtoEcsMonoConverter : 
         MonoBehaviour, 
         ILeoEcsMonoConverter,
         IEcsEntity
