@@ -2,10 +2,10 @@
 {
     using System;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using UniGame.LeoEcs.Shared.Extensions;
 
     /// <summary>
     /// one round trip entity lifetime
@@ -19,27 +19,20 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class KillMeNextTimeHandleSystem : IProtoInitSystem, IProtoRunSystem
+    public class KillMeNextTimeHandleSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
-
-        private ProtoPool<KillMeNextTimeComponent> _pool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-
-            _filter = _world
-                .Filter<KillMeNextTimeComponent>()
-                .End();
-        }
+        private LifeTimeAspect _lifeTimeAspect;
+        
+        private ProtoIt _filter = It
+            .Chain<KillMeNextTimeComponent>()
+            .End();
 
         public void Run()
         {
             foreach (var entity in _filter)
             {
-                ref var component = ref _pool.Get(entity);
+                ref var component = ref _lifeTimeAspect.KillMeNextTime.Get(entity);
                 if (component.Value)
                 {
                     _world.DelEntity(entity);

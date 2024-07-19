@@ -3,10 +3,11 @@
     using System;
     using System.Collections.Generic;
     using Components;
+    using Death.Aspects;
     using Death.Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Extensions;
 
@@ -19,52 +20,42 @@
 #endif
     [Serializable]
     [ECSDI]
-    public sealed class ForceValidateDeadChildEntitiesSystem : IProtoRunSystem,IProtoInitSystem
+    public sealed class ForceValidateDeadChildEntitiesSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
+        private DestroyAspect _destroyAspect;
+        private LifeTimeAspect _lifeTimeAspect;
         
-        private EcsFilter _requestFilter;
-        private EcsFilter _filter;
-
-        private ProtoPool<ValidateDeadChildEntitiesRequest> _validatePool;
-        private ProtoPool<DestroySelfRequest> _destroyPool;
-        private ProtoPool<OwnerComponent> _ownerPool;
+        private ProtoIt _requestFilter = It
+            .Chain<ValidateDeadChildEntitiesRequest>()
+            .End();
+        
+        private ProtoIt _filter = It
+            .Chain<OwnerComponent>()
+            .End();
         
         private HashSet<ProtoEntity> _destroyedEntities = new();
         private HashSet<ProtoEntity> _bufferDestroyedEntities = new();
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-
-            _requestFilter = _world
-                .Filter<ValidateDeadChildEntitiesRequest>()
-                .End();
-            
-            _filter = _world
-                .Filter<OwnerComponent>()
-                .End();
-        }
         
         public void Run()
         {
             foreach (var requestEntity in _requestFilter)
             {
-                ref var request = ref _validatePool.Get(requestEntity);
+                ref var request = ref _destroyAspect.ValidateDeadChild.Get(requestEntity);
                 
                 _destroyedEntities.Clear();
                 var foundDeadChild = false;
 
                 foreach (var entity in _filter)
                 {
-                    ref var ownerComponent = ref _ownerPool.Get(entity);
+                    ref var ownerComponent = ref _lifeTimeAspect.Owner.Get(entity);
                     if (ownerComponent.Value.Unpack(_world, out var ownerEntity) )
                         continue;
                     _bufferDestroyedEntities.Add(entity);
                     foundDeadChild = true;
                 }
                 
-                if(foundDeadChild == false)
+                if (foundDeadChild == false)
                     break;
 
                 do
@@ -77,7 +68,7 @@
                     
                     foreach (var entity in _filter)
                     {
-                        ref var ownerComponent = ref _ownerPool.Get(entity);
+                        ref var ownerComponent = ref _lifeTimeAspect.Owner.Get(entity);
                         if(!ownerComponent.Value.Unpack(_world, out var ownerEntity))
                             continue;
                         
@@ -85,7 +76,7 @@
 
                         _bufferDestroyedEntities.Add(entity);
                         
-                        ref var destroyRequest = ref _destroyPool.GetOrAddComponent(entity);
+                        ref var destroyRequest = ref _destroyAspect.DestroySelf.GetOrAddComponent(entity);
                         destroyRequest.ForceDestroy = request.ForceDestroy;
                         foundDeadChild = true;
                     }
@@ -94,8 +85,6 @@
                 
                 break;
             }
-            
-            
         }
     }
 }

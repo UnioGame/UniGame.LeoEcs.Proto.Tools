@@ -2,11 +2,10 @@
 {
     using System;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using UniGame.LeoEcs.Shared.Extensions;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -17,30 +16,25 @@
 #endif
     [Serializable]
     [ECSDI]
-    public sealed class CheckInvalidChildEntitiesSystem : IProtoRunSystem,IProtoInitSystem
+    public sealed class CheckInvalidChildEntitiesSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
+        private LifeTimeAspect _lifeTimeAspect;
         
-        private ProtoPool<OwnerComponent> _ownerPool;
-        private ProtoPool<OwnerDestroyedEvent> _ownerDestroyedPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _filter = _world.Filter<OwnerComponent>().End();
-        }
+        private ProtoIt _filter = It
+            .Chain<OwnerComponent>()
+            .End();
         
         public void Run()
         {
             
             foreach (var entity in _filter)
             {
-                ref var ownerComponent = ref _ownerPool.Get(entity);
+                ref var ownerComponent = ref _lifeTimeAspect.Owner.Get(entity);
                 if(ownerComponent.Value.Unpack(_world, out _))
                     continue;
 
-                _ownerDestroyedPool.Add(entity);
+                _lifeTimeAspect.OwnerDestroyedEvent.Add(entity);
             }
         }
     }
