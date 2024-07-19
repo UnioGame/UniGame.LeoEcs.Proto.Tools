@@ -2,12 +2,11 @@
 {
     using System;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Components;
-    using UniGame.LeoEcs.Shared.Extensions;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -18,44 +17,34 @@
 #endif
     [Serializable]
     [ECSDI]
-    public sealed class UpdateTransformDataSystem : IProtoRunSystem,IProtoInitSystem
+    public sealed class UpdateTransformDataSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
-
         private UnityAspect _unityAspect;
-        private EcsFilter _scaleFilter;
-        private EcsFilter _rotationFilter;
-        private EcsFilter _directionFilter;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<TransformComponent>()
-                .Inc<TransformPositionComponent>()
-                .Exc<PrepareToDeathComponent>()
-                .End();
-            
-            _scaleFilter = _world
-                .Filter<TransformComponent>()
-                .Inc<TransformScaleComponent>()
-                .Exc<PrepareToDeathComponent>()
-                .End();
-            
-            _rotationFilter = _world
-                .Filter<TransformComponent>()
-                .Inc<TransformRotationComponent>()
-                .Exc<PrepareToDeathComponent>()
-                .End();
-            
-            _directionFilter = _world
-                .Filter<TransformComponent>()
-                .Inc<TransformDirectionComponent>()
-                .Exc<PrepareToDeathComponent>()
-                .End();
-        }
+        
+        private ProtoItExc _filter = It
+            .Chain<TransformComponent>()
+            .Inc<TransformPositionComponent>()
+            .Exc<PrepareToDeathComponent>()
+            .End();
+        
+        private ProtoItExc _scaleFilter = It
+            .Chain<TransformComponent>()
+            .Inc<TransformScaleComponent>()
+            .Exc<PrepareToDeathComponent>()
+            .End();
+        
+        private ProtoItExc _rotationFilter = It
+            .Chain<TransformComponent>()
+            .Inc<TransformRotationComponent>()
+            .Exc<PrepareToDeathComponent>()
+            .End();
+        
+        private ProtoItExc _directionFilter = It
+            .Chain<TransformComponent>()
+            .Inc<TransformDirectionComponent>()
+            .Exc<PrepareToDeathComponent>()
+            .End();
         
         public void Run()
         {
