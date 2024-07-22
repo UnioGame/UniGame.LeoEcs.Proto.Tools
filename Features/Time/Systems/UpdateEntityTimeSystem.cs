@@ -5,6 +5,7 @@ namespace Game.Ecs.Time.Systems
     using Components;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using Service;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Extensions;
@@ -19,17 +20,14 @@ namespace Game.Ecs.Time.Systems
 #endif
     [Serializable]
     [ECSDI]
-    public class UpdateEntityTimeSystem : IProtoRunSystem,IProtoInitSystem
+    public class UpdateEntityTimeSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
         private GameTimeAspect _timeAspect;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _filter = _world.Filter<EntityGameTimeComponent>().End();
-        }
+        
+        private ProtoIt _filter = It
+            .Chain<EntityGameTimeComponent>()
+            .End();
         
         public void Run()
         {

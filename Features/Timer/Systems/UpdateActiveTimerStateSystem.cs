@@ -1,12 +1,11 @@
 ﻿namespace Game.Ecs.Core.Timer.Systems
 {
     using System;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Timer.Components;
     using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using UniGame.LeoEcs.Shared.Extensions;
     using UnityEngine;
 
     /// <summary>
@@ -21,22 +20,16 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class UpdateActiveTimerStateSystem : IProtoInitSystem, IProtoRunSystem
+    public class UpdateActiveTimerStateSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
         private TimerAspect _timerAspect;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<CooldownActiveComponent>()
-                .Inc<CooldownComponent>()
-                .Exc<CooldownStateComponent>()
-                .End();
-        }
+        
+        private ProtoItExc _filter = It
+            .Chain<CooldownActiveComponent>()
+            .Inc<CooldownComponent>()
+            .Exc<CooldownStateComponent>()
+            .End();
 
         public void Run()
         {

@@ -1,5 +1,6 @@
 ﻿namespace Game.Ecs.Core.Death.Components
 {
+    using System;
     using Leopotam.EcsLite;
 
     /// <summary>
@@ -12,6 +13,7 @@
 	[Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 	[Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
+    [Serializable]
     public struct ValidateDeadChildEntitiesRequest : IEcsAutoReset<ValidateDeadChildEntitiesRequest>
     {
         public bool ForceDestroy;

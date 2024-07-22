@@ -1,8 +1,8 @@
 ﻿namespace Game.Ecs.Core.Timer.Systems
 {
     using System;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Timer.Components;
     using UniGame.LeoEcs.Timer.Components.Requests;
     using Time.Service;
@@ -22,22 +22,15 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class RestartTimerSystem : IProtoInitSystem, IProtoRunSystem
+    public class RestartTimerSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
-        
         private TimerAspect _timerAspect;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<CooldownComponent>()
-                .Inc<RestartCooldownSelfRequest>()
-                .End();
-        }
+        
+        private ProtoIt _filter = It
+            .Chain<CooldownComponent>()
+            .Inc<RestartCooldownSelfRequest>()
+            .End();
 
         public void Run()
         {

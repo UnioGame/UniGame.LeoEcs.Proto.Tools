@@ -1,36 +1,40 @@
 ﻿namespace Game.Ecs.Core.Death.Systems
 {
+    using System;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Components;
-    using UniGame.LeoEcs.Shared.Extensions;
 
-    public sealed class DisableColliderSystem : IProtoRunSystem,IProtoInitSystem
+    /// <summary>
+    /// System for disabling colliders on entities.
+    /// </summary>
+#if ENABLE_IL2CPP
+    using Unity.IL2CPP.CompilerServices;
+
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    [Il2CppSetOption(Option.DivideByZeroChecks, false)]
+#endif
+    [Serializable]
+    [ECSDI]
+    public sealed class DisableColliderSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
-        private ProtoPool<ColliderComponent> _colliderPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<ColliderComponent>()
-                .Inc<DisabledEvent>()
-                .End();
-            
-            _colliderPool = _world.GetPool<ColliderComponent>();
-        }
+        private PhysicsAspect _physicsAspect;
+        
+        private ProtoIt _filter = It
+            .Chain<ColliderComponent>()
+            .Inc<DisabledEvent>()
+            .End();
         
         public void Run()
         {
-            
-
             foreach (var entity in _filter)
             {
-                ref var collider = ref _colliderPool.Get(entity);
+                ref var collider = ref _physicsAspect.Collider.Get(entity);
                 collider.Value.enabled = false;
             }
         }
