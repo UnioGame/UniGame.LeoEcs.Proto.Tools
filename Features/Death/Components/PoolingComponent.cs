@@ -1,15 +1,18 @@
 ﻿namespace Game.Ecs.Core.Death.Components
 {
     using System;
-    using Unity.IL2CPP.CompilerServices;
 
     /// <summary>
-    /// target entity is pooling asset
+    /// A component used for object pooling.
     /// </summary>
-    [Serializable]
+#if ENABLE_IL2CPP
+    using Unity.IL2CPP.CompilerServices;
+
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
+#endif
+    [Serializable]
     public struct PoolingComponent
     {
         

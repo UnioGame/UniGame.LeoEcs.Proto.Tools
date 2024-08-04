@@ -1,13 +1,16 @@
 ﻿namespace Game.Ecs.Core.Death.Systems
 {
     using System;
+    using Aspects;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Extensions;
 
+    /// <summary>
+    /// System for processing kill requests.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -17,46 +20,36 @@
 #endif
     [Serializable]
     [ECSDI]
-    public sealed class ProcessKillRequestSystem : IProtoRunSystem, IProtoInitSystem
+    public sealed class ProcessKillRequestSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
-
-        private ProtoPool<DestroyComponent> _deadPool;
-        private ProtoPool<PoolingComponent> _poolingPool;
-        private ProtoPool<DeadEvent> _deadEventPool;
-        private ProtoPool<KillRequest> _killRequestPool;
-        private ProtoPool<KillEvent> _killEventPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _filter = _world
-                .Filter<KillRequest>()
-                .Exc<DestroyComponent>()
-                .Exc<DontKillComponent>()
-                .End();
-        }
-
+        private DestroyAspect _destroyAspect;
+        
+        private ProtoItExc _filter = It
+            .Chain<KillRequest>()
+            .Exc<DestroyComponent>()
+            .Exc<DontKillComponent>()
+            .End();
+        
         public void Run()
         {
             foreach (var entity in _filter)
             {
-                ref var killRequest = ref _killRequestPool.Get(entity);
+                ref var killRequest = ref _destroyAspect.Kill.Get(entity);
 
                 var killEventEntity = _world.NewEntity();
-                ref var killEvent = ref _killEventPool.Add(killEventEntity);
+                ref var killEvent = ref _destroyAspect.KillEvent.Add(killEventEntity);
                 killEvent.Source = killRequest.Source;
                 killEvent.Destination = _world.PackEntity(entity);
 
-                if (_poolingPool.Has(entity))
+                if (_destroyAspect.Pooling.Has(entity))
                 {
-                    _deadEventPool.TryAdd(entity);
+                    _destroyAspect.DeadEvent.TryAdd(entity);
                     continue;
                 }
 
-                _deadPool.TryAdd(entity);
-                _deadEventPool.TryAdd(entity);
+                _destroyAspect.Destroy.TryAdd(entity);
+                _destroyAspect.DeadEvent.TryAdd(entity);
             }
         }
     }

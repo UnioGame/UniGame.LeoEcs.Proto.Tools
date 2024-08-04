@@ -1,8 +1,8 @@
 ﻿namespace Game.Ecs.Core.Timer.Systems
 {
     using System;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Timer.Components;
     using UniGame.LeoEcs.Timer.Components.Events;
     using Time.Service;
@@ -22,22 +22,16 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class UpdateTimerSystem : IProtoInitSystem, IProtoRunSystem
+    public class UpdateTimerSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
         private TimerAspect _timerAspect;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<CooldownActiveComponent>()
-                .Inc<CooldownComponent>()
-                .Exc<CooldownFinishedSelfEvent>()
-                .End();
-        }
+        
+        private ProtoItExc _filter = It
+            .Chain<CooldownActiveComponent>()
+            .Inc<CooldownComponent>()
+            .Exc<CooldownFinishedSelfEvent>()
+            .End();
 
         public void Run()
         {

@@ -1,5 +1,6 @@
 namespace Game.Ecs.Core.Death.Components
 {
+    using System;
     using Leopotam.EcsProto.QoL;
 
     /// <summary>
@@ -12,6 +13,7 @@ namespace Game.Ecs.Core.Death.Components
 	[Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 	[Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
+    [Serializable]
     public struct KillRequest
     {
         public ProtoPackedEntity Source;

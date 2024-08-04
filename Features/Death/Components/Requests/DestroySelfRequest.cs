@@ -2,15 +2,18 @@
 {
     using System;
     using Leopotam.EcsLite;
-    using Unity.IL2CPP.CompilerServices;
 
     /// <summary>
     /// destroy target entity without pooling
     /// </summary>
-    [Serializable]
+#if ENABLE_IL2CPP
+    using Unity.IL2CPP.CompilerServices;
+
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
+#endif
+    [Serializable]
     public struct DestroySelfRequest : IEcsAutoReset<DestroySelfRequest>
     {
         public bool ForceDestroy;
