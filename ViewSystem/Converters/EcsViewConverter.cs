@@ -50,7 +50,7 @@
         {
             _ProtoWorld = null;
             
-            entity = ProtoEntity.FromIdx(-1);
+            entity = (ProtoEntity)(-1);
         }
         
         public sealed override void Apply(GameObject target, ProtoWorld world, ProtoEntity targetEntity)

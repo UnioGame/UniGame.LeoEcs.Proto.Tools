@@ -8,7 +8,7 @@
 
     public static class EcsFilterExtensions
     {
-        public static readonly ProtoEntity InvalidEntity = ProtoEntity.FromIdx(-1); 
+        public static readonly ProtoEntity InvalidEntity = (ProtoEntity)(-1); 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int First(this EcsFilter filter)

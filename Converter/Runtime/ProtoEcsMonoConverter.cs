@@ -91,7 +91,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
         [ReadOnly]
         [ShowIf(nameof(IsRuntime))] 
 #endif
-        public ProtoEntity entity = ProtoEntity.FromIdx(-1);
+        public ProtoEntity entity = (ProtoEntity)(-1);
         
 #if ODIN_INSPECTOR
         [BoxGroup("runtime info")] 
@@ -262,7 +262,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
 
         private void SetDestroyedState()
         {
-            entity = ProtoEntity.FromIdx(-1);
+            entity = (ProtoEntity)(-1);
             _state = EntityState.Destroyed;
             _packedEntity = default;
             _entityLifeTime.Release();

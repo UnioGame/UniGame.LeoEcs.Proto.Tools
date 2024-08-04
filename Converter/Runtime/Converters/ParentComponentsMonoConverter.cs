@@ -53,7 +53,7 @@
         [SerializeReference]
         public List<IEcsComponentConverter> converters = new();
 
-        private ProtoEntity _parentEntity = ProtoEntity.FromIdx(-1);
+        private ProtoEntity _parentEntity = (ProtoEntity)(-1);
         
         public override void Apply(GameObject target, ProtoWorld world, ProtoEntity entity)
         {

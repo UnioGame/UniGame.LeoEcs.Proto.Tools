@@ -128,10 +128,10 @@ namespace UniGame.LeoEcs.Converter.Runtime
             var transform = source.transform;
             var parent = transform.parent;
             
-            if (parent == null) return ProtoEntity.FromIdx(-1);
+            if (parent == null) return (ProtoEntity)(-1);
 
             var ecsParent = parent.GetComponentInParent<IEcsEntity>();
-            if(ecsParent == null) return ProtoEntity.FromIdx(-1);
+            if(ecsParent == null) return (ProtoEntity)(-1);
 
             return ecsParent.Entity;
         }

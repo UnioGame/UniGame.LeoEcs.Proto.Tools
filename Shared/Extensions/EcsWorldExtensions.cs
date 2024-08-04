@@ -136,7 +136,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
         {
             foreach (var entity in entities)
             {
-                yield return world.PackEntity(ProtoEntity.FromIdx(entity));
+                yield return world.PackEntity(entity);
             }
         }
         
@@ -159,7 +159,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
         public static void PackAll(this ProtoWorld world,List<ProtoPackedEntity> container, IEnumerable<int> entities)
         {
             foreach (var entity in entities)
-                container.Add(world.PackEntity(ProtoEntity.FromIdx(entity)));
+                container.Add(world.PackEntity(entity));
         }
 
 #if ENABLE_IL2CPP
@@ -215,7 +215,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
             {
                 var entity = source[i];
                 if(entity < 0) continue;
-                result[counter] = world.PackEntity(ProtoEntity.FromIdx(source[i]));
+                result[counter] = world.PackEntity(source[i]);
                 counter++;
             }
             return counter;

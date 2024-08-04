@@ -105,7 +105,7 @@
 
         private async UniTask<ProtoEntity> UpdateViewEntity(IView view,CreateViewRequest request)
         {
-            var viewEntity = ProtoEntity.FromIdx(-1); 
+            var viewEntity = (ProtoEntity)(-1); 
             var viewObject = view.GameObject;
             if (viewObject == null) return viewEntity;
 

@@ -14,7 +14,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
     
     public static class EntityExtensions
     {
-        public readonly static ProtoEntity InvalidEntity = ProtoEntity.FromIdx(-1);
+        public readonly static ProtoEntity InvalidEntity = (ProtoEntity)(-1);
         
         private static List<IInitializeWithEntityData> InitializableComponents = new List<IInitializeWithEntityData>();
 
