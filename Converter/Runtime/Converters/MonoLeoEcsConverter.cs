@@ -41,15 +41,18 @@
         public bool IsRuntime => Application.isPlaying;
         
         public string Name => converter == null ? "EMPTY" : converter.Name;
-        public void Apply(ProtoWorld world, ProtoEntity entity)
-        {
-            throw new System.NotImplementedException();
-        }
+        
+        public ProtoPackedEntity Entity{get; private set;}
+        
+        protected ProtoWorld World{get; private set;}
+
 
         #endregion
 
-        public ProtoPackedEntity Entity{get; private set;}
-        protected ProtoWorld World{get; private set;}
+        public void Apply(ProtoWorld world, ProtoEntity entity)
+        {
+            converter.Apply(world,entity);
+        }
         
         public void Apply(GameObject target, ProtoWorld world, ProtoEntity entity)
         {
