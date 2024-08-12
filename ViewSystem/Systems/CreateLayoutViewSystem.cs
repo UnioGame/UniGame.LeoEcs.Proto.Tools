@@ -44,9 +44,8 @@
                 requestComponent.ViewId = requestLayoutComponent.View;
                 requestComponent.LayoutType = requestLayoutComponent.LayoutType;
                 requestComponent.StayWorld = false;
-
+                requestComponent.Owner = requestLayoutComponent.Owner;
             }
         }
-
     }
 }
