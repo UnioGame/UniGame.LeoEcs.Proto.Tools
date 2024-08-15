@@ -3,9 +3,9 @@
     using System;
     using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using UniGame.LeoEcs.Shared.Extensions;
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Components;
 
     /// <summary>
@@ -20,35 +20,24 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class InitializeViewIdComponentSystem : IProtoInitSystem, IProtoRunSystem
+    public class InitializeViewIdComponentSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
-        
-        private ProtoPool<ViewComponent> _viewComponentPool;
-        private ProtoPool<ViewIdComponent> _viewIdPool;
+        private ViewAspect _viewAspect;
 
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<ViewComponent>()
-                .Inc<ViewInitializedComponent>()
-                .Exc<ViewIdComponent>()
-                .End();
-
-            _viewComponentPool = _world.GetPool<ViewComponent>();
-            _viewIdPool = _world.GetPool<ViewIdComponent>();
-        }
+        private ProtoItExc _filter = It
+            .Chain<ViewComponent>()
+            .Inc<ViewInitializedComponent>()
+            .Exc<ViewIdComponent>()
+            .End();
 
         public void Run()
         {
             foreach (var viewEntity in _filter)
             {
-                ref var viewComponent = ref _viewComponentPool.Get(viewEntity);
+                ref var viewComponent = ref _viewAspect.View.Get(viewEntity);
                 var view = viewComponent.View;
-                ref var viewIdComponent = ref _viewIdPool.Add(viewEntity);
+                ref var viewIdComponent = ref _viewAspect.Id.Add(viewEntity);
                 viewIdComponent.Value = view.ViewIdHash;
             }
         }

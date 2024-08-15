@@ -1,14 +1,15 @@
-using UniGame.LeoEcs.ViewSystem.Components;
-
 namespace UniGame.LeoEcs.ViewSystem.Systems
 {
+    using Components;
     using System;
     using Aspects;
     using Bootstrap.Runtime.Attributes;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using Shared.Extensions;
+    using Leopotam.EcsProto.QoL;
 
+    /// <summary>
+    /// System for updating the status of the view.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -16,22 +17,18 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
+
     [Serializable]
     [ECSDI]
-    public class ViewUpdateStatusSystem : IProtoInitSystem,IProtoRunSystem
+    public class ViewUpdateStatusSystem : IProtoRunSystem
     {
-        private ViewAspect _viewAspect;
-        private EcsFilter _viewFilter;
         private ProtoWorld _world;
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _viewFilter = _world
-                .Filter<ViewComponent>()
-                .Inc<ViewStatusComponent>()
-                .End();
-        }
+        private ViewAspect _viewAspect;
+
+        private ProtoIt _viewFilter = It
+            .Chain<ViewComponent>()
+            .Inc<ViewStatusComponent>()
+            .End();
 
         public void Run()
         {
@@ -49,4 +46,4 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
             }
         }
     }
-    }
+}

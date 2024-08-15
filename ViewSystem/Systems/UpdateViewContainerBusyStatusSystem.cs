@@ -1,13 +1,14 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
+    using Bootstrap.Runtime.Attributes;
     using Components;
     using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
-    using global::UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using Leopotam.EcsLite;
+    using Layouts.Aspects;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using Shared.Components;
-    using Shared.Extensions;
 
     /// <summary>
     /// check is container state is changed to free
@@ -21,48 +22,41 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class UpdateViewContainerBusyStatusSystem : IProtoInitSystem, IProtoRunSystem
+    public class UpdateViewContainerBusyStatusSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _containerFilter;
-        private EcsFilter _parentingViewFilter;
 
-        private ProtoPool<TransformComponent> _transformPool;
-        private ProtoPool<ViewParentComponent> _parentPool;
-        private ProtoPool<ViewContainerBusyComponent> _busyPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-
-            _containerFilter =_world
-                .Filter<ViewContainerComponent>()
-                .Inc<TransformComponent>()
-                .Inc<ViewContainerBusyComponent>()
-                .End();
-
-            _parentingViewFilter = _world
-                .Filter<ViewParentComponent>()
-                .End();
-        }
+        private ViewAspect _viewAspect;
+        private ViewLayoutAspect _viewLayoutAspect;
+        private ViewContainerAspect _viewContainerAspect;
+        
+        private ProtoIt _containerFilter= It
+            .Chain<ViewContainerComponent>()
+            .Inc<TransformComponent>()
+            .Inc<ViewContainerBusyComponent>()
+            .End();
+        
+        private ProtoIt _parentingViewFilter= It
+            .Chain<ViewParentComponent>()
+            .End();
 
         public void Run()
         {
             foreach (var containerEntity in _containerFilter)
             {
-                ref var transformComponent = ref _transformPool.Get(containerEntity);
+                ref var transformComponent = ref _viewAspect.Transform.Get(containerEntity);
                 var isEmpty = true;
-                
+
                 foreach (var parentEntity in _parentingViewFilter)
                 {
-                    ref var parentComponent = ref _parentPool.Get(parentEntity);
+                    ref var parentComponent = ref _viewLayoutAspect.Parent.Get(parentEntity);
                     if (parentComponent.Value != transformComponent.Value) continue;
-                    
+
                     isEmpty = false;
                     break;
                 }
-                
-                if(isEmpty) _busyPool.Del(containerEntity);
+
+                if (isEmpty) _viewContainerAspect.Busy.Del(containerEntity);
             }
         }
     }

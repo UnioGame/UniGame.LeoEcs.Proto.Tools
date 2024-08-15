@@ -1,14 +1,18 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
     using Behavriour;
+    using Bootstrap.Runtime.Attributes;
     using Components;
     using Cysharp.Threading.Tasks;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
 
+    /// <summary>
+    /// System for initializing views.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -17,59 +21,47 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class InitializeViewsSystem : IProtoInitSystem,IProtoRunSystem
+    [ECSDI]
+    public class InitializeViewsSystem : IProtoInitSystem, IProtoRunSystem
     {
-        private readonly IEcsViewTools _viewTools;
-        
         private ProtoWorld _world;
-        private EcsFilter _filter;
-        
-        private ProtoPool<ViewInitializedComponent> _viewInitializedPool;
-        private ProtoPool<ViewComponent> _viewComponentPool;
-        private ProtoPool<ViewModelComponent> _viewModelPool;
+        private ViewAspect _viewAspect;
+        private IEcsViewTools _viewTools;
 
-        public InitializeViewsSystem(IEcsViewTools viewTools)
-        {
-            _viewTools = viewTools;
-        }
-        
+        private ProtoItExc _filter = It
+            .Chain<ViewComponent>()
+            .Exc<ViewInitializedComponent>()
+            .End();
+
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<ViewComponent>()
-                .Exc<ViewInitializedComponent>()
-                .End();
-
-            _viewInitializedPool = _world.GetPool<ViewInitializedComponent>();
-            _viewComponentPool = _world.GetPool<ViewComponent>();
-            _viewModelPool = _world.GetPool<ViewModelComponent>();
+            _viewTools = _world.GetGlobal<IEcsViewTools>();
         }
 
         public void Run()
         {
             foreach (var entity in _filter)
             {
-                _viewInitializedPool.Add(entity);
-                
-                ref var viewComponent = ref _viewComponentPool.Get(entity);
+                _viewAspect.Initialized.Add(entity);
+
+                ref var viewComponent = ref _viewAspect.View.Get(entity);
                 var packedEntity = _world.PackEntity(entity);
                 var view = viewComponent.View;
                 var viewType = viewComponent.Type;
-                ref var viewModelComponent = ref _viewModelPool.GetOrAddComponent(entity);
-                
+                ref var viewModelComponent = ref _viewAspect.Model.GetOrAddComponent(entity);
+
                 if (view.IsModelAttached)
                 {
                     viewModelComponent.Model = view.ViewModel;
                     continue;
                 }
-                
-                _viewTools.AddModelComponentAsync(_world, packedEntity, view, viewType)
+
+                _viewTools
+                    .AddModelComponentAsync(_world, packedEntity, view, viewType)
                     .AttachExternalCancellation(_viewTools.LifeTime.Token)
                     .Forget();
             }
         }
-
     }
 }

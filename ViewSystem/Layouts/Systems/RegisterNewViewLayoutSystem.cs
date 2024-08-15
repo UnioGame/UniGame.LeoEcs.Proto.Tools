@@ -3,8 +3,8 @@
     using System;
     using Aspects;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Shared.Extensions;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.ViewSystem.Runtime;
@@ -23,32 +23,25 @@
     [ECSDI]
     public class RegisterNewViewLayoutSystem : IProtoInitSystem, IProtoRunSystem
     {
-        private IGameViewSystem _viewSystem;
         private ProtoWorld _world;
-
-        private ViewLayoutAspect _layout;
-        private EcsFilter _layoutFilter;
-
-        public RegisterNewViewLayoutSystem(IGameViewSystem viewSystem)
-        {
-            _viewSystem = viewSystem;
-        }
+        private ViewLayoutAspect _layoutAspect;
+        private IGameViewSystem _viewSystem;
+        
+        private ProtoIt _layoutFilter = It
+            .Chain<ViewLayoutComponent>()
+            .Inc<RegisterViewLayoutSelfRequest>()
+            .End();
         
         public void Init(IProtoSystems systems)
         {
-            _world = systems.GetWorld();
-
-            _layoutFilter = _world
-                .Filter<ViewLayoutComponent>()
-                .Inc<RegisterViewLayoutSelfRequest>()
-                .End();
+            _viewSystem = _world.GetGlobal<IGameViewSystem>();
         }
 
         public void Run()
         {
             foreach (var entity in _layoutFilter)
             {
-                ref var layoutComponent = ref _layout.Layout.Get(entity);
+                ref var layoutComponent = ref _layoutAspect.Layout.Get(entity);
                 _viewSystem.RegisterLayout(layoutComponent.Id, layoutComponent.Layout);
             }
         }

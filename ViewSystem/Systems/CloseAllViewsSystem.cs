@@ -1,12 +1,16 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Bootstrap.Runtime.Attributes;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
     using UniGame.ViewSystem.Runtime;
 
+    /// <summary>
+    /// System for closing all views in the game.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -15,24 +19,22 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class CloseAllViewsSystem : IProtoInitSystem,IProtoRunSystem
+    [ECSDI]
+    public class CloseAllViewsSystem : IProtoInitSystem, IProtoRunSystem
     {
-        private readonly IGameViewSystem _gameViewSystem;
+        private IGameViewSystem _gameViewSystem;
         private ProtoWorld _world;
 
-        private EcsFilter _closeAllFilter;
-
-        public CloseAllViewsSystem(IGameViewSystem gameViewSystem)
-        {
-            _gameViewSystem = gameViewSystem;
-        }
+        private ProtoIt _closeAllFilter = It
+            .Chain<CloseAllViewsRequest>()
+            .End();
 
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
-            _closeAllFilter = _world.Filter<CloseAllViewsRequest>().End();
+            _gameViewSystem = _world.GetGlobal<IGameViewSystem>();
         }
-        
+
         public void Run()
         {
             foreach (var entity in _closeAllFilter)

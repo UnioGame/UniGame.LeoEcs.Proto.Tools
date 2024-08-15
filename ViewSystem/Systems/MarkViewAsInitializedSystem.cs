@@ -1,11 +1,15 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
     using Bootstrap.Runtime.Attributes;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using Shared.Extensions;
+    using Leopotam.EcsProto.QoL;
+
+    /// <summary>
+    /// System for marks the view entities as initialized.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -15,32 +19,23 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class MarkViewAsInitializedSystem : IProtoRunSystem,IProtoInitSystem
+    public class MarkViewAsInitializedSystem : IProtoRunSystem
     {
-        private EcsFilter _filter;
         private ProtoWorld _world;
-        private ProtoPool<ViewInitializedComponent> _viewInitialized;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<ViewComponent>()
-                .Inc<ViewModelComponent>()
-                .Exc<ViewInitializedComponent>()
-                .End();
-            
-            _viewInitialized = _world.GetPool<ViewInitializedComponent>();
-        }
+        private ViewAspect _viewAspect;
         
+        private ProtoItExc _filter = It
+            .Chain<ViewComponent>()
+            .Inc<ViewModelComponent>()
+            .Exc<ViewInitializedComponent>()
+            .End();
+
         public void Run()
         {
             foreach (var viewEntity in _filter)
             {
-                _world.GetOrAddComponent<ViewInitializedComponent>(viewEntity);
+                _viewAspect.Initialized.GetOrAdd(viewEntity);
             }
         }
-
     }
 }

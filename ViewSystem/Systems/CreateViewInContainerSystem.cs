@@ -1,9 +1,10 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
     using Components;
-    using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using Leopotam.EcsLite;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using Leopotam.EcsProto;
     using Shared.Components;
     using Shared.Extensions;
@@ -20,22 +21,19 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CreateViewInContainerSystem : IProtoInitSystem, IProtoRunSystem
+    public class CreateViewInContainerSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
+        
+        private ViewAspect _viewAspect;
+        private ViewContainerAspect _viewContainerAspect;
+        
         private EcsFilter _requestFilter;
         private EcsFilter _allContainersFilter;
         private EcsFilter _freeContainersFilter;
-        
-        private ProtoPool<CreateViewInContainerRequest> _createViewInContainerRequestPool;
-        private ProtoPool<ViewContainerBusyComponent> _busyContainerPool;
-        private ProtoPool<TransformComponent> _transformPool;
-        private ProtoPool<ViewContainerComponent> _containerPool;
-        
+
         public void Init(IProtoSystems systems)
         {
-            _world = systems.GetWorld();
-
             _requestFilter = _world
                 .Filter<CreateViewInContainerRequest>()
                 .End();
@@ -56,7 +54,7 @@
         {
             foreach (var requestEntity in _requestFilter)
             {
-                ref var request = ref _createViewInContainerRequestPool.Get(requestEntity);
+                ref var request = ref _viewAspect.CreateInContainer.Get(requestEntity);
                 var canUseBusyContainer = request.UseBusyContainer;
                 
                 var containerFilter = canUseBusyContainer 
@@ -65,15 +63,15 @@
 
                 foreach (var containerEntity in containerFilter)
                 {
-                    ref var containerComponent = ref _containerPool.Get(containerEntity);
+                    ref var containerComponent = ref _viewContainerAspect.ContainerView.Get(containerEntity);
                     
                     //is container for target view
                     if (containerComponent.ViewId != request.View) continue;
       
-                    ref var transformComponent = ref _transformPool.Get(containerEntity);
+                    ref var transformComponent = ref _viewAspect.Transform.Get(containerEntity);
                     
                     //create view in container
-                    ref var createViewRequest = ref _world.AddComponent<CreateViewRequest>(requestEntity);
+                    ref var createViewRequest = ref _viewAspect.CreateView.Add(requestEntity);
                     
                     createViewRequest.ViewId = request.View;
                     createViewRequest.ViewName = request.ViewName;
@@ -85,10 +83,10 @@
                     createViewRequest.Target = requestEntity.PackEntity(_world);
               
                     //mark container as busy
-                    _busyContainerPool.GetOrAddComponent(containerEntity);
+                    _viewContainerAspect.Busy.GetOrAddComponent(containerEntity);
                     
                     //remove request only when container found
-                    _createViewInContainerRequestPool.TryRemove(requestEntity);
+                    _viewAspect.CreateInContainer.TryRemove(requestEntity);
                     
                     break;
                 }

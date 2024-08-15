@@ -1,11 +1,15 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
+    using Bootstrap.Runtime.Attributes;
     using Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using Shared.Extensions;
+    using Leopotam.EcsProto.QoL;
 
+    /// <summary>
+    /// System fore creates a layout view based on a request.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -13,30 +17,24 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
+
     [Serializable]
-    public class CreateLayoutViewSystem : IProtoRunSystem,IProtoInitSystem
+    [ECSDI]
+    public class CreateLayoutViewSystem : IProtoRunSystem
     {
-        private EcsFilter _createFilter;
         private ProtoWorld _world;
+        private ViewAspect _viewAspect;
 
-        private ProtoPool<CreateLayoutViewRequest> _requestLayoutPool;
-        private ProtoPool<CreateViewRequest> _requestPool;
+        private ProtoIt _createFilter = It
+            .Chain<CreateLayoutViewRequest>()
+            .End();
 
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _createFilter = _world.Filter<CreateLayoutViewRequest>().End();
-            
-            _requestLayoutPool = _world.GetPool<CreateLayoutViewRequest>();
-            _requestPool = _world.GetPool<CreateViewRequest>();
-        }
-        
         public void Run()
         {
             foreach (var entity in _createFilter)
             {
-                ref var requestLayoutComponent = ref _requestLayoutPool.Get(entity);
-                ref var requestComponent = ref _requestPool.Add(entity);
+                ref var requestLayoutComponent = ref _viewAspect.CreateLayoutView.Get(entity);
+                ref var requestComponent = ref _viewAspect.CreateView.Add(entity);
 
                 requestComponent.Parent = null;
                 requestComponent.Tag = string.Empty;

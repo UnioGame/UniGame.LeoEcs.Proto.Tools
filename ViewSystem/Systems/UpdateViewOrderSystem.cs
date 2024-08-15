@@ -5,10 +5,13 @@
     using Bootstrap.Runtime.Attributes;
     using Components;
     using Converter.Runtime.Components;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using Shared.Components;
-    using Shared.Extensions;
+
+    /// <summary>
+    /// System for updating the view order of entities.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -16,24 +19,19 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
+
     [Serializable]
     [ECSDI]
-    public class UpdateViewOrderSystem : IProtoInitSystem,IProtoRunSystem
+    public class UpdateViewOrderSystem : IProtoRunSystem
     {
-        private ViewAspect _viewAspect;
-        private EcsFilter _viewFilter;
         private ProtoWorld _world;
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _viewFilter = _world
-                .Filter<ViewComponent>()
+        private ViewAspect _viewAspect;
+
+        private ProtoIt _viewFilter = It
+            .Chain<ViewComponent>()
                 .Inc<TransformComponent>()
                 .Inc<ViewOrderComponent>()
                 .End();
-        }
 
         public void Run()
         {

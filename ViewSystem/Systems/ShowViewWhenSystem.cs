@@ -3,11 +3,14 @@
     using System;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Converter.Runtime;
     using UniGame.LeoEcs.Shared.Extensions;
+    using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Components;
     using UniGame.ViewSystem.Runtime;
-    
+
     /// <summary>
     /// await target event and create view
     /// </summary>
@@ -19,22 +22,19 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class ShowViewWhenSystem<TView> : IProtoInitSystem, IProtoRunSystem
+    [ECSDI]
+    public class ShowViewWhenSystem<TView> : IProtoRunSystem
         where TView : IView
     {
         private ViewRequestData _data;
         private ProtoWorld _world;
+        private ViewAspect _viewAspect;
         private EcsFilter _eventFilter;
 
-        public ShowViewWhenSystem(EcsFilter eventFilter,ViewRequestData data)
+        public ShowViewWhenSystem(EcsFilter eventFilter, ViewRequestData data)
         {
             _eventFilter = eventFilter;
             _data = data;
-        }
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
         }
 
         public void Run()
@@ -42,13 +42,14 @@
             foreach (var eventEntity in _eventFilter)
             {
                 var requestEntity = _world.NewEntity();
-                ref var requestComponent = ref _world.AddComponent<CreateViewRequest>(requestEntity);
+
+                ref var requestComponent = ref _viewAspect.CreateView.Add(requestEntity);
 
                 var parent = _data.Parent;
-                if (parent != null)
+                if (parent)
                 {
                     var ecsConverter = parent.gameObject.GetComponent<ProtoEcsMonoConverter>();
-                    if (ecsConverter != null && ecsConverter.IsPlayingAndReady)
+                    if (ecsConverter && ecsConverter.IsPlayingAndReady)
                         requestComponent.Owner = ecsConverter.PackedEntity;
                 }
 
@@ -71,23 +72,22 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class ShowViewWhenSystem<TEvent,TView> : IProtoInitSystem, IProtoRunSystem
+    [ECSDI]
+    public class ShowViewWhenSystem<TEvent, TView> : IProtoRunSystem
         where TEvent : struct
         where TView : IView
     {
         private ViewRequestData _data;
         private ProtoWorld _world;
-        private EcsFilter _eventFilter;
+        private ViewAspect _viewAspect;
+
+        private ProtoIt _eventFilter = It
+            .Chain<TEvent>()
+            .End();
 
         public ShowViewWhenSystem(ViewRequestData data)
         {
             _data = data;
-        }
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _eventFilter = _world.Filter<TEvent>().End();
         }
 
         public void Run()
@@ -95,13 +95,14 @@
             foreach (var eventEntity in _eventFilter)
             {
                 var requestEntity = _world.NewEntity();
-                ref var requestComponent = ref _world.AddComponent<CreateViewRequest>(requestEntity);
+                ref var requestComponent = ref _viewAspect.CreateView.Add(requestEntity);
+
 
                 var parent = _data.Parent;
-                if (parent != null)
+                if (parent)
                 {
                     var ecsConverter = parent.gameObject.GetComponent<ProtoEcsMonoConverter>();
-                    if (ecsConverter != null && ecsConverter.IsPlayingAndReady)
+                    if (ecsConverter && ecsConverter.IsPlayingAndReady)
                         requestComponent.Owner = ecsConverter.PackedEntity;
                 }
 
@@ -114,7 +115,7 @@
             }
         }
     }
-    
+
     /// <summary>
     /// await target event and create view
     /// </summary>
@@ -124,26 +125,24 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class ShowViewWhenSystem<TEvent1,TEvent2,TView> : IProtoInitSystem, IProtoRunSystem
+    [ECSDI]
+    public class ShowViewWhenSystem<TEvent1, TEvent2, TView> : IProtoRunSystem
         where TEvent1 : struct
         where TEvent2 : struct
         where TView : IView
     {
         private ViewRequestData _data;
         private ProtoWorld _world;
-        private EcsFilter _eventFilter;
+        private ViewAspect _viewAspect;
+
+        private ProtoIt _eventFilter = It
+            .Chain<TEvent1>()
+            .Inc<TEvent2>()
+            .End();
 
         public ShowViewWhenSystem(ViewRequestData data)
         {
             _data = data;
-        }
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            _eventFilter = _world.Filter<TEvent1>()
-                .Inc<TEvent2>()
-                .End();
         }
 
         public void Run()
@@ -151,13 +150,14 @@
             foreach (var eventEntity in _eventFilter)
             {
                 var requestEntity = _world.NewEntity();
-                ref var requestComponent = ref _world.AddComponent<CreateViewRequest>(requestEntity);
+                ref var requestComponent = ref _viewAspect.CreateView.Add(requestEntity);
+
 
                 var parent = _data.Parent;
-                if (parent != null)
+                if (parent)
                 {
                     var ecsConverter = parent.gameObject.GetComponent<ProtoEcsMonoConverter>();
-                    if (ecsConverter != null && ecsConverter.IsPlayingAndReady)
+                    if (ecsConverter && ecsConverter.IsPlayingAndReady)
                         requestComponent.Owner = ecsConverter.PackedEntity;
                 }
 

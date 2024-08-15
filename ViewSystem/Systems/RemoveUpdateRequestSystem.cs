@@ -2,14 +2,13 @@
 {
     using System;
     using Aspects;
-    using Bootstrap.Runtime.Attributes;
     using Components;
+    using Bootstrap.Runtime.Attributes;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using Shared.Extensions;
 
     /// <summary>
-    /// Initializes the model of views system.
+    /// System for removes entities with update requests.
     /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -20,29 +19,28 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class InitializeModelOfViewsSystem : IProtoRunSystem
+    public class RemoveUpdateRequestSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
         private ViewAspect _viewAspect;
 
-        private ProtoItExc _filter = It
-            .Chain<ViewComponent>()
-            .Exc<ViewInitializedComponent>()
+        private ProtoIt _filter = It
+            .Chain<UpdateViewRequest>()
             .End();
 
         public void Run()
         {
             foreach (var entity in _filter)
             {
-                ref var viewComponent = ref _viewAspect.View.Get(entity);
-                var view = viewComponent.View;
+                ref var updateComponent = ref _viewAspect.UpdateView.Get(entity);
 
-                if (view.ViewModel == null) continue;
+                if (updateComponent.counter <= 0)
+                {
+                    updateComponent.counter += 1;
+                    continue;
+                }
 
-                ref var viewModelComponent = ref _viewAspect.Model.GetOrAdd(entity);
-                viewModelComponent.Model = view.ViewModel;
-
-                _viewAspect.Initialized.GetOrAddComponent(entity);
+                _viewAspect.UpdateView.Del(entity);
             }
         }
     }

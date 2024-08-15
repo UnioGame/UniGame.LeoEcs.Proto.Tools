@@ -1,14 +1,11 @@
 ﻿namespace Game.Ecs.UI.EndGameScreens.Systems
 {
     using System;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using UniGame.LeoEcs.Shared.Extensions;
-    using UniGame.LeoEcs.ViewSystem.Components;
+    using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Extensions;
-    using UniGame.ViewSystem.Runtime;
 
     /// <summary>
     /// request to show view in container
@@ -22,11 +19,11 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CloseOnSystem<TEvent,TViewModel> : IProtoRunSystem
+    public class CloseOnSystem<TEvent> : IProtoRunSystem
         where TEvent : struct
-        where TViewModel : IViewModel
     {
         private ProtoWorld _world;
+        private ViewAspect _viewAspect;
         
         private ProtoIt _eventFilter = It
             .Chain<TEvent>()
@@ -36,15 +33,13 @@
             .ViewChain()
             .End();
 
-        private ProtoPool<ViewComponent> _viewPool;
-
         public void Run()
         {
             foreach (var eventEntity in _eventFilter)
             {
                 foreach (var viewEntity in _viewFilter)
                 {
-                    ref var viewComponent = ref _viewPool.Get(viewEntity);
+                    ref var viewComponent = ref _viewAspect.View.Get(viewEntity);
                     viewComponent.View.Close();
                 }
             }

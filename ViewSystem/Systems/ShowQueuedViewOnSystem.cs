@@ -1,13 +1,13 @@
 ﻿namespace UniGame.LeoEcsLite.LeoEcs.ViewSystem.Systems
 {
     using System;
-    using global::UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using global::UniGame.LeoEcs.ViewSystem.Components;
-    using global::UniGame.LeoEcs.ViewSystem.Extensions;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using UniGame.LeoEcs.Shared.Extensions;
-
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
+    using UniGame.LeoEcs.ViewSystem.Aspects;
+    using UniGame.LeoEcs.ViewSystem.Components;
+    using UniGame.LeoEcs.ViewSystem.Extensions;
+    
     /// <summary>
     /// make request to shown view queued
     /// </summary>
@@ -20,28 +20,20 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class ShowQueuedViewOnSystem<TEvent,TView1,TView2> : IProtoInitSystem, IProtoRunSystem where TEvent : struct
+    public class ShowQueuedViewOnSystem<TEvent, TView1, TView2> : IProtoRunSystem
+        where TEvent : struct
     {
         private readonly EcsViewData _viewData;
         private ProtoWorld _world;
+        private ViewAspect _viewAspect;
         
-        private ProtoPool<ShowQueuedRequest> _showRequestPool;
-        private EcsFilter _filter;
+        private ProtoIt _filter = It
+            .Chain<TEvent>()
+            .End();
 
         public ShowQueuedViewOnSystem(EcsViewData viewData)
         {
             _viewData = viewData;
-        }
-        
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-            
-            _filter = _world
-                .Filter<TEvent>()
-                .End();
-            
-            _showRequestPool = _world.GetPool<ShowQueuedRequest>();
         }
 
         public void Run()
@@ -49,14 +41,14 @@
             foreach (var entity in _filter)
             {
                 var requestEntity = _world.NewEntity();
-                ref var request = ref _showRequestPool.Add(requestEntity);
-                
+                ref var request = ref _viewAspect.ShowQueued.Add(requestEntity);
+
                 request.AwaitId = 0;
-                
+
                 request.Value.Enqueue(EcsViewExtensions.CreateViewRequest(typeof(TView1).Name,
-                    _viewData.LayoutType,_viewData.Parent,_viewData.Tag,_viewData.ViewName,_viewData.StayWorld));
+                    _viewData.LayoutType, _viewData.Parent, _viewData.Tag, _viewData.ViewName, _viewData.StayWorld));
                 request.Value.Enqueue(EcsViewExtensions.CreateViewRequest(typeof(TView2).Name,
-                    _viewData.LayoutType,_viewData.Parent,_viewData.Tag,_viewData.ViewName,_viewData.StayWorld));
+                    _viewData.LayoutType, _viewData.Parent, _viewData.Tag, _viewData.ViewName, _viewData.StayWorld));
             }
         }
     }

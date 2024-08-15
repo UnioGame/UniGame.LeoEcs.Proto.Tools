@@ -1,7 +1,6 @@
 namespace UniGame.LeoEcs.ViewSystem
 {
     using System;
-    using System.Collections.Generic;
     using Behavriour;
     using Bootstrap.Runtime;
     using Cysharp.Threading.Tasks;
@@ -20,12 +19,6 @@ namespace UniGame.LeoEcs.ViewSystem
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;
     using UnityEngine.AddressableAssets;
-
-#if UNITY_EDITOR
-    using UnityEditor;
-    using UniModules.Editor;
-    using UniModules.UniGame.AddressableExtensions.Editor;
-#endif
     
     [CreateAssetMenu(menuName = "UniGame/Ecs Proto/Features/Views Feature", fileName = "ECS Views Feature")]
     public class ViewSystemFeature : BaseLeoEcsFeature
@@ -34,22 +27,27 @@ namespace UniGame.LeoEcs.ViewSystem
         
         public override async UniTask InitializeAsync(IProtoSystems ecsSystems)
         {
+            var protoWorld = ecsSystems.GetWorld();
             var context = ecsSystems.GetShared<IContext>();
             var viewSystem = await context.ReceiveFirstAsync<IGameViewSystem>();
             
             _ecsViewTools = new EcsViewTools(context, viewSystem);
 
+            protoWorld.SetGlobal(viewSystem);
+            protoWorld.SetGlobal(_ecsViewTools);
+            protoWorld.SetGlobal(context);
+            
             ecsSystems.DelHere<ViewStatusSelfEvent>();
             
             //layouts
-            ecsSystems.Add(new RegisterNewViewLayoutSystem(viewSystem));
+            ecsSystems.Add(new RegisterNewViewLayoutSystem());
             ecsSystems.DelHere<RegisterViewLayoutSelfRequest>();
             
             //if view entity is dead and 
             ecsSystems.Add(new CloseViewByDeadEntitySystem());
             ecsSystems.Add(new CloseViewSystem());
-            ecsSystems.Add(new ViewServiceInitSystem(viewSystem));
-            ecsSystems.Add(new CloseAllViewsSystem(viewSystem));
+            ecsSystems.Add(new ViewServiceInitSystem());
+            ecsSystems.Add(new CloseAllViewsSystem());
 
             //show view queued one by one
             ecsSystems.Add(new ShowViewsQueuedSystem());
@@ -66,14 +64,14 @@ namespace UniGame.LeoEcs.ViewSystem
             //update view status systems
             ecsSystems.Add(new ViewUpdateStatusSystem());
             ecsSystems.Add(new UpdateViewOrderSystem());
-            ecsSystems.Add(new CreateViewSystem(context,viewSystem));
+            ecsSystems.Add(new CreateViewSystem());
             ecsSystems.Add(new MarkViewAsInitializedSystem());
             
-            ecsSystems.Add(new InitializeViewsSystem(_ecsViewTools));
+            ecsSystems.Add(new InitializeViewsSystem());
             ecsSystems.Add(new InitializeModelOfViewsSystem());
             //initialize view id component when view initialized
             ecsSystems.Add(new InitializeViewIdComponentSystem());
-            ecsSystems.Add(new RemoveUpdateRequest());
+            ecsSystems.Add(new RemoveUpdateRequestSystem());
             
             ecsSystems.DelHere<CreateViewRequest>();
             ecsSystems.DelHere<CloseAllViewsRequest>();

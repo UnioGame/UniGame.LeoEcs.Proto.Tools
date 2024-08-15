@@ -2,21 +2,24 @@
 {
     using System;
     using System.Runtime.CompilerServices;
+    using Aspects;
+    using Bootstrap.Runtime.Abstract;
     using Cysharp.Threading.Tasks;
-    using Leopotam.EcsLite;
     using Components;
     using UniGame.ViewSystem.Runtime;
     using Bootstrap.Runtime.Attributes;
     using Converter.Runtime;
     using Core.Runtime;
-    using Game.Ecs.Core.Components;
-    using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
+    using Layouts.Aspects;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
     using UiSystem.Runtime;
     using Debug = UnityEngine.Debug;
 
+    /// <summary>
+    /// System for creating views based on requested data.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -26,40 +29,34 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CreateViewSystem : IProtoRunSystem,IProtoInitSystem
+    public class CreateViewSystem : IProtoRunSystem, IProtoInitSystem
     {
-        private readonly IGameViewSystem _viewSystem;
-        private readonly IContext _context;
-        
-        public EcsFilter _createFilter;
-        public ProtoWorld _world;
+        private ProtoWorld _world;
 
-        private ProtoPool<CreateViewRequest> _createViewPool;
-        private ProtoPool<OwnerComponent> _ownerPool;
-        private ProtoPool<ViewParentComponent> _parentPool;
+        private ViewAspect _viewAspect;
+        private LifeTimeAspect _lifeTimeAspect;
+        private ViewLayoutAspect _viewLayoutAspect;
 
-        public CreateViewSystem(IContext context,IGameViewSystem viewSystem)
-        {
-            _context = context;
-            _viewSystem = viewSystem;
-        }
-        
+        private IGameViewSystem _viewSystem;
+        private IContext _context;
+
+        private ProtoIt _createFilter = It
+            .Chain<CreateViewRequest>()
+            .End();
+
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
-            _createFilter = _world.Filter<CreateViewRequest>().End();
-            
-            _createViewPool = _world.GetPool<CreateViewRequest>();
-            _ownerPool = _world.GetPool<OwnerComponent>();
-            _parentPool = _world.GetPool<ViewParentComponent>();
+            _viewSystem = _world.GetGlobal<IGameViewSystem>();
+            _context = _world.GetGlobal<IContext>();
         }
-        
+
         public void Run()
         {
             foreach (var entity in _createFilter)
             {
-                ref var request = ref _createViewPool.Get(entity);
-                
+                ref var request = ref _viewAspect.CreateView.Get(entity);
+
                 CreateViewByRequest(request).Forget();
             }
         }
@@ -70,14 +67,14 @@
             var layoutId = request.LayoutType;
             var modelType = _viewSystem.ModelTypeMap.GetViewModelType(viewType);
             var model = await _viewSystem.CreateViewModel(_context, modelType);
-            
+
             var requestLayout = layoutId;
 
-            if (string.IsNullOrEmpty(layoutId) || 
+            if (string.IsNullOrEmpty(layoutId) ||
                 GameViewSystem.NoneType.Equals(layoutId, StringComparison.OrdinalIgnoreCase))
                 requestLayout = string.Empty;
 
-            if (!string.IsNullOrEmpty(requestLayout) && 
+            if (!string.IsNullOrEmpty(requestLayout) &&
                 !_viewSystem.HasLayout(requestLayout))
             {
 #if UNITY_EDITOR
@@ -85,75 +82,73 @@
 #endif
                 return;
             }
-            
+
             var view = requestLayout switch
             {
                 "" => await _viewSystem
-                    .Create(model,request.ViewId,request.Tag,request.Parent,request.ViewName,request.StayWorld),
+                    .Create(model, request.ViewId, request.Tag, request.Parent, request.ViewName, request.StayWorld),
                 _ => await _viewSystem
-                    .OpenView(model,request.ViewId,requestLayout,request.Tag,request.ViewName),
+                    .OpenView(model, request.ViewId, requestLayout, request.Tag, request.ViewName),
             };
 
-            var entity = await UpdateViewEntity(view,request);  
-            if((int)entity<0) return;
-            
+            var entity = await UpdateViewEntity(view, request);
+            if ((int)entity < 0) return;
+
             var packedEntity = _world.PackEntity(entity);
-            if(!packedEntity.Unpack(_world,out var viewEntity)) return;
-            
+            if (!packedEntity.Unpack(_world, out var viewEntity)) return;
+
             UpdateViewEntityComponent(entity, model, request);
         }
 
-        private async UniTask<ProtoEntity> UpdateViewEntity(IView view,CreateViewRequest request)
+        private async UniTask<ProtoEntity> UpdateViewEntity(IView view, CreateViewRequest request)
         {
-            var viewEntity = (ProtoEntity)(-1); 
+            var viewEntity = (ProtoEntity)(-1);
             var viewObject = view.GameObject;
-            if (viewObject == null) return viewEntity;
+            if (!viewObject) return viewEntity;
 
-            if(request.Target.Unpack(_world,out var targetEntity))
+            if (request.Target.Unpack(_world, out var targetEntity))
                 viewEntity = targetEntity;
-            
+
             var converter = viewObject.GetComponent<ILeoEcsMonoConverter>();
             if (converter != null && (int)viewEntity < 0)
             {
                 if ((int)converter.Entity > 0) return converter.Entity;
                 if (!converter.AutoCreate) return viewEntity;
-                
+
                 await UniTask.WaitWhile(() => (int)converter.Entity < 0);
                 viewEntity = converter.Entity;
             }
             else
             {
                 viewEntity = (int)viewEntity < 0 ? _world.NewEntity() : viewEntity;
-                viewObject.ConvertGameObjectToEntity(_world,viewEntity);
+                viewObject.ConvertGameObjectToEntity(_world, viewEntity);
             }
-            
-            if(request.Owner.Unpack(_world,out var ownerEntity))
-                _ownerPool.GetOrAddComponent(viewEntity).Value = request.Owner;
-            
+
+            if (request.Owner.Unpack(_world, out var ownerEntity))
+                _lifeTimeAspect.Owner.GetOrAddComponent(viewEntity).Value = request.Owner;
+
             return viewEntity;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdateViewEntityComponent(ProtoEntity viewEntity,IViewModel model,CreateViewRequest request)
+        private void UpdateViewEntityComponent(ProtoEntity viewEntity, IViewModel model, CreateViewRequest request)
         {
-            ref var modelComponent = ref _world.GetOrAddComponent<ViewModelComponent>(viewEntity);
+            ref var modelComponent = ref _viewAspect.Model.GetOrAdd(viewEntity);
             modelComponent.Model = model;
 
             ref var owner = ref request.Owner;
             ref var parent = ref request.Parent;
-            
-            if (owner.Unpack(_world, out var ownerEntity)) 
+
+            if (owner.Unpack(_world, out var ownerEntity))
             {
-                ref var ownerComponent = ref _ownerPool.GetOrAddComponent(viewEntity);
+                ref var ownerComponent = ref _lifeTimeAspect.Owner.GetOrAddComponent(viewEntity);
                 ownerComponent.Value = owner;
             }
-            
-            if (parent != null)
-            {
-                ref var parentComponent = ref _parentPool.GetOrAddComponent(viewEntity);
-                parentComponent.Value = parent;
-            }
-        }
 
+            if (!parent) return;
+
+            ref var parentComponent = ref _viewLayoutAspect.Parent.GetOrAddComponent(viewEntity);
+            parentComponent.Value = parent;
+        }
     }
 }

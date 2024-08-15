@@ -1,6 +1,8 @@
 namespace UniGame.LeoEcs.ViewSystem.Systems
 {
     using System;
+    using Aspects;
+    using Bootstrap.Runtime.Attributes;
     using Components;
     using Leopotam.EcsProto;
     using Shared.Extensions;
@@ -8,6 +10,9 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;
 
+    /// <summary>
+    /// Initializes the ViewService.
+    /// </summary>
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -16,21 +21,20 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
+    [ECSDI]
     public class ViewServiceInitSystem : IProtoInitSystem
     {
-        private readonly IGameViewSystem _gameViewSystem;
         private ProtoWorld _world;
-
-        public ViewServiceInitSystem(IGameViewSystem gameViewSystem)
-        {
-            _gameViewSystem = gameViewSystem;
-        }
-
+        private ViewSystemAspect _viewSystemAspect;
+        private IGameViewSystem _gameViewSystem;
+        
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
+            _gameViewSystem = _world.GetGlobal<IGameViewSystem>();
+            
             var entity = _world.NewEntity();
-            ref var component = ref _world.AddComponent<ViewServiceComponent>(entity);
+            ref var component = ref _viewSystemAspect.ViewService.Add(entity);
             component.ViewSystem = _gameViewSystem;
             
             GameLog.Log($"{nameof(ViewServiceComponent)} Created",Color.green);

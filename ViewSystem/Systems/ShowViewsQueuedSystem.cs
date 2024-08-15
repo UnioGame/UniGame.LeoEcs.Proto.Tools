@@ -3,9 +3,9 @@
     using System;
     using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using UniGame.LeoEcs.Shared.Extensions;
+    using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Components;
 
     /// <summary>
@@ -20,57 +20,47 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class ShowViewsQueuedSystem : IProtoInitSystem, IProtoRunSystem
+    public class ShowViewsQueuedSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _viewFilter;
-        private EcsFilter _viewQueuedFilter;
+        private ViewAspect _viewAspect;
         
-        private ProtoPool<ShowQueuedRequest> _queuedPool;
-        private ProtoPool<ViewIdComponent> _viewIdPool;
-        private ProtoPool<CreateViewRequest> _viewRequestPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-
-            _viewFilter = _world
-                .Filter<ViewIdComponent>()
-                .End();
-            
-            _viewQueuedFilter = _world
-                .Filter<ShowQueuedRequest>()
-                .End();
-        }
+        private ProtoIt _viewFilter = It
+            .Chain<ViewIdComponent>()
+            .End();
+        
+        private ProtoIt _viewQueuedFilter = It
+            .Chain<ShowQueuedRequest>()
+            .End();
 
         public void Run()
         {
             foreach (var requestEntity in _viewQueuedFilter)
             {
-                ref var queuedRequest = ref _queuedPool.Get(requestEntity);
-                
+                ref var queuedRequest = ref _viewAspect.ShowQueued.Get(requestEntity);
+
                 if (queuedRequest.Value.Count == 0)
                 {
-                    _queuedPool.Del(requestEntity);
+                    _viewAspect.ShowQueued.Del(requestEntity);
                     continue;
                 }
-                
+
                 var activateNext = queuedRequest.AwaitId == 0;
-                
+
                 foreach (var viewEntity in _viewFilter)
                 {
-                    if(activateNext) break;
-                    ref var viewIdComponent = ref _viewIdPool.Get(viewEntity);
+                    if (activateNext) break;
+                    ref var viewIdComponent = ref _viewAspect.Id.Get(viewEntity);
                     activateNext = viewIdComponent.Value == queuedRequest.AwaitId;
                 }
-                
-                if(!activateNext) continue;
-                
+
+                if (!activateNext) continue;
+
                 var viewRequestEntity = _world.NewEntity();
                 var nextRequest = queuedRequest.Value.Dequeue();
                 queuedRequest.AwaitId = nextRequest.ViewId.GetHashCode();
-                
-                ref var viewRequest = ref _viewRequestPool.Add(viewRequestEntity);
+
+                ref var viewRequest = ref _viewAspect.CreateView.Add(viewRequestEntity);
                 viewRequest.ViewId = nextRequest.ViewId;
                 viewRequest.ViewName = nextRequest.ViewName;
                 viewRequest.Owner = nextRequest.Owner;
@@ -80,7 +70,6 @@
                 viewRequest.LayoutType = nextRequest.LayoutType;
                 viewRequest.StayWorld = nextRequest.StayWorld;
             }
-            
         }
     }
 }
