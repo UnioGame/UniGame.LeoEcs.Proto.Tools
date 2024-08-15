@@ -23,7 +23,7 @@ namespace UniGame.LeoEcs.ViewSystem
     [CreateAssetMenu(menuName = "UniGame/Ecs Proto/Features/Views Feature", fileName = "ECS Views Feature")]
     public class ViewSystemFeature : BaseLeoEcsFeature
     {
-        private EcsViewTools _ecsViewTools;
+        private IEcsViewTools _ecsViewTools;
         
         public override async UniTask InitializeAsync(IProtoSystems ecsSystems)
         {

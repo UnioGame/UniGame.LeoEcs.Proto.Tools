@@ -21,7 +21,7 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CreateViewInContainerSystem : IProtoRunSystem
+    public class CreateViewInContainerSystem : IProtoInitSystem, IProtoRunSystem
     {
         private ProtoWorld _world;
         
