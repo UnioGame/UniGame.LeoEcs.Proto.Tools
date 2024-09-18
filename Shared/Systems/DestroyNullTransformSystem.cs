@@ -42,8 +42,11 @@
             {
                 ref var transformComponent = ref _transformPool.Get(transformEntity);
                 var transform = transformComponent.Value;
-
-                if (transform != null) continue;
+                if (transform)
+                {
+                    continue;
+                }
+                
                 _world.DelEntity(transformEntity);
             }
         }

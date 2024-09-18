@@ -6,10 +6,7 @@
     using Core.Runtime;
     using Leopotam.EcsLite;
     using UniModules.UniCore.Runtime.DataFlow;
-
-    /// <summary>
-    /// lifetime component
-    /// </summary>
+    
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -31,6 +28,11 @@
             c._value ??= LifeTime.Create();
             c._value.Restart();
         }
+        
+        internal void Release()
+        {
+            _value.Release();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ILifeTime AddCleanUpAction(Action cleanAction)
@@ -49,7 +51,5 @@
         {
             return _value.AddRef(o);
         }
-
-       
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Game.Ecs.Core.Systems
+﻿/*namespace Game.Ecs.Core.Systems
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,8 @@
     using Death.Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Modules.leoecs.proto.tools.Ownership.Aspects;
+    using Modules.leoecs.proto.tools.Ownership.Components;
     using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Extensions;
@@ -87,4 +89,4 @@
             }
         }
     }
-}
+}*/

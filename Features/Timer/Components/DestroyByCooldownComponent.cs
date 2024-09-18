@@ -1,10 +1,7 @@
-﻿namespace Game.Ecs.Core.Components
+﻿namespace UniGame.LeoEcs.Timer.Components
 {
-    using Leopotam.EcsProto.QoL;
-
-    /// <summary>
-    /// ready to death
-    /// </summary>
+    using System;
+    
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -12,8 +9,9 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
-    public struct PrepareToDeathComponent
+    [Serializable]
+    public struct DestroyByCooldownComponent
     {
-        public ProtoPackedEntity Source;
+        
     }
 }

@@ -27,7 +27,7 @@
             
             await gameTimeFeature.InitializeAsync(ecsSystems);
             
-            ecsSystems.Add(new KillMeNextTimeHandleSystem());
+            //ecsSystems.Add(new KillMeNextTimeHandleSystem());
             ecsSystems.Add(new ProcessDestroySilentSystem());
             
             ecsSystems.Add(new UpdateRenderStatusSystem());
@@ -35,16 +35,15 @@
             ecsSystems.Add(new ProcessDeadSimpleEntitiesSystem());
             ecsSystems.Add(new ProcessDeadTransformEntitiesSystem());
             
-            ecsSystems.Add(new DestroyInvalidChildEntitiesSystem());
-            ecsSystems.Add(new ForceValidateDeadChildEntitiesSystem());
-            ecsSystems.DelHere<OwnerDestroyedEvent>();
+            //ecsSystems.Add(new DestroyInvalidChildEntitiesSystem());
+            //ecsSystems.Add(new ForceValidateDeadChildEntitiesSystem());
+            //ecsSystems.DelHere<OwnerDestroyedEvent>();
             
-            ecsSystems.Add(new CheckInvalidChildEntitiesSystem());
+            //ecsSystems.Add(new CheckInvalidChildEntitiesSystem());
             ecsSystems.Add(new ProcessDespawnSystem());
             
             ecsSystems.DelHere<DeadEvent>();
             ecsSystems.DelHere<DisabledEvent>();
-            ecsSystems.DelHere<PrepareToDeathEvent>();
             ecsSystems.DelHere<KillEvent>();
             
             ecsSystems.Add(new ProcessKillRequestSystem());
