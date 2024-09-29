@@ -1,10 +1,7 @@
-﻿namespace Game.Ecs.Core.Components
+﻿namespace UniGame.LeoEcs.Proto.Filters.Game.Modules.leoecs.proto.tools.LifeTime.Components
 {
     using System;
-
-    /// <summary>
-    /// allow to make one round trip throw ecs loop
-    /// </summary>
+    
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 
@@ -13,8 +10,8 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct KillMeNextTimeComponent
+    public struct DeleteEntityNextComponent
     {
-        public bool Value;
+        
     }
 }

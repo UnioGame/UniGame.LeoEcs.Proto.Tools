@@ -23,6 +23,7 @@
         public ProtoPool<CooldownCompleteComponent> Completed;
         public ProtoPool<CooldownRemainsTimeComponent> Remains;
         public ProtoPool<CooldownAutoRestartComponent> AutoRestart;
+        public ProtoPool<DestroyByCooldownComponent> DestroyByCooldown;
         
         //requests
         public ProtoPool<RestartCooldownSelfRequest> Restart;

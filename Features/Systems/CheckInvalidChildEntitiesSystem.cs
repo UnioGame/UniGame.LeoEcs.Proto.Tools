@@ -1,4 +1,4 @@
-﻿namespace Game.Ecs.Core.Systems
+﻿/*namespace Game.Ecs.Core.Systems
 {
     using System;
     using Components;
@@ -38,4 +38,4 @@
             }
         }
     }
-}
+}*/

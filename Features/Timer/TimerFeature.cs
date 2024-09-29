@@ -40,6 +40,8 @@
             ecsSystems.Add(new UpdateActiveTimerStateSystem());
             ecsSystems.Add(new UpdateTimerSystem());
 
+            ecsSystems.Add(new DestroyByCooldownSystem());
+
             ecsSystems.DelHere<RestartCooldownSelfRequest>();
             
             return UniTask.CompletedTask;

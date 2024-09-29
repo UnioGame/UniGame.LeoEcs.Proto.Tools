@@ -10,9 +10,12 @@
     using Bootstrap.Runtime.Attributes;
     using Converter.Runtime;
     using Core.Runtime;
+    using Game.Modules.leoecs.proto.tools.Ownership.Aspects;
+    using Game.Modules.leoecs.proto.tools.Ownership.Extensions;
     using Layouts.Aspects;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Rx.Runtime.Extensions;
     using Shared.Extensions;
     using UiSystem.Runtime;
     using Debug = UnityEngine.Debug;
@@ -34,8 +37,8 @@
         private ProtoWorld _world;
 
         private ViewAspect _viewAspect;
-        private LifeTimeAspect _lifeTimeAspect;
         private ViewLayoutAspect _viewLayoutAspect;
+        private OwnershipAspect _ownershipAspect;
 
         private IGameViewSystem _viewSystem;
         private IContext _context;
@@ -124,9 +127,8 @@
                 viewObject.ConvertGameObjectToEntity(_world, viewEntity);
             }
 
-            if (request.Owner.Unpack(_world, out var ownerEntity))
-                _lifeTimeAspect.Owner.GetOrAddComponent(viewEntity).Value = request.Owner;
-
+            request.Owner.AddChild(viewEntity, _world);
+            
             return viewEntity;
         }
 
@@ -135,17 +137,12 @@
         {
             ref var modelComponent = ref _viewAspect.Model.GetOrAdd(viewEntity);
             modelComponent.Model = model;
-
-            ref var owner = ref request.Owner;
+            
             ref var parent = ref request.Parent;
-
-            if (owner.Unpack(_world, out var ownerEntity))
+            if (!parent)
             {
-                ref var ownerComponent = ref _lifeTimeAspect.Owner.GetOrAddComponent(viewEntity);
-                ownerComponent.Value = owner;
+                return;
             }
-
-            if (!parent) return;
 
             ref var parentComponent = ref _viewLayoutAspect.Parent.GetOrAddComponent(viewEntity);
             parentComponent.Value = parent;
