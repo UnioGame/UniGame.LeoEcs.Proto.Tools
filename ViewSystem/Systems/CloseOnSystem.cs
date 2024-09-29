@@ -6,6 +6,7 @@
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Extensions;
+    using UniGame.ViewSystem.Runtime;
 
     /// <summary>
     /// request to show view in container
@@ -19,8 +20,9 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CloseOnSystem<TEvent> : IProtoRunSystem
+    public class CloseOnSystem<TEvent, TViewModel> : IProtoRunSystem
         where TEvent : struct
+        where TViewModel : IViewModel
     {
         private ProtoWorld _world;
         private ViewAspect _viewAspect;
@@ -30,7 +32,7 @@
             .End();
         
         private ProtoIt _viewFilter = ViewIt
-            .ViewChain()
+            .ViewChain<TViewModel>()
             .End();
 
         public void Run()

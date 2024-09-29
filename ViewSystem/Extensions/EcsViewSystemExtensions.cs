@@ -57,7 +57,7 @@
             where TEvent : struct
             where TView : IViewModel
         {
-            var system = new CloseOnSystem<TEvent>();
+            var system = new CloseOnSystem<TEvent, TView>();
             systems.Add(system);
             return systems;
         }
