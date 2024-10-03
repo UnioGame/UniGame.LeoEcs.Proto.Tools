@@ -71,5 +71,20 @@
             var prepareToDeathPool = world.GetPool<PrepareToDeathComponent>();
             prepareToDeathPool.GetOrAdd(entity);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool TryGetOwner(this ProtoEntity entity, ProtoWorld world, out ProtoEntity ownerEntity)
+        {
+            ownerEntity = default;
+            
+            var ownerLinkPool = world.GetPool<OwnerLinkComponent>();
+            if (!ownerLinkPool.Has(entity))
+            {
+                return false;
+            }
+
+            ref var ownerLinkComponent = ref ownerLinkPool.Get(entity);
+            return ownerLinkComponent.Value.Unpack(world, out ownerEntity);
+        }
     }
 }

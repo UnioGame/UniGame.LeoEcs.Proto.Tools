@@ -83,5 +83,17 @@
         {
             PrepareToDeath.GetOrAdd(entity);
         }
+        
+        public bool TryGetOwner(ProtoEntity entity, out ProtoEntity ownerEntity)
+        {
+            if (OwnerLink.Has(entity))
+            {
+                ref var ownerLinkComponent = ref OwnerLink.Get(entity);
+                return ownerLinkComponent.Value.Unpack(world, out ownerEntity);
+            }
+            
+            ownerEntity = default;
+            return false;
+        }
     }
 }
