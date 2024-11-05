@@ -33,7 +33,7 @@
         {
             if (World!=null && World.IsAlive()) return World;
 
-            await UniTask.WaitWhile(() => World!=null && !World.IsAlive())
+            await UniTask.WaitWhile(() => World==null || !World.IsAlive())
                 .AttachExternalCancellation(LifeTime.Token);
 
             return World;
