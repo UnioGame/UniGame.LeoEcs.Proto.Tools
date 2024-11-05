@@ -26,6 +26,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [HideLabel]
         [ShowIf(nameof(UseAssetGroup))]
+        [InlineEditor]
 #endif
         public BaseLeoEcsFeature featureGroupAsset;
 
