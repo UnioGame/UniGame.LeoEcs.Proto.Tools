@@ -52,9 +52,10 @@
                     }
                 }
 
-                OwnerComponent ownerComponent = default;
                 ReleaseLifeTime(ownerEntity);
+                // WARNING: it is possible that entity was destroyed by game object converter! (destroy on disable)
                 _ownershipAspect.DeleteEntity.GetOrAdd(ownerEntity);
+                OwnerComponent ownerComponent = default;
                 if (!TryGetOwnerComponent(ownerEntity, ref ownerComponent))
                 {
                     continue;
@@ -84,6 +85,7 @@
                         }
                     }
                 }
+                
             }
         }
 

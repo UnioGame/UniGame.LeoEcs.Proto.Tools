@@ -46,7 +46,7 @@
             ownerLinkComponent.Value = packedOwner;
         }
         
-        public void AddChild(ref ProtoEntity owner, ref ProtoPackedEntity packedChild)
+        public void AddChild(ProtoEntity owner, ProtoPackedEntity packedChild)
         {
             if (!packedChild.Unpack(world, out var child))
             {
@@ -57,7 +57,7 @@
             AddChild(owner, child);
         }
         
-        public void AddChild(ref ProtoPackedEntity ownerPacked, ref ProtoEntity child)
+        public void AddChild(ProtoPackedEntity ownerPacked, ProtoEntity child)
         {
             if (!ownerPacked.Unpack(world, out var owner))
             {
@@ -68,7 +68,7 @@
             AddChild(owner, child);
         }   
         
-        public void AddChild(ref ProtoPackedEntity ownerPacked, ref ProtoPackedEntity packedChild)
+        public void AddChild(ProtoPackedEntity ownerPacked, ProtoPackedEntity packedChild)
         {
             if (!ownerPacked.Unpack(world, out var owner))
             {
@@ -76,7 +76,7 @@
                 return;
             }
             
-            AddChild(ref owner, ref packedChild);
+            AddChild(owner, packedChild);
         }
         
         public void Kill(ProtoEntity entity)
