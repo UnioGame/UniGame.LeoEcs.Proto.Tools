@@ -12,7 +12,7 @@
     {
         bool AutoCreate { get; }
         
-        void Convert(ProtoWorld world, int ecsEntity);
+        void Convert(ProtoWorld world, ProtoEntity ecsEntity);
 
         void DestroyEntity();
     }
