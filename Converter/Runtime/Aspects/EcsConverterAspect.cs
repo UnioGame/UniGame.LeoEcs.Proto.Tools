@@ -2,6 +2,7 @@
 {
     using System;
     using LeoEcs.Converter.Runtime.Components;
+    using LeoEcsLite.LeoEcs.Shared.Components;
     using Leopotam.EcsProto;
     using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
 
@@ -19,5 +20,6 @@
     public class EcsConverterAspect : EcsAspect
     {
         public ProtoPool<ObjectConverterComponent> Converter;
+        public ProtoPool<ParentEntityComponent> Parent;
     }
 }

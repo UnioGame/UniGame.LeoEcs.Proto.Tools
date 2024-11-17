@@ -26,6 +26,7 @@
                 new EcsDiAspectInjection(),
                 new EcsDiItInjection(),
                 new EcsDiServicesInjection(),
+                new EcsDiWorldGlobalInjection(),
             };
         }
 

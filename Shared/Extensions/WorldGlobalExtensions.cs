@@ -44,6 +44,14 @@
             var value = globals.Get<T>();
             return value;
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static object GetGlobal(this ProtoWorld world,Type type)
+        {
+            var globals = _globalValues[world];
+            var value = globals.Get(type);
+            return value;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T SetGlobal<T>(this IProtoSystems systems, T value)
