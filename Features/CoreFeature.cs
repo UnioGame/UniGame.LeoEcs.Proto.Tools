@@ -8,20 +8,25 @@
     using Death.Systems;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Modules.leoecs.proto.tools.Ownership;
     using Time;
     using Timer;
     using UniGame.LeoEcs.Bootstrap.Runtime;
+    using UniGame.LeoEcs.Proto;
     using UniGame.LeoEcs.Shared.Extensions;
     using UniGame.LeoEcs.Shared.Components;
 
     [Serializable]
-    public class CoreFeature : EcsFeature
+    public class CoreFeature : EcsFeature,IAutoInitFeature
     {
         public TimerFeature timerFeature = new();
         public GameTimeFeature gameTimeFeature = new();
+        public OwnershipFeature ownershipFeature = new();
         
         protected override async UniTask OnInitializeAsync(IProtoSystems ecsSystems)
         {
+            await ownershipFeature.InitializeAsync(ecsSystems);
+            
             ecsSystems.Add(new AddTransformComponentsSystem());
             ecsSystems.Add(new UpdateTransformDataSystem());
             

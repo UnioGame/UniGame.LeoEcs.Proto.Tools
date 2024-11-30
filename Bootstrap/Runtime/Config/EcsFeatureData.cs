@@ -38,7 +38,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [HideLabel]
         [ShowIf(nameof(UseSerializedGroup))]
 #endif
-        public IEcsSystemsGroup featureGroup = null;
+        public ILeoEcsFeature featureGroup = null;
 
         public string FeatureName => Feature is null or EmptyFeature
             ? EmptyFeature.EcsEmptyFeatureName 

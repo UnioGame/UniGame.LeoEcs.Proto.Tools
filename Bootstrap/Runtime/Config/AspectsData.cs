@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Core.Runtime.SerializableType;
     using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.ViewSystem.Aspects;
     using Sirenix.OdinInspector;
     using UnityEngine;
 
@@ -20,7 +21,7 @@
         
         [PropertySpace]
         [SerializeReference]
-        public List<IProtoAspectFactory> factories = new();
+        public List<IProtoAspectFactory> factories = new(){new ViewPoolAspectProvider()};
         
     }
 

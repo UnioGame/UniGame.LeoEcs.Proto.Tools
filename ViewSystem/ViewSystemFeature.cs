@@ -13,6 +13,7 @@ namespace UniGame.LeoEcs.ViewSystem
     using LeoEcsLite.LeoEcs.ViewSystem.Systems;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
     using Shared.Extensions;
     using Systems;
     using UiSystem.Runtime.Settings;
@@ -20,8 +21,8 @@ namespace UniGame.LeoEcs.ViewSystem
     using UnityEngine;
     using UnityEngine.AddressableAssets;
     
-    [CreateAssetMenu(menuName = "UniGame/Ecs Proto/Features/Views Feature", fileName = "ECS Views Feature")]
-    public class ViewSystemFeature : BaseLeoEcsFeature
+    [CreateAssetMenu(menuName = "Proto Features/Views Feature", fileName = "ECS Views Feature")]
+    public class ViewSystemFeature : BaseLeoEcsFeature,IAutoInitFeature
     {
         private IEcsViewTools _ecsViewTools;
         
