@@ -19,5 +19,6 @@
         public ProtoPool<TransformScaleComponent> Scale;
         public ProtoPool<TransformRotationComponent> Rotation;
         public ProtoPool<SpriteComponent> Sprite;
+        public ProtoPool<LightComponent> Light;
     }
 }
