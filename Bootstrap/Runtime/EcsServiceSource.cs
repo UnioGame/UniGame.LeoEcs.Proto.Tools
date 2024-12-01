@@ -19,7 +19,7 @@ using Sirenix.OdinInspector;
 #endif
     
     [Serializable]
-    [CreateAssetMenu(menuName = "UniGame/Ecs Proto/Ecs Service Source", fileName = nameof(EcsServiceSource))]
+    [CreateAssetMenu(menuName = "ECS Proto/Ecs Service Source", fileName = nameof(EcsServiceSource))]
     public class EcsServiceSource : ServiceDataSourceAsset<IEcsService>,IEcsExecutorFactory
     {
         #region inspector

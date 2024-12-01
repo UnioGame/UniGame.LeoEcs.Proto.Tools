@@ -12,7 +12,7 @@
     public static class EcsBootAssetEditorMenu
     {
 #if UNITY_EDITOR  
-        [MenuItem("Assets/Create/UniGame/Ecs Proto/Create Ecs Configuration")]
+        [MenuItem("Assets/Create/ECS Proto/Create Ecs Configuration")]
         public static void CreateEcsServiceMenu()
         {
             var selection = Selection.activeObject;

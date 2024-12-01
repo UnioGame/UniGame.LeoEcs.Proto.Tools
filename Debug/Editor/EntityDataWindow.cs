@@ -26,7 +26,7 @@
 
         private static Color buttonColor = new Color(0.2f, 1, 0.6f);
 
-        [MenuItem("UniGame/Ecs Proto/Entity Data Window")]
+        [MenuItem("ECS Proto/Entity Data Window")]
         [MenuItem("Game/Editors/Entity Data Window")]
         public static EntityDataWindow OpenWindow()
         {

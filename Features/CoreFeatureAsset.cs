@@ -5,7 +5,7 @@
     using UniGame.LeoEcs.Bootstrap.Runtime;
     using UnityEngine;
 
-    [CreateAssetMenu(menuName = "Proto Features/Core/Core Feature", fileName = "Core Feature")]
+    [CreateAssetMenu(menuName = "ECS Proto/Features/Core/Core Feature", fileName = "Core Feature")]
     public class CoreFeatureAsset : BaseLeoEcsFeature
     {
         public CoreFeature coreFeature = new();

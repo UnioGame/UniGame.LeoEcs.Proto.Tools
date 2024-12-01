@@ -21,7 +21,7 @@
     using TriInspector;
 #endif
     
-    [CreateAssetMenu(menuName = "UniGame/Ecs Proto/ECS Feature Group", fileName = "ECS Feature Group")]
+    [CreateAssetMenu(menuName = "ECS Proto/ECS Feature Group", fileName = "ECS Feature Group")]
     public class EcsFeatureGroupAsset : 
         BaseLeoEcsFeature, 
         IEcsSystemsGroup

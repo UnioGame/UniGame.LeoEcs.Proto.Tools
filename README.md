@@ -29,6 +29,38 @@ To enabled package add the following define to Scripting Define Symbols in Playe
 LEO_ECS_PROTO_ENABLED
 ```
 
+![proto game define](https://github.com/UnioGame/UniGame.LeoEcs.Proto.Tools/blob/main/Assets/ecsproto_define.png)
+
+## Settings
+
+To Create of ECS call a menu:
+
+```
+- Create/ECS Proto/Create ECS Configuration
+```
+
+Configuration parts:
+
+- **Ecs Update Map** - map of ecs workers, that's define how to update ecs systems
+- **Ecs Features Configuration** - define features of ECS and order of execution
+
+### Features
+
+**Feature - is a unit of ECS functionality, that implements some game logic with multiple systems/components/aspects.**
+
+Features can be added to the ECS Configuration by two ways:
+
+- As a scriptable object
+- As regular class with **SerializedReference** attribute
+
+![ecs configuration](https://github.com/UnioGame/UniGame.LeoEcs.Proto.Tools/blob/main/Assets/ecsproto_add_feature.png)
+
+
+Predefined features can be found in the: https://github.com/UnioGame/UniGame.LeoEcs.Proto.Features
+
+![predefined features](https://github.com/UnioGame/UniGame.LeoEcs.Proto.Tools/blob/main/Assets/ecsproto_features.png)
+
+
 # Aspects
 
 # ECS DI

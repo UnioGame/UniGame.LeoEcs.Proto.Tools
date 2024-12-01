@@ -13,7 +13,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
     using LeoEcs.Bootstrap.Runtime.Abstract;
 
-    [CreateAssetMenu(menuName = "UniGame/Ecs Proto/Systems Update Map", fileName = "Systems Update Map")]
+    [CreateAssetMenu(menuName = "ECS Proto/Systems Update Map", fileName = "Systems Update Map")]
     public class EcsUpdateMapAsset : ScriptableObject
     {
 #if ODIN_INSPECTOR || TRI_INSPECTOR
