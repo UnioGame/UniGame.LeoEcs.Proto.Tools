@@ -78,7 +78,7 @@
                         }
 
                         ReleaseLifeTime(unpackedChild);
-                        _ownershipAspect.DeleteEntity.GetOrAdd(unpackedChild);
+                        _ownershipAspect.PrepareToDeath.GetOrAdd(unpackedChild);
                         if (TryGetOwnerComponent(unpackedChild, ref ownerComponent))
                         {
                             killStack.Push(ownerComponent);
