@@ -17,5 +17,8 @@
     public struct RendererComponent
     {
         public Renderer Value;
+#if DEBUG
+        public string Name;
+#endif
     }
 }
