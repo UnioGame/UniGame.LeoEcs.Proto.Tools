@@ -17,7 +17,10 @@
         public void AddAspect(IProtoAspect aspect)
         {
             var type = aspect.GetType();
-            this.aspects[type] = aspect;
+            if (aspects.ContainsKey(type))
+                return;
+            
+            aspects[type] = aspect;
         }
         
         public void Init(ProtoWorld aspectWorld)

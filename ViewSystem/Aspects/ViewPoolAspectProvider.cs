@@ -12,12 +12,19 @@
     using UniGame.ViewSystem.Runtime;
     using UnityEditor;
 #endif
+    
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
 
     [Serializable]
     public class ViewPoolAspectProvider : IProtoAspectFactory
     {
         public static readonly Type ViewComponentType = typeof(ViewComponent<>);
-        
+
+#if ODIN_INSPECTOR
+        [Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)]
+#endif
         public List<SType> poolTypes = new();
         
         public IProtoAspect Create()
