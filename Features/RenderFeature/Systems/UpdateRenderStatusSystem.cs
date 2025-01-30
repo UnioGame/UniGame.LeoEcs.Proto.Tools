@@ -4,7 +4,9 @@
     using Bootstrap.Runtime.Attributes;
     using Leopotam.EcsProto;
     using Extensions;
+    using Game.Ecs.Core.Components;
     using Leopotam.EcsProto.QoL;
+    using UniCore.Runtime.ProfilerTools;
 
     /// <summary>
     /// update render components
@@ -23,8 +25,9 @@
         private ProtoWorld _world;
         private RendererAspect _rendererAspect;
         
-        private ProtoIt _filter = It
+        private ProtoItExc _filter = It
             .Chain<RendererComponent>()
+            .Exc<PrepareToDeathComponent>()
             .End();
 
         public void Run()
@@ -34,6 +37,18 @@
                 ref var renderComponent = ref _rendererAspect.Render.Get(entity);
 
                 var render = renderComponent.Value;
+                
+#if DEBUG
+                if (render == null)
+                {
+                    GameLog.LogError(renderComponent.Name);
+                }
+                else
+                {
+                    renderComponent.Name = render.gameObject.name;
+                }
+#endif
+
                 if (render.enabled)
                 {
                     _rendererAspect.Enabled.GetOrAddComponent(entity);
