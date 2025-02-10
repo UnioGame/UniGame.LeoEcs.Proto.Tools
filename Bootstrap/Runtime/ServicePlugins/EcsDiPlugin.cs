@@ -17,7 +17,7 @@
         private Type _protoDiAttribute = typeof(DIAttribute);
         private List<IEcsDiInjection> _injections = null;
 
-        public EcsDiPlugin()
+        public void PreInit(IContext context)
         {
             _injections = new List<IEcsDiInjection>()
             {
@@ -27,11 +27,8 @@
                 new EcsDiItInjection(),
                 new EcsDiServicesInjection(),
                 new EcsDiWorldGlobalInjection(),
+                new EcsDiContextInjection(),
             };
-        }
-
-        public void PreInit(IContext context)
-        {
             foreach (var injection in _injections)
                 injection.Initialize();
         }
