@@ -24,7 +24,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #endif
     
     [CreateAssetMenu(menuName = "ECS Proto/Converter/Ecs Converter",fileName = "Ecs Converter Asset")]
-    public class LeoEcsConverterAsset : ScriptableObject,
+    public class EcsConverterAsset : ScriptableObject,
         IEcsComponentConverter,
         ILeoEcsGizmosDrawer, 
         IEcsConverterProvider,

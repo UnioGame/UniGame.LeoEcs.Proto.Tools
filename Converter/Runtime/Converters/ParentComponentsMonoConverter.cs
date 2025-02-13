@@ -40,7 +40,7 @@
 #if TRI_INSPECTOR || ODIN_INSPECTOR
         [InlineEditor]
 #endif
-        public List<LeoEcsConverterAsset> configurations = new();
+        public List<EcsConverterAsset> configurations = new();
         
 #if ODIN_INSPECTOR
         [Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)] 

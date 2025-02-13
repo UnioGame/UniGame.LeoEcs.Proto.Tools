@@ -54,7 +54,7 @@
 #if ODIN_INSPECTOR
         [FoldoutGroup("$GroupTitle",false)]
 #endif
-        public LeoEcsConverterAsset nesterConverter;
+        public EcsConverterAsset nesterConverter;
 
         public string GroupTitle => GetValueTitle();
         

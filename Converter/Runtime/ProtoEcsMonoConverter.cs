@@ -79,7 +79,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #if TRI_INSPECTOR
         [ListDrawerSettings()]
 #endif
-        public List<LeoEcsConverterAsset> assetConverters = new();
+        public List<EcsConverterAsset> assetConverters = new();
 
 #if ODIN_INSPECTOR
         [BoxGroup("runtime info")] 
