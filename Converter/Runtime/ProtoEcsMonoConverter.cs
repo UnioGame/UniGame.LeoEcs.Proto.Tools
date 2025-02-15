@@ -62,7 +62,8 @@ namespace UniGame.LeoEcs.Converter.Runtime
         [Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)]
 #endif
 #if  ODIN_INSPECTOR || TRI_INSPECTOR
-        [InlineProperty]
+        //[InlineProperty]
+        [ListDrawerSettings(ListElementLabelName = "@Name")]
 #endif
         [Space(8)]
         [SerializeReference]
