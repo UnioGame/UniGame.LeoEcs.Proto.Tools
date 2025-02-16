@@ -15,18 +15,21 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct LifeTimeComponent : IEcsAutoReset<LifeTimeComponent>,ILifeTime
+    public struct LifeTimeComponent : IEcsAutoReset<LifeTimeComponent>
     {
         private LifeTime _value;
+
+        public CancellationToken Token;
         
         public bool IsTerminated => _value.isTerminated;
         
-        public CancellationToken Token => _value.Token;
+        public ILifeTime LifeTime => _value;
         
         public void AutoReset(ref LifeTimeComponent c)
         {
-            c._value ??= LifeTime.Create();
+            c._value ??= new LifeTime();
             c._value.Restart();
+            c.Token = c._value.Token;
         }
         
         internal void Release()
