@@ -361,6 +361,30 @@ namespace UniGame.LeoEcs.Shared.Extensions
         [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
 #endif
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetOrAddComponent(this ProtoWorld world, ProtoEntity entity,Type componentType)
+        {
+            var pool = world.Pool(componentType);
+            if (pool.Has(entity)) return;
+            pool.AddRaw(entity);
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void TryRemoveComponent(this ProtoWorld world, ProtoEntity entity,Type componentType)
+        {
+            var pool = world.Pool(componentType);
+            if (!pool.Has(entity)) return;
+            pool.Del(entity);
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref TComponent GetOrAddComponent<TComponent>(this ProtoWorld world, int entity)
             where TComponent : struct
         {
