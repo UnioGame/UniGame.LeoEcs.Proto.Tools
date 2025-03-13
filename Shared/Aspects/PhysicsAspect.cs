@@ -1,6 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
 {
     using System;
+    using Attributes;
     using Game.Ecs.Core.Components;
     using Leopotam.EcsProto;
     using Shared.Components;
@@ -16,6 +17,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
+    [ECSDI]
     public class PhysicsAspect : EcsAspect
     {
         public ProtoPool<ColliderComponent> Collider;

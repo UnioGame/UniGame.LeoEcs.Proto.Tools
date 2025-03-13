@@ -1,6 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
 {
     using System;
+    using Attributes;
     using Leopotam.EcsProto;
     using Shared.Components;
 
@@ -15,6 +16,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
+    [ECSDI]
     public class UnityAnimationAspect : EcsAspect
     {
         public ProtoPool<AnimatorComponent> Animator;

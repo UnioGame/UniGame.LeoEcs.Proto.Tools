@@ -1,12 +1,14 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
 {
     using System;
+    using Attributes;
     using Game.Ecs.Core.Components;
     using LeoEcsLite.LeoEcs.Shared.Components;
     using Leopotam.EcsProto;
     using Shared.Components;
 
     [Serializable]
+    [ECSDI]
     public class UnityAspect : EcsAspect
     {
         public ProtoPool<UnityObjectComponent> UnityObject;
