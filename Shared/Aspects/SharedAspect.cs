@@ -1,6 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
 {
     using System;
+    using Game.Ecs.Core.Components;
     using LeoEcsLite.LeoEcs.Shared.Components;
     using Leopotam.EcsProto;
     using Proto.Components;
@@ -23,5 +24,6 @@
         public ProtoPool<HashComponent> Hash;
         public ProtoPool<NameComponent> Name;
         public ProtoPool<TypeIdComponent> TypeId;
+        public ProtoPool<NewEntityComponent> NewEntity;
     }
 }

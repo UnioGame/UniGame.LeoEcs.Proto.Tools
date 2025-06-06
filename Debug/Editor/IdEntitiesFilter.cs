@@ -15,7 +15,7 @@
             var world = filterData.world;
             entities.Clear();
 
-            world.GetAliveEntities(entities);
+            world.AliveEntities(entities);
             var isEmptyFilter = string.IsNullOrEmpty(filterData.filter);
 
             var len = entities.Len();

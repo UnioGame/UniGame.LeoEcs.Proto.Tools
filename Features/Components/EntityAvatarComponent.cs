@@ -2,12 +2,11 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
     using UnityEngine;
-
-    /// <summary>
-    /// Компонент со ссылкой на рутовый transform для эффектов на entity.
-    /// </summary>
-    public struct EntityAvatarComponent : IEcsAutoReset<EntityAvatarComponent>
+    
+    public struct EntityAvatarComponent : IProtoAutoReset<EntityAvatarComponent>
     {
         public EntityBounds Bounds;
         
@@ -19,7 +18,9 @@
         
         public Transform[] All;
         
-        public void AutoReset(ref EntityAvatarComponent c)
+        public void SetHandlers(IProtoPool<EntityAvatarComponent> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref EntityAvatarComponent c)
         {
             c.Bounds = default;
             c.Head = default;

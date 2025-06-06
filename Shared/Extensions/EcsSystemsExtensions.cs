@@ -122,7 +122,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
             return pool1.Has(entity) && pool2.Has(entity) && pool3.Has(entity) && pool4.Has(entity);
         }
         
-        public static EcsFilter GetFilter<TComponent>(this IProtoSystems ecsSystems)
+        public static ProtoIt GetFilter<TComponent>(this IProtoSystems ecsSystems)
             where TComponent : struct
         {
             var world = ecsSystems.GetWorld();

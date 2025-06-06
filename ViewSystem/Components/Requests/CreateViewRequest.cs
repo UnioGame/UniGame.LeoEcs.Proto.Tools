@@ -5,11 +5,13 @@ namespace UniGame.LeoEcs.ViewSystem.Components
 {
     using System;
     using System.Runtime.CompilerServices;
+    using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
     using Shared.Abstract;
 
     [Serializable]
-    public struct CreateViewRequest : IEcsAutoReset<CreateViewRequest>, IApplyableComponent<CreateViewRequest>
+    public struct CreateViewRequest : IProtoAutoReset<CreateViewRequest>, IApplyableComponent<CreateViewRequest>
     {
         public string ViewId;
         public string LayoutType;
@@ -21,8 +23,10 @@ namespace UniGame.LeoEcs.ViewSystem.Components
         //target entity for view as a container
         public ProtoPackedEntity Target;
 
+        public void SetHandlers(IProtoPool<CreateViewRequest> pool) => pool.SetResetHandler(AutoReset);
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AutoReset(ref CreateViewRequest c)
+        public static void AutoReset(ref CreateViewRequest c)
         {
             c.Tag = string.Empty;
             c.Parent = null;

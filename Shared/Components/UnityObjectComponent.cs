@@ -2,6 +2,8 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
     using Object = UnityEngine.Object;
 
     /// <summary>
@@ -15,13 +17,17 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct UnityObjectComponent : IEcsAutoReset<UnityObjectComponent>
+    public struct UnityObjectComponent : IProtoAutoReset<UnityObjectComponent>
     {
         public Object Value;
+
+        public void SetHandlers(IProtoPool<UnityObjectComponent> pool) => pool.SetResetHandler(AutoReset);
         
-        public void AutoReset(ref UnityObjectComponent c)
+        public static void AutoReset(ref UnityObjectComponent c)
         {
             c.Value = null;
         }
+
+
     }
 }

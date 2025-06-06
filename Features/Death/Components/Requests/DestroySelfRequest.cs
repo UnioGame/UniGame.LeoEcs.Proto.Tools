@@ -1,8 +1,9 @@
 ﻿namespace Game.Ecs.Core.Death.Components
 {
     using System;
-    using Leopotam.EcsLite;
-
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
+    
     /// <summary>
     /// destroy target entity without pooling
     /// </summary>
@@ -14,9 +15,11 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct DestroySelfRequest : IEcsAutoReset<DestroySelfRequest>
+    public struct DestroySelfRequest : IProtoAutoReset<DestroySelfRequest>
     {
         public bool ForceDestroy;
+        
+        public void SetHandlers(IProtoPool<DestroySelfRequest> pool) => pool.SetResetHandler(AutoReset);
         
         public void AutoReset(ref DestroySelfRequest c)
         {

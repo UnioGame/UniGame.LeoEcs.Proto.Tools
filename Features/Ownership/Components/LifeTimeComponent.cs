@@ -5,6 +5,8 @@
     using System.Threading;
     using Core.Runtime;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
     using UniModules.UniCore.Runtime.DataFlow;
     
 #if ENABLE_IL2CPP
@@ -15,7 +17,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct LifeTimeComponent : IEcsAutoReset<LifeTimeComponent>
+    public struct LifeTimeComponent : IProtoAutoReset<LifeTimeComponent>
     {
         private LifeTime _value;
 
@@ -25,7 +27,9 @@
         
         public ILifeTime LifeTime => _value;
         
-        public void AutoReset(ref LifeTimeComponent c)
+        public void SetHandlers(IProtoPool<LifeTimeComponent> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref LifeTimeComponent c)
         {
             c._value ??= new LifeTime();
             c._value.Restart();

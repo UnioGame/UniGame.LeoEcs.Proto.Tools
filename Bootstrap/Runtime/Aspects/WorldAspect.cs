@@ -55,5 +55,7 @@
                 aspect.Value.PostInit();
             }
         }
+
+        public ProtoWorld World() => world;
     }
 }

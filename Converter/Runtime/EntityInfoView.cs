@@ -3,6 +3,7 @@
     using System;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Shared.Extensions;
     using Sirenix.OdinInspector;
     using UnityEngine;
 

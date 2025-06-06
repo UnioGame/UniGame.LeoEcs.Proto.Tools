@@ -2,6 +2,8 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
     using Unity.Mathematics;
 
     /// <summary>
@@ -15,11 +17,13 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct PositionComponent : IEcsAutoReset<PositionComponent>
+    public struct PositionComponent : IProtoAutoReset<PositionComponent>
     {
         public float3 Value;
         
-        public void AutoReset(ref PositionComponent c)
+        public void SetHandlers(IProtoPool<PositionComponent> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref PositionComponent c)
         {
             c.Value = float3.zero;
         }

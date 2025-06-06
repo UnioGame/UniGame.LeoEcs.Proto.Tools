@@ -101,7 +101,7 @@ namespace UniGame.LeoEcs.Debug.Editor
 
             gridEditorView.items.AddRange(view.entities);
             
-            World.GetAliveEntities(Entities);
+            World.AliveEntities(Entities);
 
             totalEntities = Entities.Len();
         }

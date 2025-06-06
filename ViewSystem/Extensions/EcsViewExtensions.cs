@@ -49,7 +49,7 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
     public static class EcsViewExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter ViewFilter<TModel>(this ProtoWorld world)
+        public static ProtoItChain ViewFilter<TModel>(this ProtoWorld world)
             where TModel : IViewModel
         {
             return world
@@ -110,7 +110,7 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter CreateViewFilter<TModel>(this ProtoWorld world)
+        public static ProtoIt CreateViewFilter<TModel>(this ProtoWorld world)
             where TModel : IViewModel
         {
             return world.ViewFilter<TModel>().End();

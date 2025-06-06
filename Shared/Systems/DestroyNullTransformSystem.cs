@@ -21,7 +21,7 @@
     public class DestroyNullTransformSystem : IProtoInitSystem, IProtoRunSystem
     {
         private ProtoWorld _world;
-        private EcsFilter _transformFilter;
+        private ProtoIt _transformFilter;
         private ProtoPool<TransformComponent> _transformPool;
 
         public void Init(IProtoSystems systems)

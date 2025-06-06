@@ -29,9 +29,9 @@
         private ViewRequestData _data;
         private ProtoWorld _world;
         private ViewAspect _viewAspect;
-        private EcsFilter _eventFilter;
+        private ProtoIt _eventFilter;
 
-        public ShowViewWhenSystem(EcsFilter eventFilter, ViewRequestData data)
+        public ShowViewWhenSystem(ProtoIt eventFilter, ViewRequestData data)
         {
             _eventFilter = eventFilter;
             _data = data;

@@ -18,7 +18,7 @@
         where TComponent : struct
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
+        private ProtoIt _filter;
         private ProtoPool<TComponent> _pool;
 
         public void Init(IProtoSystems systems)
@@ -51,7 +51,7 @@
         where TComponent : struct
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
+        private ProtoIt _filter;
         private ProtoPool<TComponent> _pool;
 
         public void Init(IProtoSystems systems)
@@ -89,7 +89,7 @@
         where TComponent : struct
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
+        private ProtoIt _filter;
         private ProtoPool<TComponent> _pool;
 
         public void Init(IProtoSystems systems)

@@ -120,7 +120,10 @@
             {
                 if (_config.EnableUnityModules)
                 {
-                    systems.AddModule(new UnityModule(bakeComponentsInName: false));
+                    systems.AddModule(new UnityModule(new UnityModule.Config()
+                    {
+                        NotBakeComponentsInName = true
+                    }));
                 }
 
                 foreach (var plugin in plugins)

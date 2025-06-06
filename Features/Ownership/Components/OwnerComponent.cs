@@ -2,7 +2,9 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using UniGame.LeoEcs.Proto;
     using Unity.Collections;
 
 #if ENABLE_IL2CPP
@@ -13,7 +15,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct OwnerComponent : IEcsAutoReset<OwnerComponent>
+    public struct OwnerComponent : IProtoAutoReset<OwnerComponent>
     {
         public NativeList<ProtoPackedEntity> Children;
         
@@ -24,13 +26,11 @@
 
         public void RemoveChild(ProtoPackedEntity packedEntity)
         {
-            for (int i = 0; i < Children.Length; i++)
+            for (var i = 0; i < Children.Length; i++)
             {
-                if (Children[i] == packedEntity)
-                {
-                    Children.RemoveAt(i);
-                    return;
-                }
+                if (Children[i] != packedEntity) continue;
+                Children.RemoveAt(i);
+                return;
             }
         }
         
@@ -39,15 +39,15 @@
             return Children.IsCreated && Children.Contains(packedEntity);
         }
         
-        public void AutoReset(ref OwnerComponent c)
+        public void SetHandlers(IProtoPool<OwnerComponent> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref OwnerComponent c)
         {
             if (c.Children.IsCreated)
-            {
-                c.Children.Clear();
-                return;
-            }
-            
-            c.Children = new NativeList<ProtoPackedEntity>(12, Allocator.Persistent);
+                c.Children.Dispose();
+#if !UNITY_EDITOR
+            c.Children = new NativeList<ProtoPackedEntity>(0, Allocator.Persistent);
+#endif
         }
     }
 }

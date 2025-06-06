@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeoEcsFilter : MonoBehaviour
+public class LeoProtoIt : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

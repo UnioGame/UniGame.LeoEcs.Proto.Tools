@@ -12,7 +12,7 @@
     {
         public abstract void Run();
         protected abstract int GetChunkSize(IProtoSystems systems);
-        protected abstract EcsFilter GetFilter(ProtoWorld world);
+        protected abstract ProtoIt GetFilter(ProtoWorld world);
         protected abstract ProtoWorld GetWorld(IProtoSystems systems);
     }
 

@@ -11,8 +11,6 @@ namespace UniGame.LeoEcs.ViewSystem.Converters
     {
         public static IViewModel Model = new EcsViewModel();
         
-        public override bool IsDisposeWithModel => false;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void OnReset()
         {

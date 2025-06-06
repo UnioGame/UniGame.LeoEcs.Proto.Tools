@@ -4,6 +4,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Cysharp.Threading.Tasks;
+    using Game.Ecs.Core.Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniGame.Core.Runtime;
@@ -80,6 +81,38 @@ namespace UniGame.LeoEcs.Shared.Extensions
             where TComponent : struct
         {
             return ref world.AddComponent<TComponent>((ProtoEntity)entity);
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ProtoItChain Filter<TComponent>(this ProtoWorld world)
+            where TComponent : struct
+        {
+            return It.Chain<TComponent>();
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Unpack(this ProtoWorld world, ProtoPackedEntity packedEntity, out ProtoEntity entity)
+        {
+            return packedEntity.TryUnpack(world, out entity);
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ProtoEntity NewEntity(this ProtoWorld world)
+        {
+            world.GetPool<NewEntityComponent>().NewEntity(out var entity);
+            return entity;
         }
 
 #if ENABLE_IL2CPP
@@ -391,7 +424,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveComponents<TType>(this ProtoWorld world, ProtoEntity entity)
         {
-            world.GetComponents(entity, _removingComponents);
+            world.EntityComponents(entity, _removingComponents);
             var data = _removingComponents.Data();
             
             for (int i = 0; i < _removingComponents.Len(); i++)

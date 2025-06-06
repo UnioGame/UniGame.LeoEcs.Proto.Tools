@@ -2,6 +2,8 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
+    using Proto;
     using UnityEngine;
 
     /// <summary>
@@ -15,11 +17,13 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct ScaleComponent : IEcsAutoReset<ScaleComponent>
+    public struct ScaleComponent : IProtoAutoReset<ScaleComponent>
     {
         public Vector3 Value;
         
-        public void AutoReset(ref ScaleComponent c)
+        public void SetHandlers(IProtoPool<ScaleComponent> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref ScaleComponent c)
         {
             c.Value = Vector3.one;
         }

@@ -2,7 +2,8 @@
 {
     using System.Runtime.CompilerServices;
     using EcsProto;
-    
+    using UniGame.LeoEcs.Proto;
+
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -50,6 +51,4 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ProtoWorld World() => pool.World();
     }
-    
-    public interface IEcsAutoReset<T> : IProtoAutoReset<T> where T : struct { }
 }

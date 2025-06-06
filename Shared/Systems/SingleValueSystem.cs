@@ -8,7 +8,7 @@ namespace UniGame.LeoEcsLite.LeoEcs.Shared.Systems
     public class SingleValueSystem<TComponent> : IProtoInitSystem,IProtoRunSystem 
         where TComponent : struct
     {
-        private EcsFilter _filter;
+        private ProtoIt _filter;
         private ProtoPool<TComponent> _pool;
         private ProtoWorld _world;
 

@@ -45,7 +45,7 @@
             
         public static IProtoSystems ShowOn<TView>(
             this IProtoSystems systems,
-            EcsFilter filter,
+            ProtoIt filter,
             ViewType layoutType = ViewType.Window)
             where TView : IView
         {
@@ -104,7 +104,7 @@
 
         public static IProtoSystems ShowOn<TView>(
             this IProtoSystems systems,
-            EcsFilter filter,
+            ProtoIt filter,
             ViewRequestData viewData)
             where TView : IView
         {

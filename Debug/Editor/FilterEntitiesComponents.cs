@@ -18,7 +18,8 @@
             var world = filterData.world;
             entities.Clear();
             
-            world.GetAliveEntities(entities);
+            world.AliveEntities(entities);
+
             var len = entities.Len();
             var data = entities.Data();
 
@@ -46,7 +47,8 @@
             
             components.Clear();
             
-            world.GetComponents(entity,components);
+            world.EntityComponents(entity,components);
+            
             var len = components.Len();
             var data = components.Data();
             

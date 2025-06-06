@@ -28,12 +28,12 @@
         {
             protoSystems = systems;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IProtoSystems AddSystem(IProtoSystem system, string pointName = default)
+        public IProtoSystems AddSystem(IProtoSystem system, int weight = default)
         {
             systems.Add(system);
-            return protoSystems.AddSystem(system, pointName);
+            return protoSystems.AddSystem(system, weight);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -46,12 +46,6 @@
         public IProtoSystems AddModule(IProtoModule module)
         {
             return protoSystems.AddModule(module);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IProtoSystems AddPoint(string pointName)
-        {
-            return protoSystems.AddPoint(pointName);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

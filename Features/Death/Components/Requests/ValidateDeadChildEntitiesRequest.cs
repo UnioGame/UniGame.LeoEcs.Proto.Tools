@@ -2,7 +2,8 @@
 {
     using System;
     using Leopotam.EcsLite;
-
+    using Leopotam.EcsProto;
+    using UniGame.LeoEcs.Proto;
     /// <summary>
     /// validate all dead child entities in single frame
     /// </summary>
@@ -14,11 +15,13 @@
 	[Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct ValidateDeadChildEntitiesRequest : IEcsAutoReset<ValidateDeadChildEntitiesRequest>
+    public struct ValidateDeadChildEntitiesRequest : IProtoAutoReset<ValidateDeadChildEntitiesRequest>
     {
         public bool ForceDestroy;
         
-        public void AutoReset(ref ValidateDeadChildEntitiesRequest c)
+        public void SetHandlers(IProtoPool<ValidateDeadChildEntitiesRequest> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref ValidateDeadChildEntitiesRequest c)
         {
             c.ForceDestroy = false;
         }

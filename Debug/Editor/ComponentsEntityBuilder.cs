@@ -37,7 +37,7 @@
             }
             
             _components ??= new Slice<object>();
-            _world.GetComponents((ProtoEntity)view.id, _components);
+            _world.EntityComponents((ProtoEntity)view.id, _components);
 
             var len = _components.Len();
             var data = _components.Data();

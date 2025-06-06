@@ -55,6 +55,7 @@
             
             ecsSystems.DelHere<KillRequest>();
             ecsSystems.DelHere<ValidateDeadChildEntitiesRequest>();
+            ecsSystems.DelHere<NewEntityComponent>();
             
             ecsSystems.Add(new ProcessDestroySilentSystem());
 

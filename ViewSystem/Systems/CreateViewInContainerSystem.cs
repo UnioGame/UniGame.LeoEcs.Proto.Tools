@@ -28,9 +28,9 @@
         private ViewAspect _viewAspect;
         private ViewContainerAspect _viewContainerAspect;
         
-        private EcsFilter _requestFilter;
-        private EcsFilter _allContainersFilter;
-        private EcsFilter _freeContainersFilter;
+        private ProtoIt _requestFilter;
+        private ProtoIt _allContainersFilter;
+        private ProtoItExc _freeContainersFilter;
 
         public void Init(IProtoSystems systems)
         {
@@ -56,41 +56,54 @@
             {
                 ref var request = ref _viewAspect.CreateInContainer.Get(requestEntity);
                 var canUseBusyContainer = request.UseBusyContainer;
-                
-                var containerFilter = canUseBusyContainer 
-                    ? _allContainersFilter 
-                    : _freeContainersFilter;
 
-                foreach (var containerEntity in containerFilter)
+                if (canUseBusyContainer)
                 {
-                    ref var containerComponent = ref _viewContainerAspect.ContainerView.Get(containerEntity);
-                    
-                    //is container for target view
-                    if (containerComponent.ViewId != request.View) continue;
-      
-                    ref var transformComponent = ref _viewAspect.Transform.Get(containerEntity);
-                    
-                    //create view in container
-                    ref var createViewRequest = ref _viewAspect.CreateView.Add(requestEntity);
-                    
-                    createViewRequest.ViewId = request.View;
-                    createViewRequest.ViewName = request.ViewName;
-                    createViewRequest.Tag = request.Tag;
-                    createViewRequest.Owner = request.Owner;
-                    createViewRequest.StayWorld = request.StayWorld;
-                    createViewRequest.Parent = transformComponent.Value;
-                    createViewRequest.LayoutType =string.Empty;
-                    createViewRequest.Target = requestEntity.PackEntity(_world);
-              
-                    //mark container as busy
-                    _viewContainerAspect.Busy.GetOrAddComponent(containerEntity);
-                    
-                    //remove request only when container found
-                    _viewAspect.CreateInContainer.TryRemove(requestEntity);
-                    
-                    break;
+                    foreach (var containerEntity in _allContainersFilter)
+                    {
+                        if(ApplyContainer(ref request,requestEntity,containerEntity))
+                            break;
+                    }
                 }
+                else
+                {
+                    foreach (var containerEntity in _freeContainersFilter)
+                    {
+                        if(ApplyContainer(ref request,requestEntity,containerEntity))
+                            break;
+                    }
+                }
+                
             }
+        }
+
+        public bool ApplyContainer(ref CreateViewInContainerRequest request,
+            ProtoEntity requestEntity,
+            ProtoEntity containerEntity)
+        {
+            ref var containerComponent = ref _viewContainerAspect.ContainerView.Get(containerEntity);
+            //is container for target view
+            if (containerComponent.ViewId != request.View) return false;
+            ref var transformComponent = ref _viewAspect.Transform.Get(containerEntity);
+            //create view in container
+            ref var createViewRequest = ref _viewAspect.CreateView.Add(requestEntity);
+                    
+            createViewRequest.ViewId = request.View;
+            createViewRequest.ViewName = request.ViewName;
+            createViewRequest.Tag = request.Tag;
+            createViewRequest.Owner = request.Owner;
+            createViewRequest.StayWorld = request.StayWorld;
+            createViewRequest.Parent = transformComponent.Value;
+            createViewRequest.LayoutType =string.Empty;
+            createViewRequest.Target = requestEntity.PackEntity(_world);
+              
+            //mark container as busy
+            _viewContainerAspect.Busy.GetOrAddComponent(containerEntity);
+                    
+            //remove request only when container found
+            _viewAspect.CreateInContainer.TryRemove(requestEntity);
+
+            return true;
         }
     }
 }

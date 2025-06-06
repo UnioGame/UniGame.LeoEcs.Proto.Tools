@@ -2,9 +2,10 @@
 {
     using System;
     using global::UniGame.LeoEcs.Shared.Extensions;
+    using LeoEcs.Bootstrap.Runtime.Attributes;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-
+    using Leopotam.EcsProto.QoL;
     /// <summary>
     /// create target component on entity by triggered component
     /// </summary>
@@ -16,25 +17,14 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class SelfConvertComponentSystem<TTrigger,TTarget> : IProtoInitSystem, IProtoRunSystem
+    [ECSDI]
+    public class SelfConvertComponentSystem<TTrigger,TTarget> : IProtoRunSystem
         where TTrigger : struct
         where TTarget : struct
     {
         private ProtoWorld _world;
-        private EcsFilter _filter;
+        private ProtoItExc _filter = It.Chain<TTrigger>().Exc<TTarget>().End();
         private ProtoPool<TTarget> _targetPool;
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-
-            _filter = _world
-                .Filter<TTrigger>()
-                .Exc<TTarget>()
-                .End();
-
-            _targetPool = _world.GetPool<TTarget>();
-        }
 
         public void Run()
         {

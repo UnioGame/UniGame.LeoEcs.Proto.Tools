@@ -112,9 +112,9 @@
         private string _viewLayoutType;
         private ProtoWorld _world;
         private ViewAspect _viewAspect;
-        private EcsFilter _eventFilter;
+        private ProtoIt _eventFilter;
 
-        public ShowLayoutViewWhenSystem(EcsFilter eventFilter,string viewLayoutType)
+        public ShowLayoutViewWhenSystem(ProtoIt eventFilter,string viewLayoutType)
         {
             _eventFilter = eventFilter;
             _viewLayoutType = viewLayoutType;

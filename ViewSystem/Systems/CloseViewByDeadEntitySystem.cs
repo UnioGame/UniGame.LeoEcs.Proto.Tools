@@ -6,6 +6,7 @@
     using Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Shared.Extensions;
     using UniModules.UniGame.UISystem.Runtime;
 
     /// <summary>

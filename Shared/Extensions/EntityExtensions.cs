@@ -44,6 +44,16 @@ namespace UniGame.LeoEcs.Shared.Extensions
         [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
 #endif
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Unpack(this ProtoPackedEntity packedEntity, ProtoWorld world, out ProtoEntity entity)
+        {
+            return packedEntity.TryUnpack(world, out entity);
+        }
+        
+#if ENABLE_IL2CPP
+        [Il2CppSetOption (Option.NullChecks, false)]
+        [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ILifeTime DestroyEntityWith(this ILifeTime lifeTime, ProtoEntity entity, ProtoWorld world)
         {
             if (world.IsAlive() == false) return lifeTime;

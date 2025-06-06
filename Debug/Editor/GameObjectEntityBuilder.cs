@@ -12,7 +12,7 @@
     public class GameObjectEntityBuilder : IEntityEditorViewBuilder
     {
         private ProtoWorld _world;
-        private EcsFilter _gameObjectFilter;
+        private ProtoIt _gameObjectFilter;
         private ProtoPool<GameObjectComponent> _gameObjectPool;
 
         public void Initialize(ProtoWorld world)

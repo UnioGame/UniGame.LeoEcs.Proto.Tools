@@ -2,6 +2,7 @@
 {
     using System;
     using Leopotam.EcsLite;
+    using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
 
     [Serializable]
@@ -15,6 +16,6 @@
         public string Tag = string.Empty;
         public string ViewName = string.Empty;
         public bool StayWorld = false;
-        public EcsFilter FilterMask = null;
+        public ProtoIt FilterMask = null;
     }
 }

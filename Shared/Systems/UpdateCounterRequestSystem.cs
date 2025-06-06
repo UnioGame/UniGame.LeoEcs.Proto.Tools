@@ -14,7 +14,7 @@ namespace UniGame.LeoEcs.Shared.Systems
     [Serializable]
     public class UpdateCounterRequestSystem<TRequestType>: IProtoRunSystem,IProtoInitSystem
     {
-        private EcsFilter _filter;
+        private ProtoIt _filter;
         private ProtoWorld _world;
         private ProtoPool<CounterComponent<TRequestType>> _pool;
         private int _counterLimit;

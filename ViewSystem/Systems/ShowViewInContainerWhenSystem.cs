@@ -29,7 +29,7 @@
     {
         private ViewContainerSystemData _data;
         private ProtoWorld _world;
-        private EcsFilter _eventFilter;
+        private ProtoIt _eventFilter;
 
         private ProtoPool<ContainerViewMarker<TView>> _markerPool;
 
@@ -41,8 +41,8 @@
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
-            var mask = _data.FilterMask ?? _world.Filter<TEvent>();
-            _eventFilter = mask.End();
+            var mask = _data.FilterMask ?? _world.Filter<TEvent>().End();
+            _eventFilter = mask;
             _markerPool = _world.GetPool<ContainerViewMarker<TView>>();
         }
 

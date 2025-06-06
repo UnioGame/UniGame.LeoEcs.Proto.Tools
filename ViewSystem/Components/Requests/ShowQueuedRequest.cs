@@ -3,7 +3,8 @@
     using System;
     using System.Collections.Generic;
     using Leopotam.EcsLite;
-
+    using Leopotam.EcsProto;
+    using Proto;
     /// <summary>
     /// request to show view one by one
     /// </summary>
@@ -15,12 +16,14 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct ShowQueuedRequest : IEcsAutoReset<ShowQueuedRequest>
+    public struct ShowQueuedRequest : IProtoAutoReset<ShowQueuedRequest>
     {
         public int AwaitId;
         public Queue<CreateViewRequest> Value;
         
-        public void AutoReset(ref ShowQueuedRequest c)
+        public void SetHandlers(IProtoPool<ShowQueuedRequest> pool) => pool.SetResetHandler(AutoReset);
+        
+        public static void AutoReset(ref ShowQueuedRequest c)
         {
             c.Value ??= new Queue<CreateViewRequest>();
             c.Value.Clear();
