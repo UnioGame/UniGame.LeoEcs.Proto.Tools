@@ -7,7 +7,7 @@
     using Leopotam.EcsProto;
     using Runtime.ObjectPool.Extensions;
     using UniModules.Editor;
-    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using Runtime.ReflectionUtils;
     using UnityEngine;
 
 #if ODIN_INSPECTOR

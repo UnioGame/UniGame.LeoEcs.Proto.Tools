@@ -3,7 +3,7 @@
     using System;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.Utils;
 
     [Serializable]
     public class IdEntitiesFilter : IProtoWorldSearchFilter

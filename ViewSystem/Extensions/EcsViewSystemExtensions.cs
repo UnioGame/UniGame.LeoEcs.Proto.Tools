@@ -7,7 +7,7 @@
     using Leopotam.EcsProto;
     using Shared.Extensions;
     using UniGame.ViewSystem.Runtime;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.Utils;
     using UniModules.UniGame.UiSystem.Runtime;
 
     public static class EcsViewSystemExtensions

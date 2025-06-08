@@ -3,7 +3,7 @@
     using Leopotam.EcsProto;
     using UniGame.Core.Runtime;
     using UniGame.LeoEcs.Shared.Extensions;
-    using UniModules.UniCore.Runtime.DataFlow;
+    using UniGame.Runtime.DataFlow;
     using Unity.Jobs;
 
     public abstract class EcsDataJobSystem<TJob> : IEcsJobDataParallelFor<TJob>,IProtoDestroySystem

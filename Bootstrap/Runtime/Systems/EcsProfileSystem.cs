@@ -6,7 +6,7 @@
     using Leopotam.EcsProto;
     using Shared.Extensions;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
-    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using UniGame.Runtime.ReflectionUtils;
     using Unity.Profiling;
 
     /// <summary>

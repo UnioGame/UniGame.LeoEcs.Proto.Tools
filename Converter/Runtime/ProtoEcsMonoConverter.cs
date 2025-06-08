@@ -9,7 +9,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using UniModules.UniCore.Runtime.DataFlow;
+    using UniGame.Runtime.DataFlow;
     using UnityEngine;
     using UnityEngine.Serialization;
 

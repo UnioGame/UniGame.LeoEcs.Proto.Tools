@@ -4,7 +4,7 @@
     using Abstract;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
-    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using UniGame.Runtime.ReflectionUtils;
     using UnityEngine;
 
 #if ODIN_INSPECTOR

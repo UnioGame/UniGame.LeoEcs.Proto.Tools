@@ -9,7 +9,7 @@
     using UniGame.LeoEcs.ViewSystem.Aspects;
     using UniGame.LeoEcs.ViewSystem.Components;
     using UniGame.ViewSystem.Runtime;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.Utils;
     using UniModules.UniGame.UiSystem.Runtime;
     
     /// <summary>

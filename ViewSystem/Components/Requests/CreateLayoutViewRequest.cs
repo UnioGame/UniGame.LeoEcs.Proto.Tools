@@ -5,7 +5,7 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Proto;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.Utils;
     using UniModules.UniGame.UiSystem.Runtime;
 
     [Serializable]

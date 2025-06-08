@@ -6,10 +6,9 @@
     using Core.Runtime;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using Rx.Runtime.Extensions;
+    using Runtime.Rx.Runtime.Extensions;
     using Shared.Extensions;
     using Sirenix.OdinInspector;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Extensions;
     using UnityEngine;
     using UnityEngine.UI;
 

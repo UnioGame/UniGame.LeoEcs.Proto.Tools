@@ -8,7 +8,6 @@
     using Shared.Extensions;
     using Sirenix.OdinInspector;
     using UniGame.ViewSystem.Runtime;
-    using UniModules.UniGame.UISystem.Runtime;
     using UnityEngine;
 
     [RequireComponent(typeof(ProtoEcsMonoConverter))]

@@ -18,8 +18,8 @@
     using Leopotam.EcsProto.Unity;
     using Shared.Extensions;
     using UniCore.Runtime.ProfilerTools;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.DataFlow;
+    using UniGame.Runtime.Utils;
     using Object = UnityEngine.Object;
 
     public class EcsService : GameService, IEcsService

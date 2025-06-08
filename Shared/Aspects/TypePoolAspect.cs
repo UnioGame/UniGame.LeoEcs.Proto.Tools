@@ -5,7 +5,7 @@
     using Core.Runtime.SerializableType;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.Utils;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;

@@ -8,7 +8,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Leopotam.EcsLite;
     using Abstract;
     using Leopotam.EcsProto;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.Utils;
     using UnityEngine;
 
 #if TRI_INSPECTOR

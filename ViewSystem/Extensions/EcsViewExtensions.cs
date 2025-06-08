@@ -12,7 +12,7 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
     using Leopotam.EcsProto.QoL;
     using Proto.Components;
     using UniGame.ViewSystem.Runtime;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.Utils;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;

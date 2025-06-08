@@ -11,11 +11,9 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Components;
     using Converters;
     using Cysharp.Threading.Tasks;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniCore.Runtime.ProfilerTools;
-    using UniGame.Runtime.ObjectPool;
     using UniGame.Runtime.ObjectPool.Extensions;
     using UnityEngine;
     using UnityEngine.Pool;

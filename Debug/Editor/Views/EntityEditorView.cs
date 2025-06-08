@@ -9,7 +9,7 @@
     using Runtime.ObjectPool.Extensions;
     using Shared.Extensions;
     using Sirenix.OdinInspector;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.Utils;
     using UnityEngine;
 
     [Serializable]

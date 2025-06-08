@@ -7,7 +7,7 @@
     using Converter.Runtime;
     using Core.Runtime;
     using Cysharp.Threading.Tasks;
-    using GameFlow.Runtime.Services;
+    using Context.Runtime;
     using UnityEngine;
 
 #if ODIN_INSPECTOR
@@ -82,12 +82,7 @@ using Sirenix.OdinInspector;
             await ecsService.InitializeAsync();
             ecsService.Execute();
             ecsService.SetDefaultWorld(world);
-
-            var assetName = name;
             
-#if UNITY_EDITOR
-            LifeTime.LogOnRelease($"SERVICE: LeoEcs Service COMPLETE : {assetName}",Color.yellow);
-#endif
             context.LifeTime.AddDispose(ecsService);
             return ecsService;
         }

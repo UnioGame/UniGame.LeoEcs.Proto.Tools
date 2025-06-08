@@ -15,7 +15,7 @@
     using Layouts.Aspects;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using Rx.Runtime.Extensions;
+    using Runtime.Rx.Runtime.Extensions;
     using Shared.Extensions;
     using UiSystem.Runtime;
     using Debug = UnityEngine.Debug;

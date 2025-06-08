@@ -6,7 +6,7 @@
     using UnityEngine;
     using Leopotam.EcsProto;
     using Shared.Extensions;
-    using UniModules.UniCore.Runtime.DataFlow;
+    using UniGame.Runtime.DataFlow;
 
     public static class LeoEcsGlobalData
     {

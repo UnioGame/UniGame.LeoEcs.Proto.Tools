@@ -3,9 +3,9 @@
     using System;
     using System.Runtime.CompilerServices;
     using Leopotam.EcsProto;
-    using UniModules.UniCore.Runtime.Extension;
-    using UniModules.UniCore.Runtime.Utils;
-    using UniModules.UniGame.Context.Runtime.Context;
+    using Runtime.Extension;
+    using Runtime.Utils;
+    using Context.Runtime;
     
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;

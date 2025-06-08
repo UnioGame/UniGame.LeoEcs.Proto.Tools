@@ -5,9 +5,7 @@
     using System.Runtime.CompilerServices;
     using Abstract;
     using Core.Runtime;
-    using Core.Runtime.ScriptableObjects;
     using Cysharp.Threading.Tasks;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Shared.Extensions;
     using UnityEngine;
@@ -22,7 +20,7 @@
     
     [Serializable]
     [CreateAssetMenu(menuName = "ECS Proto/Converter/Entity Converter",fileName = "Entity Converter")]
-    public class EcsEntityConverter : LifetimeScriptableObject
+    public class EcsEntityConverter : ScriptableObject
     {
         #region inspector
         

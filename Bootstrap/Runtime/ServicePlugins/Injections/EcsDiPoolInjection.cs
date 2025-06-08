@@ -5,7 +5,7 @@
     using System.Reflection;
     using Leopotam.EcsProto;
     using Shared.Extensions;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.Utils;
 
     public class EcsDiPoolInjection : IEcsDiInjection
     {

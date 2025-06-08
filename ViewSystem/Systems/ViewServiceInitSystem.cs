@@ -3,13 +3,10 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
     using System;
     using Aspects;
     using Bootstrap.Runtime.Attributes;
-    using Components;
     using Leopotam.EcsProto;
     using Shared.Extensions;
-    using UniCore.Runtime.ProfilerTools;
     using UniGame.ViewSystem.Runtime;
-    using UnityEngine;
-
+    
     /// <summary>
     /// Initializes the ViewService.
     /// </summary>
@@ -36,8 +33,6 @@ namespace UniGame.LeoEcs.ViewSystem.Systems
             var entity = _world.NewEntity();
             ref var component = ref _viewSystemAspect.ViewService.Add(entity);
             component.ViewSystem = _gameViewSystem;
-            
-            GameLog.Log($"{nameof(ViewServiceComponent)} Created",Color.green);
         }
     }
 }

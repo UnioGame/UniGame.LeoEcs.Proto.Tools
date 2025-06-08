@@ -8,7 +8,7 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using UniModules.UniCore.Runtime.ReflectionUtils;
+    using UniGame.Runtime.ReflectionUtils;
 
     [Serializable]
     public class EcsDiPlugin : IEcsServicePlugin

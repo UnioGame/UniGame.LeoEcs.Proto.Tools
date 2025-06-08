@@ -7,13 +7,14 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Proto.Components;
+    using R3;
     using Shared.Extensions;
     using Sirenix.OdinInspector;
     using UiSystem.Runtime;
     using UniGame.ViewSystem.Runtime;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.Utils;
-    using UniRx;
+    using Runtime.DataFlow;
+    using Runtime.Utils;
+     
     using UnityEngine;
 
     [Serializable]
@@ -67,7 +68,7 @@
             ref var viewComponent = ref world.GetOrAddComponent<ViewComponent>(entity);
             ref var viewStatusComponent = ref world.GetOrAddComponent<ViewStatusComponent>(entity);
 
-            viewStatusComponent.Status = _view.Status.Value;
+            viewStatusComponent.Status = _view.Status.CurrentValue;
             viewComponent.View = _view;
             viewComponent.Type = _view.GetType();
 

@@ -7,7 +7,7 @@
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using UniGame.LeoEcs.Proto;
-    using UniModules.UniCore.Runtime.DataFlow;
+    using Runtime.DataFlow;
     
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;

@@ -7,8 +7,7 @@ namespace UniGame.LeoEcs.ViewSystem.Behavriour
     using Extensions;
     using Leopotam.EcsProto;
     using UiSystem.Runtime.Settings;
-    using UniGame.Rx.Runtime.Extensions;
-    using UniModules.UniGame.Core.Runtime.DataFlow.Extensions;
+    using Runtime.Rx.Runtime.Extensions;
     using UniModules.UniGame.UiSystem.Runtime;
     using UnityEngine;
     using UnityEngine.UI;

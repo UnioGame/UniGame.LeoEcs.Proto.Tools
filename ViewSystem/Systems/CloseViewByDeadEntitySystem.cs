@@ -7,7 +7,7 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using UniModules.UniGame.UISystem.Runtime;
+    using UniGame.ViewSystem.Runtime;
 
     /// <summary>
     /// close View if entity is dead
@@ -39,7 +39,7 @@
                     continue;
 
                 var view = lifeTimeComponent.View;
-                if (!view.IsTerminated && view.Status.Value != ViewStatus.Closed)
+                if (!view.IsTerminated && view.Status.CurrentValue != ViewStatus.Closed)
                     view.Close();
 
                 if (_viewAspect.LifeTime.Has(entity))

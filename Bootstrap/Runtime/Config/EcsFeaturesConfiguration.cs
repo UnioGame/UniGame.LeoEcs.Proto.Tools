@@ -3,7 +3,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using System.Collections.Generic;
     using LeoEcs.Bootstrap.Runtime.Abstract;
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
-    using UniModules.UniCore.Runtime.Utils;
+    using UniGame.Runtime.Utils;
     using UnityEngine;
     using UnityEngine.Serialization;
 

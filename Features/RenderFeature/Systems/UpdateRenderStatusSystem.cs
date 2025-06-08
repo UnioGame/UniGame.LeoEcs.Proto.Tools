@@ -6,7 +6,6 @@
     using Extensions;
     using Game.Ecs.Core.Components;
     using Leopotam.EcsProto.QoL;
-    using UniCore.Runtime.ProfilerTools;
 
     /// <summary>
     /// update render components
@@ -39,11 +38,7 @@
                 var render = renderComponent.Value;
                 
 #if DEBUG
-                if (render == null)
-                {
-                    GameLog.LogError(renderComponent.Name);
-                }
-                else
+                if (render != null)
                 {
                     renderComponent.Name = render.gameObject.name;
                 }

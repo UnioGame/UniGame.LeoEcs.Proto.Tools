@@ -8,8 +8,8 @@ namespace UniGame.LeoEcs.Shared.Extensions
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniGame.Core.Runtime;
-    using UniModules.UniCore.Runtime.DataFlow;
-    using UniModules.UniCore.Runtime.Utils;
+    using Runtime.DataFlow;
+    using Runtime.Utils;
     using Unity.Collections;
     using UnityEngine;
 
