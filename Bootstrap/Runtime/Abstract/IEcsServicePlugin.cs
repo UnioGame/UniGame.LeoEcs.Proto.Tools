@@ -1,6 +1,7 @@
-﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
+﻿namespace UniGame.LeoEcs.Bootstrap
 {
     using Core.Runtime;
+    using Runtime;
 
     public interface IEcsServicePlugin
     {

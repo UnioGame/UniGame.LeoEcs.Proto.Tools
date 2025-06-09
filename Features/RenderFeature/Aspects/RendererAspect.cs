@@ -1,7 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Shared.Components
 {
     using System;
-    using Bootstrap.Runtime.Abstract;
+    using Bootstrap;
     using Leopotam.EcsProto;
 
     [Serializable]

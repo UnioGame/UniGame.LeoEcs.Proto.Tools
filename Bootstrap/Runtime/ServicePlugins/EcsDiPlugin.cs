@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Abstract;
+    using Bootstrap;
     using Attributes;
     using Core.Runtime;
     using Leopotam.EcsProto;

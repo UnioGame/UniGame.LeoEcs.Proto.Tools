@@ -1,4 +1,4 @@
-namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
+namespace UniGame.LeoEcs.Bootstrap
 {
     using System.Collections.Generic;
     using Ecs.Bootstrap.Runtime.Config;

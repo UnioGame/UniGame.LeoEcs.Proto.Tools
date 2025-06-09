@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Core.Runtime.SerializableType;
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
     using LeoEcs.ViewSystem.Aspects;
     using Sirenix.OdinInspector;
     using UnityEngine;

@@ -12,7 +12,7 @@ using UnityEngine;
 namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
     using Cysharp.Threading.Tasks;
-    using Abstract;
+    using Bootstrap;
     using Leopotam.EcsProto;
 
 #if UNITY_EDITOR

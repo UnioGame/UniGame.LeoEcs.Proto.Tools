@@ -1,5 +1,5 @@
 ﻿using System;
-using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+using UniGame.LeoEcs.Bootstrap;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

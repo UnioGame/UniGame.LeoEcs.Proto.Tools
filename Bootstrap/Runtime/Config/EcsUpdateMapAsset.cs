@@ -11,7 +11,7 @@ using TriInspector;
 
 namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
 
     [CreateAssetMenu(menuName = "ECS Proto/Systems Update Map", fileName = "Systems Update Map")]
     public class EcsUpdateMapAsset : ScriptableObject

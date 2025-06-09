@@ -8,7 +8,7 @@
     using UniGame.LeoEcs.Timer.Components.Events;
     using UniGame.LeoEcs.Timer.Components.Requests;
     using Systems;
-    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+    using UniGame.LeoEcs.Bootstrap;
     using UniGame.LeoEcs.Shared.Extensions;
 
     /// <summary>

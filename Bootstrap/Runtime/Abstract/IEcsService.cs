@@ -1,6 +1,6 @@
-namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
+namespace UniGame.LeoEcs.Bootstrap
 {
-    using UniGame.GameFlow.Runtime.Interfaces;
+    using GameFlow.Runtime;
     using Leopotam.EcsProto;
 
     public interface IEcsService : IGameService

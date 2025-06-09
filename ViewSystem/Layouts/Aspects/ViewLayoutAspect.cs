@@ -3,7 +3,7 @@
     using System;
     using Components;
     using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
-    using Bootstrap.Runtime.Abstract;
+    using Bootstrap;
     using Leopotam.EcsProto;
 
     /// <summary>

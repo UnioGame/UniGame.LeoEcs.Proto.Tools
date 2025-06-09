@@ -15,7 +15,7 @@ namespace UniGame.LeoEcs.ViewSystem
     using Leopotam.EcsProto.QoL;
     using Proto;
     using Shared.Extensions;
-    using Systems;
+    using ViewSystem;
     using UiSystem.Runtime.Settings;
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;

@@ -4,7 +4,7 @@
     using LeoEcs.Converter.Runtime.Components;
     using LeoEcsLite.LeoEcs.Shared.Components;
     using Leopotam.EcsProto;
-    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+    using Bootstrap;
 
     /// <summary>
     /// components of ecs converter

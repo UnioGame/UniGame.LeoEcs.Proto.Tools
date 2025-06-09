@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
 

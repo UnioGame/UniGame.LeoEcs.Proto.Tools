@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Abstract;
+    using Bootstrap;
     using Aspects;
     using Ecs.Bootstrap.Runtime.Config;
     using Converter.Runtime;

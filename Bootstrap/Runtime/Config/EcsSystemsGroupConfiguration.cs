@@ -6,7 +6,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using System.Collections.Generic;
     using System.Diagnostics;
     using LeoEcs.Bootstrap.Runtime;
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using UniCore.Runtime.ProfilerTools;

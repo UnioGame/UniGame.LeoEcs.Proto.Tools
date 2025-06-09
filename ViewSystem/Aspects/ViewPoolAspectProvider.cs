@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Bootstrap.Runtime.Abstract;
+    using Bootstrap;
     using Bootstrap.Runtime.Aspects;
     using Components;
     using Core.Runtime.SerializableType;

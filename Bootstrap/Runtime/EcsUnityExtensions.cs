@@ -1,6 +1,6 @@
 namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
-    using Abstract;
+    using Bootstrap;
     using Cysharp.Threading.Tasks;
 
     public static class EcsUnityExtensions

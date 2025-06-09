@@ -1,9 +1,9 @@
-﻿namespace UniGame.LeoEcs.ViewSystem.Systems
+﻿namespace UniGame.LeoEcs.ViewSystem
 {
     using System;
     using System.Runtime.CompilerServices;
     using Aspects;
-    using Bootstrap.Runtime.Abstract;
+    using Bootstrap;
     using Cysharp.Threading.Tasks;
     using Components;
     using UniGame.ViewSystem.Runtime;

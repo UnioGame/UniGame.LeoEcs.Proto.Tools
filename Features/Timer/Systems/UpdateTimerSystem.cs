@@ -6,7 +6,7 @@
     using UniGame.LeoEcs.Timer.Components;
     using UniGame.LeoEcs.Timer.Components.Events;
     using Time.Service;
-    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+    using UniGame.LeoEcs.Bootstrap;
     using UniGame.LeoEcs.Shared.Extensions;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
 

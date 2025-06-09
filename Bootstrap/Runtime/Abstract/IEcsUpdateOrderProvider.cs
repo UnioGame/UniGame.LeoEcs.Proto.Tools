@@ -1,4 +1,4 @@
-﻿using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+﻿using UniGame.LeoEcs.Bootstrap;
 
 namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {

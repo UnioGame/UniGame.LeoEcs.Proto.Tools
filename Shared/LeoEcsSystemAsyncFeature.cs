@@ -1,7 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
     using System;
-    using Abstract;
+    using Bootstrap;
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;

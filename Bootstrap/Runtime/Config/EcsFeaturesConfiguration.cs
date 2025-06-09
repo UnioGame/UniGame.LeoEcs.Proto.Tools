@@ -1,7 +1,7 @@
 namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
     using System.Collections.Generic;
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
     using UniGame.Runtime.Utils;
     using UnityEngine;

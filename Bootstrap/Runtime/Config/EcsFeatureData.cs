@@ -5,7 +5,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using System.Collections.Generic;
     using Leopotam.EcsLite;
     using LeoEcs.Bootstrap.Runtime;
-    using LeoEcs.Bootstrap.Runtime.Abstract;
+    using LeoEcs.Bootstrap;
     using Leopotam.EcsProto;
     using UnityEngine;
 

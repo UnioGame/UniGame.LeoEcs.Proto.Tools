@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Abstract;
+    using Bootstrap;
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsProto;
     using UnityEngine;

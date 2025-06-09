@@ -6,7 +6,7 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniCore.Runtime.ProfilerTools;
-    using UniGame.LeoEcs.Bootstrap.Runtime.Abstract;
+    using UniGame.LeoEcs.Bootstrap;
     using UniGame.LeoEcs.Proto.Filters.Game.Modules.leoecs.proto.tools.LifeTime.Components;
     using UniGame.LeoEcs.Shared.Extensions;
     using UniGame.LeoEcsLite.LeoEcs.Shared.Components;

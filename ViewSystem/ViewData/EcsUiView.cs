@@ -1,7 +1,7 @@
 ﻿namespace UniGame.LeoEcs.ViewSystem.Converters
 {
     using System;
-    using Bootstrap.Runtime.Abstract;
+    using Bootstrap;
     using Components;
     using Converter.Runtime;
     using Converter.Runtime.Abstract;

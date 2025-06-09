@@ -1,4 +1,4 @@
-﻿namespace UniGame.LeoEcs.Bootstrap.Runtime.Abstract
+﻿namespace UniGame.LeoEcs.Bootstrap
 {
 #if ODIN_INSPECTOR
     using Sirenix.OdinInspector;
