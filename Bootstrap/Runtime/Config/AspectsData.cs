@@ -5,9 +5,13 @@
     using Core.Runtime.SerializableType;
     using LeoEcs.Bootstrap;
     using LeoEcs.ViewSystem.Aspects;
-    using Sirenix.OdinInspector;
+
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [Serializable]
     public class AspectsData
     {
@@ -19,7 +23,10 @@
 #endif
         public List<AspectData> aspects = new List<AspectData>();
         
+#if ODIN_INSPECTOR
         [PropertySpace]
+#endif
+
         [SerializeReference]
         public List<IProtoAspectFactory> factories = new(){new ViewPoolAspectProvider()};
         

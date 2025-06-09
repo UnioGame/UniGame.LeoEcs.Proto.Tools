@@ -5,12 +5,16 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UiSystem.Runtime.Settings;
     using UniGame.LeoEcs.Converter.Runtime;
     using UniGame.LeoEcs.Converter.Runtime.Converters;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     public sealed class MonoRequestViewInContainerConverter : MonoLeoEcsConverter<RequestViewInContainerConverter>
     {
 
@@ -19,34 +23,46 @@
     [Serializable]
     public class RequestViewInContainerConverter : LeoEcsConverter
     {
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
+#endif
         public ViewId view;
         
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
+#endif
         public bool useBusyContainer = false;
         
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
+#endif
         public bool ownView = false;
         
         /// <summary>
         /// Optional Data
         /// </summary>
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
         [Optional]
+#endif
         public string Tag = string.Empty;
         
         /// <summary>
         /// Optional Data
         /// </summary>
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
         [Optional]
+#endif
         public string ViewName = string.Empty;
         
         /// <summary>
         /// Optional Data
         /// </summary>
+#if ODIN_INSPECTOR
         [TitleGroup("View Data")]
         [Optional]
+#endif
         public bool StayWorld;
         
         public sealed override void Apply(GameObject target, ProtoWorld world, ProtoEntity entity)

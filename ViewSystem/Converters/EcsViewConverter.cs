@@ -6,17 +6,23 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class EcsViewConverter : MonoLeoEcsConverter, 
         IEcsViewConverter
     {
         #region inspector
 
+#if ODIN_INSPECTOR
         [ReadOnly]
+#endif
         public ProtoEntity entity;
 
         public bool followEntityLifeTime = false;

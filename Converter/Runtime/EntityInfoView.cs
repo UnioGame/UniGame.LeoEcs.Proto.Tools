@@ -4,9 +4,13 @@
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
 #if UNITY_EDITOR
     using Leopotam.EcsProto.Unity.Editor;
 #endif
@@ -22,7 +26,9 @@
 
 #if UNITY_EDITOR
         
+#if ODIN_INSPECTOR
         [OnInspectorGUI]
+#endif
         public void OnInspector()
         {
             if (!ShowComponents) return;

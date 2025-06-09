@@ -5,12 +5,16 @@
     using Game.Modules.UnioModules.UniGame.LeoEcsLite.LeoEcs.ViewSystem.Components;
     using Leopotam.EcsProto;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UniGame.LeoEcs.Converter.Runtime;
     using Core.Runtime;
     using Unity.IL2CPP.CompilerServices;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     /// <summary>
     /// make a new layout for views
     /// </summary>
@@ -20,7 +24,9 @@
     [Serializable]
     public class EcsViewsLayoutConverter : GameObjectConverter
     {
+#if ODIN_INSPECTOR
         [InlineProperty]
+#endif
         public ViewLayoutAsset layoutAsset;
         
         protected override void OnApply(

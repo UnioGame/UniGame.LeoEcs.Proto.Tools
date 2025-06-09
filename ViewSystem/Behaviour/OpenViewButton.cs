@@ -3,7 +3,7 @@ namespace UniGame.LeoEcs.ViewSystem.Behavriour
     using Converter.Runtime;
     using Converter.Runtime.Abstract;
     using Core.Runtime;
-    using Sirenix.OdinInspector;
+
     using Extensions;
     using Leopotam.EcsProto;
     using UiSystem.Runtime.Settings;
@@ -12,6 +12,10 @@ namespace UniGame.LeoEcs.ViewSystem.Behavriour
     using UnityEngine;
     using UnityEngine.UI;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class OpenViewButton : MonoBehaviour, IEcsComponentConverter, ILifeTimeContext
     {
@@ -50,7 +54,9 @@ namespace UniGame.LeoEcs.ViewSystem.Behavriour
                 .MakeViewRequest(view, layoutType));
         }
         
+#if ODIN_INSPECTOR
         [OnInspectorInit]
+#endif
         private void OnInspectorInitialize()
         {
             if (trigger == null)

@@ -8,10 +8,14 @@
     using Leopotam.EcsProto.QoL;
     using Runtime.Rx.Runtime.Extensions;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UnityEngine;
     using UnityEngine.UI;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public class CloseAllViewsButton : MonoBehaviour, IEcsComponentConverter, ILifeTimeContext
     {
@@ -42,14 +46,18 @@
             this.Bind(trigger, CloseAll);
         }
 
+#if ODIN_INSPECTOR
         [Button]
+#endif
         private void CloseAll()
         {
             if (!_packedEntity.Unpack(_world, out var entity)) return;
             _world.GetOrAddComponent<CloseAllViewsRequest>(entity);
         }
         
+#if ODIN_INSPECTOR
         [OnInspectorInit]
+#endif
         private void OnInspectorInitialize()
         {
             if (trigger == null)

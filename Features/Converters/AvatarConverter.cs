@@ -3,18 +3,24 @@
     using System;
     using Components;
     using Leopotam.EcsProto;
-    using Sirenix.OdinInspector;
+
     using UniGame.LeoEcs.Converter.Runtime;
     using UniGame.LeoEcs.Shared.Extensions;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [Serializable]
     public sealed class AvatarConverter : LeoEcsConverter
     {
-        [SerializeField] 
+#if ODIN_INSPECTOR
         [InlineProperty]
         [HideLabel]
         [TitleGroup("Avatar Bounds")]
+#endif
+        [SerializeField] 
         public EntityBounds entityBounds;
 
         [Space]

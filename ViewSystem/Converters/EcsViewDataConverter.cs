@@ -9,12 +9,16 @@
     using Proto.Components;
     using R3;
     using Shared.Extensions;
-    using Sirenix.OdinInspector;
+
     using UiSystem.Runtime;
     using UniGame.ViewSystem.Runtime;
     using Runtime.DataFlow;
     using Runtime.Utils;
      
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     using UnityEngine;
 
     [Serializable]
@@ -23,10 +27,14 @@
         IConverterEntityDestroyHandler
         where TData : class, IViewModel
     {
+#if ODIN_INSPECTOR
         [TitleGroup("settings")]
+#endif
         public EcsViewSettings settings = new EcsViewSettings();
         
+#if ODIN_INSPECTOR
         [TitleGroup("runtime")]
+#endif
         public int entity;
         
         #region private fields

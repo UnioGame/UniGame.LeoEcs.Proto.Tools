@@ -113,8 +113,10 @@
         public string name;
         public bool enabled;
         
+#if ODIN_INSPECTOR
         [HideLabel]
         [InlineProperty]
+#endif
         [SerializeReference]
         public IEcsServicePlugin plugin;
     }

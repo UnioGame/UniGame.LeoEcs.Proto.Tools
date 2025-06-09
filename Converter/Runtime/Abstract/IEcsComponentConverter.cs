@@ -1,5 +1,6 @@
 ﻿namespace UniGame.LeoEcs.Converter.Runtime.Abstract
 {
+    using Core.Runtime;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
 
@@ -9,10 +10,7 @@
 
     
     public interface IEcsComponentConverter : 
-        ILeoEcsConverterStatus
-#if ODIN_INSPECTOR
-        , ISearchFilterable
-#endif
+        ILeoEcsConverterStatus, ISearchFilterable
     {
         public string Name { get; }
         

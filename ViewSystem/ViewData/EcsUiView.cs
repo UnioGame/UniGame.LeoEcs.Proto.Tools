@@ -6,11 +6,15 @@
     using Converter.Runtime;
     using Converter.Runtime.Abstract;
     using Leopotam.EcsProto;
-    using Sirenix.OdinInspector;
+
     using UiSystem.Runtime;
     using UniGame.ViewSystem.Runtime;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [RequireComponent(typeof(ProtoEcsMonoConverter))]
     public abstract class EcsUiView<TViewModel> : View<TViewModel>,
         IEcsComponentConverter,
@@ -20,10 +24,12 @@
     {
         public bool isEnabled = true;
         
+#if ODIN_INSPECTOR
         [PropertySpace(8)]
         [FoldoutGroup("settings")]
         [InlineProperty]
         [HideLabel]
+#endif
         public EcsViewSettings settings = new();
         
         private EcsViewDataConverter<TViewModel> _dataConverter = new();

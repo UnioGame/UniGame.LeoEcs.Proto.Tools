@@ -6,10 +6,14 @@
     using Core.Runtime.SerializableType.Attributes;
     using Extensions;
     using Leopotam.EcsProto;
-    using Sirenix.OdinInspector;
+
     using UniModules.UniGame.UiSystem.Runtime;
     using UnityEngine;
 
+#if ODIN_INSPECTOR
+    using Sirenix.OdinInspector;
+#endif
+    
     [Serializable]
     public class ViewRequestTrigger
     {
