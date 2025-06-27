@@ -4,9 +4,6 @@
     using System.Collections.Generic;
     using System.Reflection;
     using Leopotam.EcsProto;
-    using UniGame.Runtime.ReflectionUtils;
-    using UniGame.Runtime.Utils;
-    using UnityEngine;
 
     [Serializable]
     public class EcsDiItInjection : IEcsDiInjection

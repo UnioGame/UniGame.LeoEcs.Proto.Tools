@@ -5,7 +5,6 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
     using UniGame.Runtime.Utils;
     using UnityEngine;
-    using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
     using Leopotam.EcsProto;

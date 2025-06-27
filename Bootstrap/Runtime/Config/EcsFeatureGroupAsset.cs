@@ -6,7 +6,6 @@
     using System.Diagnostics;
     using LeoEcs.Bootstrap.Runtime;
     using LeoEcs.Bootstrap;
-    using LeoEcs.Bootstrap.Runtime.PostInitialize;
     using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using UniCore.Runtime.ProfilerTools;

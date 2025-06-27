@@ -2,7 +2,7 @@
 {
     using System;
     using UniGame.Core.Runtime;
-    using UniGame.UniNodes.GameFlow.Runtime;
+    
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
@@ -13,14 +13,9 @@
     using Core.Runtime.Extension;
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsLite;
-    using Leopotam.EcsProto;
-    using Leopotam.EcsProto.QoL;
-    using Leopotam.EcsProto.Unity;
+    using GameFlow.Runtime;
     using Shared.Extensions;
-    using UniCore.Runtime.ProfilerTools;
-    using UniGame.Runtime.DataFlow;
     using UniGame.Runtime.Utils;
-    using Object = UnityEngine.Object;
 
     public class EcsService : GameService, IEcsService
     {
@@ -30,14 +25,14 @@
         private Dictionary<string, EcsFeatureSystems> _systemsMap;
         private Dictionary<string, IEcsExecutor> _systemsExecutors;
         private IContext _context;
-        private ProtoWorld _world;
+        private Leopotam.EcsProto.ProtoWorld _world;
 
         private bool _isInitialized;
         private float _featureTimeout;
 
         private List<IEcsSystem> _lateSystems = new() { };
 
-        public ProtoWorld World => _world;
+        public Leopotam.EcsProto.ProtoWorld World => _world;
 
         public EcsService(IContext context,
             IEcsSystemsConfig config,
@@ -60,7 +55,7 @@
             LifeTime.AddCleanUpAction(CleanUp);
         }
 
-        public ProtoWorld CreateWorld(IEcsSystemsConfig config)
+        public Leopotam.EcsProto.ProtoWorld CreateWorld(IEcsSystemsConfig config)
         {
             var worldConfig = config.WorldConfiguration.Create();
             var aspectsData = config.AspectsData;
@@ -82,21 +77,21 @@
                 if (aspectType.IsGenericType && !aspectType.IsConstructedGenericType)
                     continue;
                 
-                var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
+                var aspectInstance = aspectType.CreateWithDefaultConstructor() as Leopotam.EcsProto.IProtoAspect;
                 worldAspect.AddAspect(aspectInstance);
             }
 
 
-            var protoWorld = new ProtoWorld(worldAspect, worldConfig);
+            var protoWorld = new Leopotam.EcsProto.ProtoWorld(worldAspect, worldConfig);
             return protoWorld;
         }
 
-        public void SetDefaultWorld(ProtoWorld world)
+        public void SetDefaultWorld(Leopotam.EcsProto.ProtoWorld world)
         {
             LeoEcsGlobalData.World = world;
         }
 
-        public override async UniTask InitializeAsync()
+        public async UniTask InitializeAsync()
         {
 #if DEBUG
             var stopwatch = Stopwatch.StartNew();
@@ -120,7 +115,7 @@
             {
                 if (_config.EnableUnityModules)
                 {
-                    systems.AddModule(new UnityModule(new UnityModule.Config()
+                    systems.AddModule(new Leopotam.EcsProto.Unity.UnityModule(new Leopotam.EcsProto.Unity.UnityModule.Config()
                     {
                         NotBakeComponentsInName = true
                     }));
@@ -192,10 +187,10 @@
             var elapsed = timer.ElapsedMilliseconds;
             timer.Restart();
             if (stop) timer.Stop();
-            GameLog.Log($"ECS FEATURE SOURCE: LOAD {message} TIME = {elapsed} ms");
+            UniCore.Runtime.ProfilerTools.GameLog.Log($"ECS FEATURE SOURCE: LOAD {message} TIME = {elapsed} ms");
         }
 
-        private async UniTask InitializeEcsService(ProtoWorld world)
+        private async UniTask InitializeEcsService(Leopotam.EcsProto.ProtoWorld world)
         {
             var groups = _config
                 .FeatureGroups
@@ -212,13 +207,13 @@
             return features;
         }
 
-        private async UniTask CreateEcsGroupAsync(EcsConfigGroup ecsGroup, ProtoWorld world)
+        private async UniTask CreateEcsGroupAsync(EcsConfigGroup ecsGroup, Leopotam.EcsProto.ProtoWorld world)
         {
             var systemsGroup = CollectFeatures(ecsGroup);
             await CreateEcsGroup(ecsGroup.updateType, world, systemsGroup);
         }
 
-        private void ApplyPlugins(ProtoWorld world)
+        private void ApplyPlugins(Leopotam.EcsProto.ProtoWorld world)
         {
             foreach (var systemsPlugin in _plugins)
             {
@@ -231,7 +226,7 @@
             }
         }
 
-        private EcsFeatureSystems CreateEcsSystems(string groupId, ProtoWorld world)
+        private EcsFeatureSystems CreateEcsSystems(string groupId, Leopotam.EcsProto.ProtoWorld world)
         {
             var systems = new EcsFeatureSystems(world);
             systems.AddService(_context,typeof(IContext));
@@ -242,13 +237,13 @@
 
         private async UniTask CreateEcsGroup(
             string updateType,
-            ProtoWorld world,
+            Leopotam.EcsProto.ProtoWorld world,
             IReadOnlyList<ILeoEcsFeature> runnerFeatures)
         {
             if (!_systemsMap.TryGetValue(updateType, out var ecsSystems))
             {
                 ecsSystems = CreateEcsSystems(updateType, world);
-                ecsSystems.AddModule(new AutoInjectModule());
+                ecsSystems.AddModule(new Leopotam.EcsProto.QoL.AutoInjectModule());
             }
 
             var asyncFeatures = runnerFeatures
@@ -260,7 +255,7 @@
                 ecsSystems.AddSystem(startupSystem);
         }
 
-        public async UniTask InitializeFeatureAsync(IProtoSystems ecsSystems, ILeoEcsFeature feature)
+        public async UniTask InitializeFeatureAsync(Leopotam.EcsProto.IProtoSystems ecsSystems, ILeoEcsFeature feature)
         {
             if (!feature.IsFeatureEnabled) return;
 
@@ -271,7 +266,7 @@
 
             if (feature is ILeoEcsInitializableFeature initializeFeature)
             {
-                var featureLifeTime = new LifeTimeDefinition();
+                var featureLifeTime = new UniGame.Runtime.DataFlow.LifeTime();
 
                 await initializeFeature
                     .InitializeAsync(ecsSystems)
@@ -292,13 +287,13 @@
                 var leoEcsSystem = system;
 
                 //create instance of SO systems
-                if (leoEcsSystem is Object systemAsset)
+                if (leoEcsSystem is UnityEngine.Object systemAsset)
                 {
-                    systemAsset = Object.Instantiate(systemAsset);
+                    systemAsset = UnityEngine.Object.Instantiate(systemAsset);
                     leoEcsSystem = systemAsset as IEcsSystem;
                 }
 
-                var featureLifeTime = new LifeTimeDefinition();
+                var featureLifeTime = new UniGame.Runtime.DataFlow.LifeTime();
                 if (leoEcsSystem is ILeoEcsInitializableFeature initFeature)
                 {
 #if DEBUG

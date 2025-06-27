@@ -2,7 +2,6 @@
 using UniGame.LeoEcs.Bootstrap;
 
 #if ODIN_INSPECTOR
-    using Sirenix.OdinInspector;
 #endif
 
 #if TRI_INSPECTOR

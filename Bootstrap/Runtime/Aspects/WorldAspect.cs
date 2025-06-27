@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Bootstrap;
     using Leopotam.EcsProto;
     using UnityEngine;
 

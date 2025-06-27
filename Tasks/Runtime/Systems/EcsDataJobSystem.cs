@@ -12,7 +12,7 @@
         public IProtoSystems ecsSystems;
         public ProtoWorld world;
         
-        private LifeTimeDefinition _lifeTime;
+        private LifeTime _lifeTime;
         
         private int _defaultJobsCount;
         private JobHandle _jobHandle;
@@ -23,7 +23,7 @@
             ecsSystems = systems;
             world = systems.GetWorld();
             
-            _lifeTime = new LifeTimeDefinition();
+            _lifeTime = new LifeTime();
             _defaultJobsCount = 16;
             _jobHandle = default;
             _job = default;

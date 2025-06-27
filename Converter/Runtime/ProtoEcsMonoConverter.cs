@@ -109,7 +109,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
         private ProtoPackedEntity _packedEntity;
         private ProtoWorld _world;
         private List<IEcsComponentConverter> _converters = new();
-        private LifeTimeDefinition _entityLifeTime = new();
+        private LifeTime _entityLifeTime = new();
         private int _generation;
         
 #endregion
@@ -302,7 +302,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
 
         private void Awake()
         {
-            _entityLifeTime ??= new LifeTimeDefinition();
+            _entityLifeTime ??= new LifeTime();
             //get all converters
             _converters ??= new List<IEcsComponentConverter>();
         }

@@ -11,14 +11,14 @@
     public static class LeoEcsGlobalData
     {
         public static ProtoWorld World;
-        public static LifeTimeDefinition LifeTime;
+        public static LifeTime LifeTime;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             World = null;
             LifeTime?.Terminate();
-            LifeTime = new LifeTimeDefinition();
+            LifeTime = new LifeTime();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

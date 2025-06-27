@@ -25,19 +25,21 @@ namespace UniGame.LeoEcs.Shared.Extensions
         private static MemorizeItem<ProtoWorld,WorldContextData> _memorizeItem = MemorizeTool
             .Memorize<ProtoWorld, WorldContextData>(static x =>
             {
-                var lifeTime = new LifeTimeDefinition();
+                var lifeTime = new LifeTime();
+                var hashMap = new NativeHashMap<int, ProtoPackedEntity>(8, Allocator.Persistent);
+                lifeTime.AddDispose(hashMap);
+                
                 var worldData = new WorldContextData()
                 {
                     World = x,
                     LifeTime = lifeTime,
-                    SingleEntities = new NativeHashMap<int, ProtoPackedEntity>(8, Allocator.Persistent)
-                        .AddTo(lifeTime)
+                    SingleEntities =hashMap,
                 };
                 
                 UpdateWorldLifeTime(x,lifeTime).Forget();
                 return worldData;
                 
-                static async UniTask UpdateWorldLifeTime(ProtoWorld world,LifeTimeDefinition lifeTime)
+                static async UniTask UpdateWorldLifeTime(ProtoWorld world,LifeTime lifeTime)
                 {
                     while (world.IsAlive())
                     {
@@ -596,7 +598,7 @@ namespace UniGame.LeoEcs.Shared.Extensions
     public class WorldContextData
     {
         public ProtoWorld World;
-        public LifeTimeDefinition LifeTime;
+        public LifeTime LifeTime;
         public NativeHashMap<int,ProtoPackedEntity> SingleEntities;
     }
 }

@@ -42,7 +42,7 @@
         private ProtoWorld _world;
         private ProtoPackedEntity _viewPackedEntity;
         private IUiView<TData> _view;
-        private LifeTimeDefinition _entityLifeTime;
+        private LifeTime _entityLifeTime;
 
         #endregion
         
@@ -58,7 +58,7 @@
         protected override void OnApply(GameObject target, ProtoWorld world, ProtoEntity targetEntity)
         {
             //reset lifetime
-            _entityLifeTime ??= new LifeTimeDefinition();
+            _entityLifeTime ??= new LifeTime();
             _entityLifeTime.Release();
             
             _view = target.GetComponent<IUiView<TData>>();
