@@ -3,6 +3,7 @@
     using System;
     using Attributes;
     using Leopotam.EcsProto;
+    using Runtime.Attributes;
     using Shared.Components;
 
     /// <summary>

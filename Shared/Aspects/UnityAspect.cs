@@ -5,6 +5,7 @@
     using Game.Ecs.Core.Components;
     using LeoEcsLite.LeoEcs.Shared.Components;
     using Leopotam.EcsProto;
+    using Runtime.Attributes;
     using Shared.Components;
 
     [Serializable]

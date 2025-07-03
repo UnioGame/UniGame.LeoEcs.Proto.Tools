@@ -4,6 +4,7 @@
     using Attributes;
     using Game.Ecs.Core.Components;
     using Leopotam.EcsProto;
+    using Runtime.Attributes;
     using Shared.Components;
 
     /// <summary>
