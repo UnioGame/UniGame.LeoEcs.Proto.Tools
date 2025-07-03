@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Attributes;
     using Core.Runtime.SerializableType;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
@@ -14,6 +15,7 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 #endif
     [Serializable]
+    [ECSDI]
     public abstract class TypePoolAspect : ProtoAspectInject
     {
         public List<SType> componentTypes = new();
