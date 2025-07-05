@@ -1,6 +1,7 @@
 namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
     using System.Collections.Generic;
+    using Game.Ecs.Core;
     using LeoEcs.Bootstrap;
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
     using UniGame.Runtime.Utils;
@@ -41,7 +42,20 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [ListDrawerSettings(ListElementLabelName = "updateType")]
 #endif
         //[Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)]
-        public List<EcsConfigGroup> ecsUpdateGroups = new();
+        public List<EcsConfigGroup> ecsUpdateGroups = new()
+        {
+            new()
+            {
+                updateType = EcsUpdateMap.UpdateQueueId,
+                features = new List<EcsFeatureData>()
+                {
+                    new()
+                    {
+                        featureGroup = new CoreFeature(),
+                    }
+                }
+            }
+        };
         
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineProperty]
@@ -83,9 +97,9 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         public AspectsData AspectsData => aspectsData;
         
         public IReadOnlyList<EcsPlugin> Plugins => plugins;
-        
+
         public IReadOnlyList<EcsConfigGroup> FeatureGroups => ecsUpdateGroups;
-        
+
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [Button]
 #endif

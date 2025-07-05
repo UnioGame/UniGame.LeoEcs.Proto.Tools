@@ -43,7 +43,7 @@
     "versionDefines": [
         {
             "name": "com.leopotam.proto",
-            "expression": "2024.0.0",
+            "expression": "",
             "define": "LEO_ECS_PROTO_ENABLED"
         }
     ],

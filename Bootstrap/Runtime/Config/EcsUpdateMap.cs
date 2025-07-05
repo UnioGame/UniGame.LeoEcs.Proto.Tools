@@ -9,6 +9,10 @@
     [Serializable]
     public class EcsUpdateMap
     {
+        public const string UpdateQueueId = "Update";
+        public const string FixedQueueId = "Fixed_Update";
+        public const string LateQueueId = "Late_Update";
+        
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineProperty]
 #endif
@@ -16,7 +20,7 @@
         {
             new EcsUpdateQueue()
             {
-                OrderId = "Update",
+                OrderId = UpdateQueueId,
                 Factory = new EcsUniTaskUpdateProvider()
                 {
                     updateType = EcsPlayerUpdateType.Update
@@ -25,7 +29,7 @@
             
             new EcsUpdateQueue()
             {
-                OrderId = "Fixed_Update",
+                OrderId = FixedQueueId,
                 Factory = new EcsUniTaskUpdateProvider()
                 {
                     updateType = EcsPlayerUpdateType.FixedUpdate
@@ -34,7 +38,7 @@
             
             new EcsUpdateQueue()
             {
-                OrderId = "Late_Update",
+                OrderId = LateQueueId,
                 Factory = new EcsUniTaskUpdateProvider()
                 {
                     updateType = EcsPlayerUpdateType.LateUpdate
