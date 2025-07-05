@@ -1,20 +1,13 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
-
-#if TRI_INSPECTOR
-using TriInspector;
-#endif
-
-namespace UniGame.Ecs.Bootstrap.Runtime.Config
+﻿namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
+    using System;
+    using System.Collections.Generic;
     using LeoEcs.Bootstrap;
+    using Sirenix.OdinInspector;
+    using UnityEngine;
 
-    [CreateAssetMenu(menuName = "ECS Proto/Systems Update Map", fileName = "Systems Update Map")]
-    public class EcsUpdateMapAsset : ScriptableObject
+    [Serializable]
+    public class EcsUpdateMap
     {
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineProperty]
@@ -48,12 +41,6 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
                 }
             },
         };
-
-#if ODIN_INSPECTOR || TRI_INSPECTOR
-        [InlineProperty]
-#endif
-        [SerializeReference]
-        public List<IEcsSystemsPluginProvider> systemsPlugins = new();
 
         [SerializeReference] public IEcsUpdateOrderProvider defaultFactory = new EcsUniTaskUpdateProvider()
         {

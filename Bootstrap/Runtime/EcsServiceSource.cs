@@ -1,6 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Bootstrap;
     using Ecs.Bootstrap.Runtime.Config;
@@ -33,14 +34,8 @@ using Sirenix.OdinInspector;
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineEditor] 
 #endif
-        public EcsFeaturesConfiguration features;
-
-#if ODIN_INSPECTOR || TRI_INSPECTOR
-        [InlineEditor]
-#endif
-        [Space(10)]
-        [SerializeField]
-        public EcsUpdateMapAsset updatesMap;
+        public EcsConfiguration features;
+        
 
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineEditor]
@@ -48,11 +43,11 @@ using Sirenix.OdinInspector;
 #endif
         [Space(10)]
         [SerializeField]
-        public EcsFeaturesConfiguration _runtimeConfiguration;
+        public EcsConfiguration _runtimeConfiguration;
 
         #endregion
 
-        private EcsUpdateMapAsset _updateMapData;
+        private EcsUpdateMap _updateMapData;
         
         public bool IsRuntimeConfigVisible => Application.isPlaying && _runtimeConfiguration != null;
 
@@ -61,10 +56,10 @@ using Sirenix.OdinInspector;
             LeoEcsGlobalData.World = null;
 
             var config = Instantiate(features);
-            _updateMapData = Instantiate(updatesMap);
+            _updateMapData = config.ecsUpdateMap;
             _runtimeConfiguration = config;
 
-            var plugins = _updateMapData
+            var plugins = config
                 .systemsPlugins
                 .Select(x => x.Create())
                 .ToList();

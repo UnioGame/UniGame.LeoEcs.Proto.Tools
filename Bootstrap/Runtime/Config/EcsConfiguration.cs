@@ -20,8 +20,8 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using TriInspector;
 #endif
     
-    [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = nameof(EcsFeaturesConfiguration))]
-    public class EcsFeaturesConfiguration : ScriptableObject, IEcsSystemsConfig
+    [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = nameof(EcsConfiguration))]
+    public class EcsConfiguration : ScriptableObject, IEcsSystemsConfig
     {
 #if ODIN_INSPECTOR
        [FoldoutGroup("world config")]
@@ -30,8 +30,9 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [InlineProperty]
         [HideLabel]
 #endif
-        public WorldConfiguration worldConfiguration = new WorldConfiguration();
+        public WorldConfiguration worldConfiguration = new();
         
+        [Tooltip("If true, enable ECS Proto Unity module")]
         public bool enableUnityModule = true;
         
         [Space(8)]
@@ -40,18 +41,24 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [ListDrawerSettings(ListElementLabelName = "updateType")]
 #endif
         //[Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)]
-        public List<EcsConfigGroup> ecsUpdateGroups = new List<EcsConfigGroup>();
+        public List<EcsConfigGroup> ecsUpdateGroups = new();
         
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [InlineProperty]
         [HideLabel]
 #endif  
-        public AspectsData aspectsData = new AspectsData();
+        [Space(10)]
+        public AspectsData aspectsData = new();
         
+        [Space(10)]
+        public EcsUpdateMap ecsUpdateMap = new();
+
+        [Header("ECS Plugins")]
 #if ODIN_INSPECTOR 
         [ListDrawerSettings(ListElementLabelName = "@name")]
 #endif
-        public List<EcsPlugin> plugins = new List<EcsPlugin>()
+        [Tooltip("Ecs Plugins that provide additional functionality for the ECS framework, such as dependency injection,etc.")]
+        public List<EcsPlugin> plugins = new()
         {
             new EcsPlugin()
             {
@@ -60,6 +67,15 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
                 plugin = new EcsDiPlugin()
             },
         };
+                
+#if ODIN_INSPECTOR || TRI_INSPECTOR
+        [InlineProperty]
+#endif
+        [Space(8)]
+        [Tooltip("Plugins that provide additional functionality for Systems, such as logging, profiling, etc.")]
+        [SerializeReference]
+        public List<IEcsSystemsPluginProvider> systemsPlugins = new();
+
 
         public bool EnableUnityModules => enableUnityModule;
         public WorldConfiguration WorldConfiguration => worldConfiguration;
@@ -120,7 +136,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         {
             plugins = new List<EcsPlugin>()
             {
-                new EcsPlugin()
+                new()
                 {
                     enabled = true,
                     name = nameof(EcsDiPlugin),
@@ -134,7 +150,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [InitializeOnLoadMethod]
         public static void ReloadEcsConfiguration()
         {
-            var assets = AssetEditorTools.GetAssets<EcsFeaturesConfiguration>();
+            var assets = AssetEditorTools.GetAssets<EcsConfiguration>();
             foreach (var asset in assets)
             {
                 if(!asset.aspectsData.autoRegisterAspects)

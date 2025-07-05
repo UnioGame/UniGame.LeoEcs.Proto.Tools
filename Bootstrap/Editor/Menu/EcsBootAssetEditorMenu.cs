@@ -19,18 +19,14 @@
             var path = AssetDatabase.GetAssetPath(selection);
 
             var source = ScriptableObject.CreateInstance<EcsServiceSource>();
-            var features = ScriptableObject.CreateInstance<EcsFeaturesConfiguration>();
-            var map = ScriptableObject.CreateInstance<EcsUpdateMapAsset>();
+            var features = ScriptableObject.CreateInstance<EcsConfiguration>();
             
             source.name = "Ecs Service Source";
             features.name = "Ecs Features Configuration";
-            map.name = "Ecs Update Map";
             
             features = features.SaveAsset(path);
-            map = map.SaveAsset(path);
             
             source.features = features;
-            source.updatesMap = map;
             source.SaveAsset(path);
         }
 #endif
