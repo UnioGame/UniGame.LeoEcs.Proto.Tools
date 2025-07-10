@@ -59,7 +59,7 @@
         {
             //reset lifetime
             _entityLifeTime ??= new LifeTime();
-            _entityLifeTime.Release();
+            _entityLifeTime.Restart();
             
             _view = target.GetComponent<IUiView<TData>>();
             if (_view == null) return;
@@ -124,7 +124,7 @@
         {
             entity = -1;
             
-            _entityLifeTime?.Release();
+            _entityLifeTime?.Terminate();
             _world = null;
             _viewPackedEntity = default;
         }

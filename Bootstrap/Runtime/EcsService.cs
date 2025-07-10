@@ -15,6 +15,7 @@
     using Leopotam.EcsLite;
     using GameFlow.Runtime;
     using Shared.Extensions;
+    using UniGame.Runtime.DataFlow;
     using UniGame.Runtime.Utils;
 
     public class EcsService : GameService, IEcsService
@@ -266,7 +267,7 @@
 
             if (feature is ILeoEcsInitializableFeature initializeFeature)
             {
-                var featureLifeTime = new UniGame.Runtime.DataFlow.LifeTime();
+                var featureLifeTime = new LifeTime();
 
                 await initializeFeature
                     .InitializeAsync(ecsSystems)
@@ -293,7 +294,7 @@
                     leoEcsSystem = systemAsset as IEcsSystem;
                 }
 
-                var featureLifeTime = new UniGame.Runtime.DataFlow.LifeTime();
+                var featureLifeTime = new LifeTime();
                 if (leoEcsSystem is ILeoEcsInitializableFeature initFeature)
                 {
 #if DEBUG
@@ -307,7 +308,7 @@
                     LogServiceTime($"\tSUB FEATURE {feature.GetType().Name}", timer);
 #endif
 
-                    featureLifeTime.Release();
+                    featureLifeTime.Terminate();
                 }
 
                 ecsSystems.Add(leoEcsSystem);

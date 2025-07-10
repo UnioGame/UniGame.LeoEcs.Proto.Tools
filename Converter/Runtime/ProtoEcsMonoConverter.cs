@@ -215,7 +215,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
             if (_state != EntityState.Destroyed) return;
 
             _state = EntityState.Creating;
-            _entityLifeTime.Release();
+            _entityLifeTime.Restart();
 
             Convert()
                 .AttachExternalCancellation(_entityLifeTime.Token)
@@ -266,7 +266,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
             entity = (ProtoEntity)(-1);
             _state = EntityState.Destroyed;
             _packedEntity = default;
-            _entityLifeTime.Release();
+            _entityLifeTime.Terminate();
         }
 
 #endregion

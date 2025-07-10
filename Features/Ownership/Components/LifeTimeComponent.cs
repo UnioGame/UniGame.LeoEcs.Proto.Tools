@@ -38,7 +38,7 @@
         
         internal void Release()
         {
-            _value.Release();
+            _value.Terminate();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
