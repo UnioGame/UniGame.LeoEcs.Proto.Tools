@@ -1,8 +1,6 @@
 ﻿namespace UniGame.Proto.Ownership
 {
     using System.Runtime.CompilerServices;
-    using UniGame.Proto.Ownership;
-    using Ecs.Core.Components;
     using Game.Ecs.Core.Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
