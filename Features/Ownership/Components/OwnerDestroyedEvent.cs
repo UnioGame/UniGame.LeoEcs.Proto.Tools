@@ -1,4 +1,4 @@
-﻿namespace Game.Modules.leoecs.proto.tools.Ownership.Components
+﻿namespace UniGame.Proto.Ownership
 {
     public struct OwnerDestroyedEvent
     {

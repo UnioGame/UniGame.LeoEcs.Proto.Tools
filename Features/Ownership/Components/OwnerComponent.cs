@@ -1,4 +1,4 @@
-﻿namespace Game.Modules.leoecs.proto.tools.Ownership.Components
+﻿namespace UniGame.Proto.Ownership
 {
     using System;
     using Leopotam.EcsLite;
@@ -45,9 +45,7 @@
         {
             if (c.Children.IsCreated)
                 c.Children.Dispose();
-#if !UNITY_EDITOR
             c.Children = new NativeList<ProtoPackedEntity>(0, Allocator.Persistent);
-#endif
         }
     }
 }

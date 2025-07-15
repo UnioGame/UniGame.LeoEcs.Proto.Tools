@@ -1,8 +1,9 @@
-﻿namespace Game.Modules.leoecs.proto.tools.Ownership.Extensions
+﻿namespace UniGame.Proto.Ownership
 {
     using System.Runtime.CompilerServices;
-    using Components;
+    using UniGame.Proto.Ownership;
     using Ecs.Core.Components;
+    using Game.Ecs.Core.Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using UniCore.Runtime.ProfilerTools;

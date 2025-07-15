@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
-    using Aspects;
-    using Components;
+    using UniGame.Proto.Ownership;
     using Ecs.Core.Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;

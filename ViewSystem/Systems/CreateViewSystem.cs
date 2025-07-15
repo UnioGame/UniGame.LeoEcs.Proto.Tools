@@ -10,8 +10,7 @@
     using Bootstrap.Runtime.Attributes;
     using Converter.Runtime;
     using Core.Runtime;
-    using Game.Modules.leoecs.proto.tools.Ownership.Aspects;
-    using Game.Modules.leoecs.proto.tools.Ownership.Extensions;
+    using UniGame.Proto.Ownership;
     using Layouts.Aspects;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;

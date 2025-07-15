@@ -4,7 +4,7 @@
     using Components;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
-    using Modules.leoecs.proto.tools.Ownership.Extensions;
+    using UniGame.Proto.Ownership;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using UniGame.LeoEcs.Shared.Extensions;
     using UniGame.LeoEcs.Timer.Components;
