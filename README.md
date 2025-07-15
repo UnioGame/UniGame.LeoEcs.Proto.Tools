@@ -111,3 +111,33 @@ Predefined features can be found in the: https://github.com/UnioGame/UniGame.Leo
 
 # LifeTime
 
+# Views
+
+- Feature for support of View System package in ECS Proto.
+
+```csharp
+    [CreateAssetMenu(menuName = "ECS Proto/Features/Views Feature", fileName = "ECS Views Feature")]
+    public class ViewSystemFeature
+```
+
+Create a feature asset and add to the ECS Configuration
+
+## View Filter
+
+Allow to filter views in the Ecs World by it's model
+
+view filter will check few components on the entity
+
+- ViewModelComponent
+- ViewComponent
+- ViewComponent<TModel>
+- ViewInitializedComponent
+
+```csharp
+    //create view filter for TViewModel
+    public ProtoIt chain = ViewIt.ViewChain().Inc<TComponent>().End();
+    public ProtoIt chain2 = ViewIt.ViewChain<TViewModel2>().Inc<TComponent2>().End();
+    public ProtoIt chain3 = It.Chain<GameObjectComponent>().ViewChain<TViewModel3>().End();
+```
+
+you can check the source code in 'EcsViewExtensions.cs'

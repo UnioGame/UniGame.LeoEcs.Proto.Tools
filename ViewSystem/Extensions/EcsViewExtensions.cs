@@ -13,6 +13,7 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
     using Proto.Components;
     using UniGame.ViewSystem.Runtime;
     using Runtime.Utils;
+    using Shared.Components;
 
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
@@ -52,8 +53,7 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
         public static ProtoItChain ViewFilter<TModel>(this ProtoWorld world)
             where TModel : IViewModel
         {
-            return world
-                .Filter<ViewModelComponent>()
+            return It.Chain<ViewModelComponent>()
                 .Inc<ViewComponent>()
                 .Inc<ViewComponent<TModel>>()
                 .Inc<ViewInitializedComponent>();
