@@ -44,7 +44,7 @@ Configuration parts:
 - **Ecs Update Map** - map of ecs workers, that's define how to update ecs systems
 - **Ecs Features Configuration** - define features of ECS and order of execution
 
-### Features
+# Features
 
 **Feature - is a unit of ECS functionality, that implements some game logic with multiple systems/components/aspects.**
 
@@ -110,6 +110,30 @@ Predefined features can be found in the: https://github.com/UnioGame/UniGame.Leo
 # Ownership
 
 # LifeTime
+
+# Prefab Converters
+
+To make you prefab to be converted to ECS entity you need to add **ProtoEcsMonoConverter** mono component to the prefab
+
+When you can register in the converter your components providers
+
+1. Serializable Converter - implements **IEcsComponentConverter** interface
+
+```csharp
+    public interface IEcsComponentConverter : 
+        ILeoEcsConverterStatus, ISearchFilterable
+    {
+        public string Name { get; }
+        
+        void Apply(ProtoWorld world, ProtoEntity entity);
+    }
+```
+
+You can use as a base class of the serializable converter - **LeoEcsConverter** 
+
+2. ScriptableObject Converter - **EcsConverterAsset**
+
+SO converters allow you to make presets of converters and use them in different prefabs
 
 # Views
 
