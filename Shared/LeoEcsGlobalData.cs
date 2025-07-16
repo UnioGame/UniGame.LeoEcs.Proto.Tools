@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.CompilerServices;
+    using Bootstrap;
     using Cysharp.Threading.Tasks;
     using UnityEngine;
     using Leopotam.EcsProto;
@@ -10,6 +11,7 @@
 
     public static class LeoEcsGlobalData
     {
+        public static IEcsService EcsService;
         public static ProtoWorld World;
         public static LifeTime LifeTime;
 
@@ -17,6 +19,7 @@
         public static void Reset()
         {
             World = null;
+            EcsService = null;
             LifeTime?.Terminate();
             LifeTime = new LifeTime();
         }

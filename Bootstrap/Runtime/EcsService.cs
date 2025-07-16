@@ -14,6 +14,8 @@
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsLite;
     using GameFlow.Runtime;
+    using Leopotam.EcsProto;
+    using Proto.Shared;
     using Shared.Extensions;
     using UniGame.Runtime.DataFlow;
     using UniGame.Runtime.Utils;
@@ -26,14 +28,18 @@
         private Dictionary<string, EcsFeatureSystems> _systemsMap;
         private Dictionary<string, IEcsExecutor> _systemsExecutors;
         private IContext _context;
-        private Leopotam.EcsProto.ProtoWorld _world;
+        
+        private ProtoWorld _world;
+        private EcsWorldData _lastWorldData;
+        private EcsWorldData _defaultWorldData;
+        private List<EcsWorldData> _worlds = new();
 
         private bool _isInitialized;
         private float _featureTimeout;
 
         private List<IEcsSystem> _lateSystems = new() { };
 
-        public Leopotam.EcsProto.ProtoWorld World => _world;
+        public ProtoWorld World => _world;
 
         public EcsService(IContext context,
             IEcsSystemsConfig config,
@@ -52,11 +58,20 @@
             _featureTimeout = featureTimeout;
 
             _world = CreateWorld(_config);
-
+            
+            _defaultWorldData = new EcsWorldData()
+            {
+                Id = string.Empty,
+                LifeTime = _world.GetWorldLifeTime(),
+                World = _world,
+            };
+            
+            _lastWorldData = _defaultWorldData;
+            
             LifeTime.AddCleanUpAction(CleanUp);
         }
 
-        public Leopotam.EcsProto.ProtoWorld CreateWorld(IEcsSystemsConfig config)
+        public ProtoWorld CreateWorld(string worldId,IEcsSystemsConfig config = null)
         {
             var worldConfig = config.WorldConfiguration.Create();
             var aspectsData = config.AspectsData;
@@ -78,16 +93,47 @@
                 if (aspectType.IsGenericType && !aspectType.IsConstructedGenericType)
                     continue;
                 
-                var aspectInstance = aspectType.CreateWithDefaultConstructor() as Leopotam.EcsProto.IProtoAspect;
+                var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
                 worldAspect.AddAspect(aspectInstance);
             }
 
 
-            var protoWorld = new Leopotam.EcsProto.ProtoWorld(worldAspect, worldConfig);
+            var protoWorld = new ProtoWorld(worldAspect, worldConfig);
+            return protoWorld;
+        }
+        
+        public ProtoWorld CreateWorld(IEcsSystemsConfig config)
+        {
+            var worldConfig = config.WorldConfiguration.Create();
+            var aspectsData = config.AspectsData;
+            var worldAspect = new WorldAspect();
+            
+            foreach (var factory in aspectsData.factories)
+            {
+                var aspect = factory.Create();
+                worldAspect.AddAspect(aspect);
+            }
+            
+            foreach (var aspect in aspectsData.aspects)
+            {
+                if (!aspect.enabled) continue;
+                var aspectType = (Type)aspect.aspectType;
+                
+                if (aspectType == null) continue;
+                
+                if (aspectType.IsGenericType && !aspectType.IsConstructedGenericType)
+                    continue;
+                
+                var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
+                worldAspect.AddAspect(aspectInstance);
+            }
+
+
+            var protoWorld = new ProtoWorld(worldAspect, worldConfig);
             return protoWorld;
         }
 
-        public void SetDefaultWorld(Leopotam.EcsProto.ProtoWorld world)
+        public void SetDefaultWorld(ProtoWorld world)
         {
             LeoEcsGlobalData.World = world;
         }
@@ -191,7 +237,7 @@
             UniCore.Runtime.ProfilerTools.GameLog.Log($"ECS FEATURE SOURCE: LOAD {message} TIME = {elapsed} ms");
         }
 
-        private async UniTask InitializeEcsService(Leopotam.EcsProto.ProtoWorld world)
+        private async UniTask InitializeEcsService(ProtoWorld world)
         {
             var groups = _config
                 .FeatureGroups
@@ -208,13 +254,13 @@
             return features;
         }
 
-        private async UniTask CreateEcsGroupAsync(EcsConfigGroup ecsGroup, Leopotam.EcsProto.ProtoWorld world)
+        private async UniTask CreateEcsGroupAsync(EcsConfigGroup ecsGroup, ProtoWorld world)
         {
             var systemsGroup = CollectFeatures(ecsGroup);
             await CreateEcsGroup(ecsGroup.updateType, world, systemsGroup);
         }
 
-        private void ApplyPlugins(Leopotam.EcsProto.ProtoWorld world)
+        private void ApplyPlugins(ProtoWorld world)
         {
             foreach (var systemsPlugin in _plugins)
             {
@@ -227,7 +273,7 @@
             }
         }
 
-        private EcsFeatureSystems CreateEcsSystems(string groupId, Leopotam.EcsProto.ProtoWorld world)
+        private EcsFeatureSystems CreateEcsSystems(string groupId, ProtoWorld world)
         {
             var systems = new EcsFeatureSystems(world);
             systems.AddService(_context,typeof(IContext));
@@ -238,7 +284,7 @@
 
         private async UniTask CreateEcsGroup(
             string updateType,
-            Leopotam.EcsProto.ProtoWorld world,
+            ProtoWorld world,
             IReadOnlyList<ILeoEcsFeature> runnerFeatures)
         {
             if (!_systemsMap.TryGetValue(updateType, out var ecsSystems))
@@ -256,7 +302,7 @@
                 ecsSystems.AddSystem(startupSystem);
         }
 
-        public async UniTask InitializeFeatureAsync(Leopotam.EcsProto.IProtoSystems ecsSystems, ILeoEcsFeature feature)
+        public async UniTask InitializeFeatureAsync(IProtoSystems ecsSystems, ILeoEcsFeature feature)
         {
             if (!feature.IsFeatureEnabled) return;
 
