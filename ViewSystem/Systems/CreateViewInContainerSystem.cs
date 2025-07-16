@@ -6,6 +6,7 @@
     using Leopotam.EcsLite;
     using UniGame.LeoEcs.Bootstrap.Runtime.Attributes;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using Shared.Components;
     using Shared.Extensions;
 
@@ -21,34 +22,25 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class CreateViewInContainerSystem : IProtoInitSystem, IProtoRunSystem
+    public class CreateViewInContainerSystem : IProtoRunSystem
     {
         private ProtoWorld _world;
         
         private ViewAspect _viewAspect;
         private ViewContainerAspect _viewContainerAspect;
         
-        private ProtoIt _requestFilter;
-        private ProtoIt _allContainersFilter;
-        private ProtoItExc _freeContainersFilter;
-
-        public void Init(IProtoSystems systems)
-        {
-            _requestFilter = _world
-                .Filter<CreateViewInContainerRequest>()
-                .End();
-
-            _allContainersFilter = _world
-                .Filter<ViewContainerComponent>()
-                .Inc<TransformComponent>()
-                .End();
-            
-            _freeContainersFilter = _world
-                .Filter<ViewContainerComponent>()
-                .Inc<TransformComponent>()
-                .Exc<ViewContainerBusyComponent>()
-                .End();
-        }
+        private ProtoIt _requestFilter = It
+            .Chain<CreateViewInContainerRequest>()
+            .End();
+        private ProtoIt _allContainersFilter = It
+            .Chain<ViewContainerComponent>()
+            .Inc<TransformComponent>()
+            .End();
+        private ProtoItExc _freeContainersFilter = It
+            .Chain<ViewContainerComponent>()
+            .Inc<TransformComponent>()
+            .Exc<ViewContainerBusyComponent>()
+            .End();
 
         public void Run()
         {
