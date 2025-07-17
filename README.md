@@ -102,6 +102,21 @@ Predefined features can be found in the: https://github.com/UnioGame/UniGame.Leo
 
 ![predefined features](https://github.com/UnioGame/UniGame.LeoEcs.Proto.Tools/blob/main/Assets/ecsproto_features.png)
 
+# Multiple Worlds Support
+
+Ecs Services allow you to create multiple worlds and manage them
+
+To predefine the worlds names you can create a scriptable object with the following code:
+
+```csharp
+[CreateAssetMenu(menuName = "ECS Proto/ECS Worlds", fileName = nameof(EcsWorldsConfiguration),order = 0)]
+public class EcsWorldsConfiguration : ScriptableObject
+```
+
+It's optional, you can use string world id at runtime, but this configuration allows you select
+one of the predefined worlds in dropdown in some inspectors like **ProtoEcsMonoConverter***
+
+
 
 # Aspects
 

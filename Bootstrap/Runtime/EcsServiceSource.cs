@@ -1,8 +1,6 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Bootstrap;
     using Ecs.Bootstrap.Runtime.Config;
     using Converter.Runtime;

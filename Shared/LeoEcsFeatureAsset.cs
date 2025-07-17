@@ -11,6 +11,7 @@
     using Sirenix.OdinInspector;
 #endif
 
+    [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = "Ecs Feature Asset")]
     public class LeoEcsFeatureAsset : BaseLeoEcsFeature , ILeoEcsFeature
     {
         #region inspector

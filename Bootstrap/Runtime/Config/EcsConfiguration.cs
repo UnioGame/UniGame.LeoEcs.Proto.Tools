@@ -4,11 +4,11 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using Game.Ecs.Core;
     using LeoEcs.Bootstrap;
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
+    using Leopotam.EcsProto;
     using UniGame.Runtime.Utils;
     using UnityEngine;
 
 #if UNITY_EDITOR
-    using Leopotam.EcsProto;
     using UnityEditor;
     using UniModules.Editor;
 #endif
@@ -33,9 +33,6 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [HideLabel]
 #endif
         public WorldConfiguration worldConfiguration = new();
-
-        [Tooltip("List of in game used worlds, allow you select specific id in mono converters")]
-        public List<string> definedWorlds = new();
         
         [Tooltip("If true, enable ECS Proto Unity module")]
         public bool enableUnityModule = true;
