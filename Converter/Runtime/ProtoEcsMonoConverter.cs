@@ -66,7 +66,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #if ODIN_INSPECTOR
         [BoxGroup("converter settings")]
         [ShowIf(nameof(IsCustomWorld))]
-        [ValueDropdown(nameof(GetWorlds))]
+        [ValueDropdown(valuesGetter:nameof(GetWorlds),IsUniqueList = true)]
 #endif
         public string worldId = string.Empty;
         
