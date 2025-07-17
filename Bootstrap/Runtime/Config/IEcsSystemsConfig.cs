@@ -7,6 +7,7 @@ namespace UniGame.LeoEcs.Bootstrap
     {
         IReadOnlyList<EcsPlugin> Plugins { get; }
         IReadOnlyList<EcsConfigGroup> FeatureGroups { get; }
+        IReadOnlyList<IEcsSystemsPluginProvider> SystemsPlugins { get; }
         
         public bool EnableUnityModules { get; }
         public WorldConfiguration WorldConfiguration { get; }

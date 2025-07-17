@@ -4,17 +4,19 @@ namespace UniGame.LeoEcs.Bootstrap
     using GameFlow.Runtime;
     using Leopotam.EcsProto;
     using Proto.Shared;
+    using R3;
 
     public interface IEcsService : IGameService
     {
+        ReadOnlyReactiveProperty<EcsWorldData> DefaultWorld { get; }
+        
+        ReadOnlyReactiveProperty<EcsWorldData> LastWorld { get; }
 
         ProtoWorld World { get; }
-
-        ProtoWorld LastWorld{ get; }
         
         IReadOnlyDictionary<string,EcsWorldData> Worlds{ get; }
         
-        void SetDefaultWorld(string worldId);
+        bool SetDefaultWorld(string worldId);
 
     }
 }

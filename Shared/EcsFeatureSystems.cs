@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Leopotam.EcsProto;
+    
 #if ENABLE_IL2CPP
     using Unity.IL2CPP.CompilerServices;
 #endif

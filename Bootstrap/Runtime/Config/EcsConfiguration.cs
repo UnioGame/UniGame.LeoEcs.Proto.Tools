@@ -104,6 +104,8 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
 
         public IReadOnlyList<EcsConfigGroup> FeatureGroups => ecsUpdateGroups;
 
+        public IReadOnlyList<IEcsSystemsPluginProvider> SystemsPlugins => systemsPlugins;
+
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [Button]
 #endif

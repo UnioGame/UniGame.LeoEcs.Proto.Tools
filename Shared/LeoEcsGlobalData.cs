@@ -1,6 +1,7 @@
 ﻿namespace UniGame.LeoEcs.Converter.Runtime
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using Bootstrap;
     using Cysharp.Threading.Tasks;
@@ -11,17 +12,19 @@
 
     public static class LeoEcsGlobalData
     {
-        public static IEcsService EcsService;
+        public static IEcsService Service;
         public static ProtoWorld World;
+        public static Dictionary<string,ProtoWorld> Worlds = new(8);
         public static LifeTime LifeTime;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             World = null;
-            EcsService = null;
+            Service = null;
             LifeTime?.Terminate();
             LifeTime = new LifeTime();
+            Worlds.Clear();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
