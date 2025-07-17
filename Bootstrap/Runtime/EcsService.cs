@@ -32,14 +32,11 @@
         private ProtoWorld _world;
         private EcsWorldData _lastWorldData;
         private EcsWorldData _defaultWorldData;
-        private List<EcsWorldData> _worlds = new();
+        private Dictionary<string,EcsWorldData> _worlds = new();
 
         private bool _isInitialized;
         private float _featureTimeout;
-
         private List<IEcsSystem> _lateSystems = new() { };
-
-        public ProtoWorld World => _world;
 
         public EcsService(IContext context,
             IEcsSystemsConfig config,
@@ -56,50 +53,43 @@
             _ecsExecutorFactory = ecsExecutorFactory;
             _plugins = plugins;
             _featureTimeout = featureTimeout;
-
-            _world = CreateWorld(_config);
-            
-            _defaultWorldData = new EcsWorldData()
-            {
-                Id = string.Empty,
-                LifeTime = _world.GetWorldLifeTime(),
-                World = _world,
-            };
-            
-            _lastWorldData = _defaultWorldData;
+            _defaultWorldData = CreateWorld(string.Empty,_config);
+            _world = _defaultWorldData.World;
             
             LifeTime.AddCleanUpAction(CleanUp);
         }
+        
+        public ProtoWorld World => _world;
 
-        public ProtoWorld CreateWorld(string worldId,IEcsSystemsConfig config = null)
+        public ProtoWorld LastWorld => _lastWorldData.World;
+
+        public IReadOnlyDictionary<string,EcsWorldData> Worlds => _worlds;
+        
+        public EcsWorldData CreateWorld(string worldId,IEcsSystemsConfig config = null)
         {
-            var worldConfig = config.WorldConfiguration.Create();
-            var aspectsData = config.AspectsData;
-            var worldAspect = new WorldAspect();
+            if (_worlds.TryGetValue(worldId, out var worldData))
+                return worldData;
             
-            foreach (var factory in aspectsData.factories)
-            {
-                var aspect = factory.Create();
-                worldAspect.AddAspect(aspect);
-            }
+            var configToUse = config ?? _config;
+            var protoWorld = CreateWorld(configToUse);
+            var worldLifeTime = protoWorld.GetWorldLifeTime();
             
-            foreach (var aspect in aspectsData.aspects)
+            worldData = new EcsWorldData()
             {
-                if (!aspect.enabled) continue;
-                var aspectType = (Type)aspect.aspectType;
-                
-                if (aspectType == null) continue;
-                
-                if (aspectType.IsGenericType && !aspectType.IsConstructedGenericType)
-                    continue;
-                
-                var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
-                worldAspect.AddAspect(aspectInstance);
-            }
-
-
-            var protoWorld = new ProtoWorld(worldAspect, worldConfig);
-            return protoWorld;
+                Id = worldId,
+                LifeTime = worldLifeTime,
+                World = protoWorld,
+            };
+            
+            _worlds[worldId] = worldData;
+            _lastWorldData = worldData; 
+            
+            worldLifeTime.AddCleanUpAction(() =>
+            {
+                _worlds.Remove(worldId);
+            });
+            
+            return worldData;
         }
         
         public ProtoWorld CreateWorld(IEcsSystemsConfig config)
@@ -127,15 +117,16 @@
                 var aspectInstance = aspectType.CreateWithDefaultConstructor() as IProtoAspect;
                 worldAspect.AddAspect(aspectInstance);
             }
-
-
+            
             var protoWorld = new ProtoWorld(worldAspect, worldConfig);
             return protoWorld;
         }
 
-        public void SetDefaultWorld(ProtoWorld world)
+        public void SetDefaultWorld(string worldId)
         {
-            LeoEcsGlobalData.World = world;
+            var world = CreateWorld(worldId, _config);
+            _defaultWorldData = world;
+            _world = world.World;
         }
 
         public async UniTask InitializeAsync()

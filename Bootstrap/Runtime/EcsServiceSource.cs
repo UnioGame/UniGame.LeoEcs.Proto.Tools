@@ -70,13 +70,15 @@ using Sirenix.OdinInspector;
                 plugins,
                 featureTimeout);
 
+            LeoEcsGlobalData.EcsService = ecsService;
+            LeoEcsGlobalData.World = ecsService.World;
+            
             var world = ecsService.World;
             context.Publish(ecsService.World);
             
             //start ecs service update
             await ecsService.InitializeAsync();
             ecsService.Execute();
-            ecsService.SetDefaultWorld(world);
             
             context.LifeTime.AddDispose(ecsService);
             return ecsService;

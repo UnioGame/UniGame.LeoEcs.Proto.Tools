@@ -24,6 +24,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = nameof(EcsConfiguration))]
     public class EcsConfiguration : ScriptableObject, IEcsSystemsConfig
     {
+        [Header("Worlds Configuration")]
 #if ODIN_INSPECTOR
        [FoldoutGroup("world config")]
 #endif
@@ -32,6 +33,9 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [HideLabel]
 #endif
         public WorldConfiguration worldConfiguration = new();
+
+        [Tooltip("List of in game used worlds, allow you select specific id in mono converters")]
+        public List<string> definedWorlds = new();
         
         [Tooltip("If true, enable ECS Proto Unity module")]
         public bool enableUnityModule = true;
