@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
     using Bootstrap;
     using Aspects;
     using Converter.Runtime;
@@ -58,11 +59,58 @@
         public ReadOnlyReactiveProperty<EcsWorldData> DefaultWorld => _defaultWorldData;
 
         public IReadOnlyDictionary<string,EcsWorldData> Worlds => _worlds;
-        
-        public async UniTask<EcsWorldData> CreateWorldAsync(string worldId,IEcsSystemsConfig config = null)
+
+        public async UniTask<EcsWorldData> CreateWorldAsync(string worldId)
         {
+            return await CreateWorldAsync(worldId, _defaultConfig);
+        }
+
+        public async UniTask<ProtoWorld> GetWorldAsync(string worldId, 
+            bool createIfNotExists = false, 
+            CancellationToken cancellationToken = default)
+        {
+            var isDefault = string.IsNullOrEmpty(worldId);
+
+            if (isDefault)
+            {
+                await UniTask.WaitUntil(this, x =>
+                {
+                    var value = x._defaultWorldData.Value;
+                    return value != null &&
+                        value.IsInitialized &&
+                        value.World.IsAlive();
+                }, cancellationToken: cancellationToken);
+                
+                return World;
+            }
+            
+            if (createIfNotExists)
+            {
+                var world = await CreateWorldAsync(worldId, _defaultConfig);
+                return world.World;
+            }
+
+            await UniTask.WaitWhile(this, x => x._worlds.ContainsKey(worldId) == false,
+                cancellationToken: cancellationToken);
+            
+            var worldData = _worlds[worldId];
+
+            await UniTask.WaitWhile(worldData,static x => x.IsInitialized == false,
+                cancellationToken: cancellationToken);
+
+            return worldData.World;
+        }
+        
+        public async UniTask<EcsWorldData> CreateWorldAsync(string worldId,IEcsSystemsConfig config)
+        {
+            //check if world already exists
             if (_worlds.TryGetValue(worldId, out var worldData))
+            {
+                if (worldData.IsInitialized) return worldData;
+                // wait for world to be initialized
+                await UniTask.WaitWhile(worldData, static x => !x.IsInitialized);
                 return worldData;
+            }
             
             var configToUse = config ?? _defaultConfig;
             var protoWorld = CreateWorld(configToUse);
@@ -84,7 +132,9 @@
             
             _worlds[worldId] = worldData;
             _lastWorldData.Value = worldData;
-            _defaultWorldData.Value ??= worldData;
+    
+            if(string.IsNullOrEmpty(worldId))
+                _defaultWorldData.Value ??= worldData;
             
             worldLifeTime.AddCleanUpAction(() =>
             {
@@ -96,6 +146,8 @@
             await InitializeWorldAsync(worldData,configToUse);
             
             GameLog.Log($"Ecs World [{worldId}] Initialized");
+            
+            worldData.IsInitialized = true;
             
             return worldData;
         }

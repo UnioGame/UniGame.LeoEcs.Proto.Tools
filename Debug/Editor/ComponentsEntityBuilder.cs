@@ -12,12 +12,14 @@
     public class ComponentsEntityBuilder : IEntityEditorViewBuilder
     {
         private ProtoWorld _world;
+        private string _worldName;
         private ProtoPool<NameComponent> _namePool;
         private Slice<object> _components;
 
-        public void Initialize(ProtoWorld world)
+        public void Initialize(ProtoWorld world,string worldName)
         {
             _world = world;
+            _worldName = worldName;
             _namePool = _world.GetPool<NameComponent>();
         }
 
@@ -48,6 +50,7 @@
                 if(component == null) continue;
                     
                 var componentView = ClassPool.Spawn<ComponentEditorView>();
+                componentView.world = _world;
                 componentView.entity = (ProtoEntity)view.id;
                 componentView.value = component;
                     

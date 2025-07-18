@@ -21,16 +21,18 @@
             new GameObjectEntityBuilder(),
         };
 
-        public void Initialize(ProtoWorld world)
+        public void Initialize(ProtoWorld world,string worldName)
         {
             foreach (var viewBuilder in viewBuilders)
-                viewBuilder.Initialize(world);
+                viewBuilder.Initialize(world,worldName);
         }
 
-        public EntityEditorView Create(ProtoEntity entity,ProtoWorld world)
+        public EntityEditorView Create(ProtoEntity entity,ProtoWorld world,string worldName)
         {
             var view = ClassPool.Spawn<EntityEditorView>();
+            view.world = world;
             view.id = (int)entity;
+            view.worldId = worldName;
             view.packedEntity = world.PackEntity(entity);
             view.name = view.id.ToStringFromCache();
             

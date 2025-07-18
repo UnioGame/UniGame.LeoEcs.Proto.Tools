@@ -3,10 +3,10 @@
     using System;
     using Bootstrap;
     using Ecs.Bootstrap.Runtime.Config;
-    using Converter.Runtime;
     using Core.Runtime;
     using Cysharp.Threading.Tasks;
     using Context.Runtime;
+    using Proto;
     using R3;
     using UnityEngine;
 
@@ -52,7 +52,6 @@ using Sirenix.OdinInspector;
 
         protected override async UniTask<IEcsService> CreateServiceInternalAsync(IContext context)
         {
-            LeoEcsGlobalData.World = null;
             LeoEcsGlobalData.Service = null;
             
             var config = Instantiate(features);
@@ -65,7 +64,7 @@ using Sirenix.OdinInspector;
                 featureTimeout);
 
             //start ecs service update
-            await ecsService.CreateWorldAsync("default");
+            await ecsService.CreateWorldAsync(string.Empty);
             ecsService.Execute();
             
             var world = ecsService.DefaultWorld.CurrentValue;
@@ -74,11 +73,9 @@ using Sirenix.OdinInspector;
             ecsService.DefaultWorld
                 .Subscribe(context,(x,y) =>
                 {
-                    LeoEcsGlobalData.World = x.World;
                     y.Publish(x.World);
                 });
             
-            LeoEcsGlobalData.World = ecsService.World;
             LeoEcsGlobalData.Service = ecsService;
             
             context.LifeTime.AddDispose(ecsService);

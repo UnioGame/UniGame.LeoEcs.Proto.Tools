@@ -13,13 +13,15 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
+    using Proto.Shared;
     using UniCore.Runtime.ProfilerTools;
     using UniGame.Runtime.ObjectPool.Extensions;
     using UnityEngine;
     using UnityEngine.Pool;
     using Object = UnityEngine.Object;
 
-    public static class LeoEcsTool
+    public static class LeoEcsConverterTool
     {
         /// <summary>
         /// base common converters for gameobjects
@@ -116,7 +118,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
             bool spawnInstance,
             CancellationToken cancellationToken = default)
         {
-            var world = await WaitWorldReady(cancellationToken);
+            var world = await EcsTools.WaitWorldReady(cancellationToken);
             var entity = ConvertGameObjectToEntity(target, world, converters, spawnInstance);
             return entity;
         }
@@ -227,13 +229,13 @@ namespace UniGame.LeoEcs.Converter.Runtime
 
         public static async UniTask DestroyEntity(ProtoEntity entityId, CancellationToken cancellationToken = default)
         {
-            var world = await WaitWorldReady(cancellationToken);
+            var world = await EcsTools.WaitWorldReady(cancellationToken);
             DestroyEntity(entityId, world);
         }
         
         public static async UniTask DestroyEntityAsync(ProtoPackedEntity entityId, CancellationToken cancellationToken = default)
         {
-            var world = await WaitWorldReady(cancellationToken);
+            var world = await EcsTools.WaitWorldReady(cancellationToken);
             DestroyEntity(entityId, world);
         }
         
@@ -269,17 +271,5 @@ namespace UniGame.LeoEcs.Converter.Runtime
                 world.DelEntity(aliveEntity);
         }
 
-        public static async UniTask<ProtoWorld> WaitWorldReady(this GameObject target,CancellationToken cancellationToken = default)
-        {
-            return await WaitWorldReady(cancellationToken);
-        }
-
-        public static async UniTask<ProtoWorld> WaitWorldReady(CancellationToken cancellationToken = default)
-        {
-            await UniTask.WaitUntil(() => 
-                LeoEcsGlobalData.World != null &&
-                LeoEcsGlobalData.World.IsAlive(), cancellationToken: cancellationToken);
-            return LeoEcsGlobalData.World;
-        }
     }
 }

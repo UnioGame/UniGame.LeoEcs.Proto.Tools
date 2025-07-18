@@ -8,6 +8,7 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
     using Proto.Shared;
     using Shared.Extensions;
     using UniGame.Runtime.DataFlow;
@@ -66,9 +67,17 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #if ODIN_INSPECTOR
         [BoxGroup("converter settings")]
         [ShowIf(nameof(IsCustomWorld))]
-        [ValueDropdown(valuesGetter:nameof(GetWorlds),IsUniqueList = true)]
+#endif
+        [Tooltip("If true, create world if not exists")]
+        public bool createWorldIfNonExists = true;
+        
+#if ODIN_INSPECTOR
+        [BoxGroup("converter settings")]
+        [ShowIf(nameof(IsCustomWorld))]
+        [ValueDropdown(valuesGetter:nameof(GetWorlds),IsUniqueList = true,AppendNextDrawer = true)]
 #endif
         public string worldId = string.Empty;
+        
         
         [Header("Converters")]
         [FormerlySerializedAs("_serializableConverters")]
@@ -165,8 +174,8 @@ namespace UniGame.LeoEcs.Converter.Runtime
             
             if(_state != EntityState.Creating) return;
 
-            var world = LeoEcsGlobalData.World ?? 
-                        await gameObject.WaitWorldReady(_entityLifeTime.Token);
+            var world = await gameObject
+                .WaitWorldReady(worldId,worldType,createWorldIfNonExists,_entityLifeTime.Token);
 
             if (world.IsAlive() == false)   
             {
@@ -369,7 +378,13 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #endif
         public void ShowComponents()
         {
-            EntityEditorCommands.OpenEntityInfo((int)entity);
+            var debugEntityData = new EntityEditorData()
+            {
+                world = _world,
+                worldId = worldId,
+                entity = entity,
+            };
+            EntityEditorCommands.OpenEntityInfo(debugEntityData);
         }
 
 #endif

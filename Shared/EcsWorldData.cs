@@ -13,6 +13,7 @@
         public string Id;
         public ProtoWorld World;
         public ILifeTime LifeTime;
+        public bool IsInitialized;
         
         public Dictionary<string, EcsFeatureSystems> SystemsMap = new(8);
         public Dictionary<string, IEcsExecutor> Executors = new(8);

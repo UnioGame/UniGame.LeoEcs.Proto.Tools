@@ -12,7 +12,7 @@
             EntityEditorCommands.OnEntityInfoRequested += OpenEntityInfo;
         }
 
-        public static void OpenEntityInfo(int entity)
+        public static void OpenEntityInfo(EntityEditorData entity)
         {
             EntityDataWindow.OpenPopupWindow(entity);
         }

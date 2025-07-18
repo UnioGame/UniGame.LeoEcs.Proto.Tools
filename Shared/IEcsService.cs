@@ -1,6 +1,8 @@
 namespace UniGame.LeoEcs.Bootstrap
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
     using GameFlow.Runtime;
     using Leopotam.EcsProto;
     using Proto.Shared;
@@ -18,5 +20,9 @@ namespace UniGame.LeoEcs.Bootstrap
         
         bool SetDefaultWorld(string worldId);
 
+        UniTask<ProtoWorld> GetWorldAsync(string worldId, bool createIfNotExists = false,
+            CancellationToken cancellationToken = default);
+
+        UniTask<EcsWorldData> CreateWorldAsync(string worldId);
     }
 }
