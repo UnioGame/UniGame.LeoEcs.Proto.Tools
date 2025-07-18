@@ -24,5 +24,9 @@ namespace UniGame.LeoEcs.Bootstrap
             CancellationToken cancellationToken = default);
 
         UniTask<EcsWorldData> CreateWorldAsync(string worldId);
+
+        void DestroyWorld(ProtoWorld world);
+        
+        void DestroyWorld(string worldId);
     }
 }

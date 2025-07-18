@@ -65,8 +65,6 @@ using Sirenix.OdinInspector;
 
             //start ecs service update
             await ecsService.CreateWorldAsync(string.Empty);
-            ecsService.Execute();
-            
             var world = ecsService.DefaultWorld.CurrentValue;
             
             context.Publish(world);

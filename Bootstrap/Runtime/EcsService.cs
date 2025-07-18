@@ -148,8 +148,94 @@
             GameLog.Log($"Ecs World [{worldId}] Initialized");
             
             worldData.IsInitialized = true;
+
+            Execute(worldId);
             
             return worldData;
+        }
+
+        public bool Execute(string worldId = null)
+        {
+            if(string.IsNullOrEmpty(worldId))
+                worldId = _defaultWorldData.Value.Id;
+            
+            if (!_serviceWorlds.TryGetValue(worldId, out var serviceWorld))
+                return false;
+            
+            var worldData = serviceWorld.WorldData;
+            var world = worldData.World;
+            var executors = worldData.Executors;
+            var systemsMap = worldData.SystemsMap;
+
+            if (executors.Count > 0)
+            {
+                foreach (var executor in executors)
+                    executor.Value.Execute(world);
+                return true;
+            }
+            
+            foreach (var (updateType, systems) in systemsMap)
+            {
+                if (!executors.TryGetValue(updateType, out var executor))
+                {
+                    executor = _ecsExecutorFactory.Create(updateType);
+                    executors[updateType] = executor;
+                }
+
+                executor.Execute(world);
+                executor.Add(systems);
+            }
+
+            ApplyPlugins(serviceWorld);
+            return true;
+        }
+
+        public void Pause(string worldId = null)
+        {
+            worldId ??= _defaultWorldData.Value.Id;
+            
+            if (!_worlds.TryGetValue(worldId, out var worldData))
+                return;
+            
+            var executors = worldData.Executors;
+            foreach (var systemsExecutor in executors.Values)
+                systemsExecutor.Stop();
+        }
+
+        public void DestroyWorld(ProtoWorld world)
+        {
+            if (world == World) return;
+            var worldId = _worlds
+                .FirstOrDefault(x => x.Value.World == world)
+                .Key;
+            if(string.IsNullOrEmpty(worldId)) return;
+            DestroyWorld(worldId);
+        }
+        
+        public void DestroyWorld(string worldId)
+        {
+            if (string.IsNullOrEmpty(worldId))
+                return;
+            
+            if (!_worlds.TryGetValue(worldId, out var worldData))
+                return;
+
+            worldData.Dispose();
+            _serviceWorlds.Remove(worldId);
+            _worlds.Remove(worldId);
+
+            GameLog.Log($"Ecs World [{worldId}] Destroyed");
+        }
+        
+        public void CleanUp()
+        {
+            foreach (var worldData in _worlds)
+            {
+                worldData.Value.Dispose();
+            }
+            
+            _serviceWorlds.Clear();
+            _worlds.Clear();
         }
 
         public bool SetDefaultWorld(string worldId)
@@ -244,64 +330,6 @@
             LogServiceTime("InitializeAsync", stopwatch);
 #endif
             
-        }
-
-        public bool Execute(string worldId = null)
-        {
-            worldId ??= _defaultWorldData.Value.Id;
-            
-            if (!_serviceWorlds.TryGetValue(worldId, out var serviceWorld))
-                return false;
-            
-            var worldData = serviceWorld.WorldData;
-            var world = worldData.World;
-            var executors = worldData.Executors;
-            var systemsMap = worldData.SystemsMap;
-
-            if (executors.Count > 0)
-            {
-                foreach (var executor in executors)
-                    executor.Value.Execute(world);
-                return true;
-            }
-            
-            foreach (var (updateType, systems) in systemsMap)
-            {
-                if (!executors.TryGetValue(updateType, out var executor))
-                {
-                    executor = _ecsExecutorFactory.Create(updateType);
-                    executors[updateType] = executor;
-                }
-
-                executor.Execute(world);
-                executor.Add(systems);
-            }
-
-            ApplyPlugins(serviceWorld);
-            return true;
-        }
-
-        public void Pause(string worldId = null)
-        {
-            worldId ??= _defaultWorldData.Value.Id;
-            
-            if (!_worlds.TryGetValue(worldId, out var worldData))
-                return;
-            
-            var executors = worldData.Executors;
-            foreach (var systemsExecutor in executors.Values)
-                systemsExecutor.Stop();
-        }
-
-        public void CleanUp()
-        {
-            foreach (var worldData in _worlds)
-            {
-                worldData.Value.Dispose();
-            }
-            
-            _serviceWorlds.Clear();
-            _worlds.Clear();
         }
 
         [Conditional("DEBUG")]
