@@ -53,7 +53,7 @@
             
             ecsSystems.Add(new ProcessKillRequestSystem());
             
-            ecsSystems.DelHere<KillRequest>();
+            ecsSystems.DelHere<KillSelfRequest>();
             ecsSystems.DelHere<ValidateDeadChildEntitiesRequest>();
             ecsSystems.DelHere<NewEntityComponent>();
             

@@ -27,7 +27,7 @@
         //requests
         public ProtoPool<ValidateDeadChildEntitiesRequest> ValidateDeadChild;
         public ProtoPool<DestroySelfRequest> DestroySelf;
-        public ProtoPool<KillRequest> Kill;
+        public ProtoPool<KillSelfRequest> Kill;
         
         //events
         public ProtoPool<DeadEvent> DeadEvent;

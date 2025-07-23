@@ -26,7 +26,7 @@
         private DestroyAspect _destroyAspect;
         
         private ProtoItExc _filter = It
-            .Chain<KillRequest>()
+            .Chain<KillSelfRequest>()
             .Exc<DestroyComponent>()
             .Exc<DontKillComponent>()
             .End();

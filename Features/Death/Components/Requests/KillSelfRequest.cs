@@ -14,7 +14,7 @@ namespace Game.Ecs.Core.Death.Components
 	[Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public struct KillRequest
+    public struct KillSelfRequest
     {
         public ProtoPackedEntity Source;
     }
