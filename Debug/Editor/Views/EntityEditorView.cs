@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Converter.Runtime;
+    using Converter.Runtime.Editor;
     using Core.Runtime.ObjectPool;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
@@ -23,6 +23,12 @@
         private static Color _buttonRedColor = new Color(0.8f, 0.4f, 0.6f);
         
         #endregion
+
+        public ProtoWorld world;
+
+        [LabelWidth(60)]
+        [HorizontalGroup()]
+        public string worldId;
 
         [LabelWidth(60)]
         [HorizontalGroup()]
@@ -53,9 +59,9 @@
         [InlineProperty]
         public List<ComponentEditorView> components = new List<ComponentEditorView>();
 
-        public ProtoWorld World => LeoEcsGlobalData.World;
+        public ProtoWorld World => world;
 
-        public bool IsAlive => World != null && World.IsAlive();
+        public bool IsAlive => world != null && world.IsAlive();
         
         public bool IsNameSameAsId => id.ToStringFromCache() == name;
         
@@ -123,7 +129,12 @@
         
         public void Show()
         {
-            EntityDataWindow.OpenPopupWindow(id);
+            EntityDataWindow.OpenPopupWindow(new EntityEditorData()
+            {
+                entity = (ProtoEntity)id,
+                world = world,
+                worldId = worldId,
+            });
         }
         
         public Color GetElementColor(int index, Color defaultColor)

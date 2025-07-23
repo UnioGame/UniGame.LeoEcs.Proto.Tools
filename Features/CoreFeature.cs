@@ -40,11 +40,6 @@
             ecsSystems.Add(new ProcessDeadSimpleEntitiesSystem());
             ecsSystems.Add(new ProcessDeadTransformEntitiesSystem());
             
-            //ecsSystems.Add(new DestroyInvalidChildEntitiesSystem());
-            //ecsSystems.Add(new ForceValidateDeadChildEntitiesSystem());
-            //ecsSystems.DelHere<OwnerDestroyedEvent>();
-            
-            //ecsSystems.Add(new CheckInvalidChildEntitiesSystem());
             ecsSystems.Add(new ProcessDespawnSystem());
             
             ecsSystems.DelHere<DeadEvent>();

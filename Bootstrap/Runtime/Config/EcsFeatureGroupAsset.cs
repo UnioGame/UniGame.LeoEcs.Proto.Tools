@@ -1,6 +1,5 @@
 ﻿namespace UniGame.Ecs.Bootstrap.Runtime.Config
 {
-    using System;
     using Cysharp.Threading.Tasks;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -10,7 +9,6 @@
     using Leopotam.EcsProto;
     using UniCore.Runtime.ProfilerTools;
     using UnityEngine;
-    using UnityEngine.Serialization;
 
 #if ODIN_INSPECTOR
     using Sirenix.OdinInspector;
@@ -103,20 +101,5 @@
                 string.IsNullOrEmpty(features.FeatureName))
                 features.name = name;
         }
-    }
-
-    [Serializable]
-    public class EcsPlugin
-    {
-        [FormerlySerializedAs("pluginName")]
-        public string name;
-        public bool enabled;
-        
-#if ODIN_INSPECTOR
-        [HideLabel]
-        [InlineProperty]
-#endif
-        [SerializeReference]
-        public IEcsServicePlugin plugin;
     }
 }

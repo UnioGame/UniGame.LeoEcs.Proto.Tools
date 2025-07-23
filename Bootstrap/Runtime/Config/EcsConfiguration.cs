@@ -4,11 +4,11 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     using Game.Ecs.Core;
     using LeoEcs.Bootstrap;
     using LeoEcs.Bootstrap.Runtime.PostInitialize;
+    using Leopotam.EcsProto;
     using UniGame.Runtime.Utils;
     using UnityEngine;
 
 #if UNITY_EDITOR
-    using Leopotam.EcsProto;
     using UnityEditor;
     using UniModules.Editor;
 #endif
@@ -24,6 +24,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
     [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = nameof(EcsConfiguration))]
     public class EcsConfiguration : ScriptableObject, IEcsSystemsConfig
     {
+        [Header("Worlds Configuration")]
 #if ODIN_INSPECTOR
        [FoldoutGroup("world config")]
 #endif
@@ -99,6 +100,8 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         public IReadOnlyList<EcsPlugin> Plugins => plugins;
 
         public IReadOnlyList<EcsConfigGroup> FeatureGroups => ecsUpdateGroups;
+
+        public IReadOnlyList<IEcsSystemsPluginProvider> SystemsPlugins => systemsPlugins;
 
 #if ODIN_INSPECTOR || TRI_INSPECTOR
         [Button]

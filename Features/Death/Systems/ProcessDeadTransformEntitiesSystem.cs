@@ -36,13 +36,15 @@
             
             foreach (var entity in _filter)
             {
+                var packedEntity = _world.PackEntity(entity);
                 ref var transformComponent = ref transformPool.Get(entity);
                 var transform = transformComponent.Value;
                 
                 if(transform && transform.gameObject)
                     Object.Destroy(transform.gameObject);
                 
-                _world.DelEntity(entity);
+                if(packedEntity.Unpack(_world,out var unpackedEntity))
+                    _world.DelEntity(entity);
             }
         }
     }

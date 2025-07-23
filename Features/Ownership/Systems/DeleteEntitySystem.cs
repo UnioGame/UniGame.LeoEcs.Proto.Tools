@@ -17,7 +17,7 @@
 #endif
     [Serializable]
     [ECSDI]
-    public class DeleteEntitySystem : IProtoInitSystem, IProtoRunSystem
+    public class DeleteEntitySystem : IProtoRunSystem
     {
         private ProtoWorld _world;
 
@@ -25,11 +25,6 @@
             .Chain<DeleteEntityNextComponent>()
             .Inc<PrepareToDeathComponent>()
             .End();
-
-        public void Init(IProtoSystems systems)
-        {
-            _world = systems.GetWorld();
-        }
 
         public void Run()
         {

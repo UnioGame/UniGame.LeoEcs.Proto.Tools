@@ -49,18 +49,20 @@
         #endregion
 
         private ProtoWorld _world;
+        private string _worldName;
         private HashSet<ProtoEntity> _uniqueEntities = new HashSet<ProtoEntity>();
         private EcsFilterData _cachedFilter = EcsFilterData.NoneFilterData;
         private EcsEditorFilter _filter = new EcsEditorFilter();
         private EditorEntityViewBuilder _viewBuilder = new EditorEntityViewBuilder();
 
-        public void Initialize(ProtoWorld world)
+        public void Initialize(ProtoWorld world,string worldName)
         {
             _world = world;
-
+            _worldName = worldName;
+            
             if (_world == null || !VerifyView()) return;
             
-            _viewBuilder.Initialize(_world);
+            _viewBuilder.Initialize(_world,worldName);
             
             IsInitialized = true;
         }
@@ -104,7 +106,7 @@
             
             foreach (var dataEntity in _uniqueEntities)
             {
-                var view = _viewBuilder.Create(dataEntity,_world);
+                var view = _viewBuilder.Create(dataEntity,_world,_worldName);
                 entities.Add(view);
             }
         }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Core.Runtime.ObjectPool;
+    using Leopotam.EcsProto;
     using Sirenix.OdinInspector;
 
     [Serializable]
@@ -19,6 +20,9 @@
     {
         public string name;
         public int id;
+        public ProtoWorld world;
+
+        public ProtoWorld World => world;
 
         public int Id => id;
 

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Leopotam.EcsLite;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
     using Shared.Components;
@@ -12,12 +11,14 @@
     public class GameObjectEntityBuilder : IEntityEditorViewBuilder
     {
         private ProtoWorld _world;
+        private string _worldName;
         private ProtoIt _gameObjectFilter;
         private ProtoPool<GameObjectComponent> _gameObjectPool;
 
-        public void Initialize(ProtoWorld world)
+        public void Initialize(ProtoWorld world,string worldName)
         {
             _world = world;
+            _worldName = worldName;
             _gameObjectFilter = world.Filter<GameObjectComponent>().End();
             _gameObjectPool = _world.GetPool<GameObjectComponent>();
         }

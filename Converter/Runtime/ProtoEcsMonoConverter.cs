@@ -8,6 +8,8 @@ namespace UniGame.LeoEcs.Converter.Runtime
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
+    using Proto.Shared;
     using Shared.Extensions;
     using UniGame.Runtime.DataFlow;
     using UnityEngine;
@@ -57,6 +59,27 @@ namespace UniGame.LeoEcs.Converter.Runtime
         [SerializeField] 
         public bool destroyOnDestroy = false;
         
+#if ODIN_INSPECTOR
+        [BoxGroup("converter settings")]
+#endif
+        public WorldType worldType = WorldType.DefaultWorld;
+        
+#if ODIN_INSPECTOR
+        [BoxGroup("converter settings")]
+        [ShowIf(nameof(IsCustomWorld))]
+#endif
+        [Tooltip("If true, create world if not exists")]
+        public bool createWorldIfNonExists = true;
+        
+#if ODIN_INSPECTOR
+        [BoxGroup("converter settings")]
+        [ShowIf(nameof(IsCustomWorld))]
+        [ValueDropdown(valuesGetter:nameof(GetWorlds),IsUniqueList = true,AppendNextDrawer = true)]
+#endif
+        public string worldId = string.Empty;
+        
+        
+        [Header("Converters")]
         [FormerlySerializedAs("_serializableConverters")]
 #if ODIN_INSPECTOR
         [Searchable(FilterOptions = SearchFilterOptions.ISearchFilterableInterface)]
@@ -114,6 +137,8 @@ namespace UniGame.LeoEcs.Converter.Runtime
         
 #endregion
 
+        public bool IsCustomWorld => worldType == WorldType.CustomWorld;
+
         public bool IsRuntime => Application.isPlaying;
 
         public bool IsAutoGenerating => createEntityOnEnabled || createEntityOnStart;
@@ -149,8 +174,8 @@ namespace UniGame.LeoEcs.Converter.Runtime
             
             if(_state != EntityState.Creating) return;
 
-            var world = LeoEcsGlobalData.World ?? 
-                        await gameObject.WaitWorldReady(_entityLifeTime.Token);
+            var world = await gameObject
+                .WaitWorldReady(worldId,worldType,createWorldIfNonExists,_entityLifeTime.Token);
 
             if (world.IsAlive() == false)   
             {
@@ -309,8 +334,10 @@ namespace UniGame.LeoEcs.Converter.Runtime
 
 #endregion
         
-#if UNITY_EDITOR
+        public IEnumerable<string> GetWorlds() => EcsWorldsAsset.GetCustomWorlds();
 
+#if UNITY_EDITOR
+        
         private void OnDrawGizmos()
         {
             foreach (var converter in serializableConverters)
@@ -351,7 +378,13 @@ namespace UniGame.LeoEcs.Converter.Runtime
 #endif
         public void ShowComponents()
         {
-            EntityEditorCommands.OpenEntityInfo((int)entity);
+            var debugEntityData = new EntityEditorData()
+            {
+                world = _world,
+                worldId = worldId,
+                entity = entity,
+            };
+            EntityEditorCommands.OpenEntityInfo(debugEntityData);
         }
 
 #endif

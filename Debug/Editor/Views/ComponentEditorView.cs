@@ -1,11 +1,8 @@
 ﻿namespace UniGame.LeoEcs.Debug.Editor
 {
     using System;
-    using System.Buffers;
-    using Converter.Runtime;
     using Core.Runtime.ObjectPool;
     using Leopotam.EcsProto;
-    using Runtime.ObjectPool.Extensions;
     using UniModules.Editor;
     using Runtime.ReflectionUtils;
     using UnityEngine;
@@ -28,6 +25,9 @@
         [HideInInspector]
         public ProtoEntity entity;
         
+        [HideInInspector]
+        public ProtoWorld world;
+        
         [HorizontalGroup(ComponentKey, 0.75f)]
         [BoxGroup(ComponentGroupValue,LabelText = BoxGroupLabel)]
         [InlineProperty]
@@ -40,9 +40,9 @@
         
         public string Label => value == null ? ComponentKey : value.GetType().GetFormattedName();
 
-        public ProtoWorld World => LeoEcsGlobalData.World;
+        public ProtoWorld World => world;
 
-        public bool IsAlive => World != null && World.IsAlive();
+        public bool IsAlive => world != null && world.IsAlive();
         
         [BoxGroup(ComponentGroupActions)]
         [Button(nameof(OpenScript),ButtonSizes.Small, Icon = SdfIconType.Folder2Open)]

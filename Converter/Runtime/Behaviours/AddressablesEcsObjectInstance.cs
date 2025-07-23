@@ -1,12 +1,10 @@
 namespace UniGame.LeoEcs.Behaviours
 {
-    using System;
     using System.Threading;
     using Cysharp.Threading.Tasks;
-    using UniGame.LeoEcs.Converter.Runtime;
+    using Proto;
     using UnityEngine;
     using UnityEngine.AddressableAssets;
-    using Object = UnityEngine.Object;
 
     public class AddressablesEcsObjectInstance : MonoBehaviour
     {
@@ -20,12 +18,12 @@ namespace UniGame.LeoEcs.Behaviours
     
         public async UniTask CreateInstance()
         {
-            await LeoEcsTool.WaitWorldReady(_source.Token);
+            await EcsTools.WaitWorldReady(_source.Token);
             
             var resource = await _gameObjectReference
                 .LoadAssetAsync<GameObject>()
                 .ToUniTask(cancellationToken:_source.Token);
-            Object.Instantiate(resource);
+            Instantiate(resource);
         }
     
         private void Start()

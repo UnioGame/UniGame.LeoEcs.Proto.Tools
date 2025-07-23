@@ -25,6 +25,7 @@
         private ProtoWorld _world;
 
         private OwnershipAspect _ownershipAspect;
+        private Stack<OwnerComponent> _ownerStack;
 
         private ProtoItExc _ownerFilter = It
             .Chain<PrepareToDeathComponent>()
@@ -34,6 +35,7 @@
         public void Init(IProtoSystems systems)
         {
             _world = systems.GetWorld();
+            _ownerStack = new Stack<OwnerComponent>();
         }
 
         public void Run()
@@ -53,21 +55,22 @@
 
                 ReleaseLifeTime(ownerEntity);
                 // WARNING: it is possible that entity was destroyed by game object converter! (destroy on disable)
+                
                 _ownershipAspect.DeleteEntity.GetOrAdd(ownerEntity);
+                
                 OwnerComponent ownerComponent = default;
                 if (!TryGetOwnerComponent(ownerEntity, ref ownerComponent))
                 {
                     continue;
                 }
                 
-                var killStack = new Stack<OwnerComponent>();
-                killStack.Push(ownerComponent);
-                while (killStack.TryPop(out ownerComponent))
+                _ownerStack.Clear();
+                _ownerStack.Push(ownerComponent);
+                
+                while (_ownerStack.TryPop(out ownerComponent))
                 {
                     if (!ownerComponent.Children.IsCreated)
-                    {
                         continue;
-                    }
                     
                     foreach (var child in ownerComponent.Children)
                     {
@@ -78,10 +81,9 @@
 
                         ReleaseLifeTime(unpackedChild);
                         _ownershipAspect.PrepareToDeath.GetOrAdd(unpackedChild);
+                        
                         if (TryGetOwnerComponent(unpackedChild, ref ownerComponent))
-                        {
-                            killStack.Push(ownerComponent);
-                        }
+                            _ownerStack.Push(ownerComponent);
                     }
                 }
                 

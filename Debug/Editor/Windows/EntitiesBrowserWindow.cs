@@ -2,9 +2,10 @@ using UnityEditor;
 
 namespace UniGame.LeoEcs.Debug.Editor
 {
-    using Converter.Runtime;
+    using System.Collections.Generic;
     using Leopotam.EcsProto;
     using Leopotam.EcsProto.QoL;
+    using Proto;
     using Runtime.ObjectPool;
     using Sirenix.OdinInspector;
     using Sirenix.OdinInspector.Editor;
@@ -45,12 +46,18 @@ namespace UniGame.LeoEcs.Debug.Editor
         #region inspector
         
         [InlineButton(nameof(UpdateFilter),
-            nameof(search),
-            Icon = SdfIconType.Search)]
+            nameof(search), Icon = SdfIconType.Search)]
         [HideLabel]
         [EnableIf(nameof(HasProtoWorld))]
         public string search;
 
+        [Space(8)]
+        [HorizontalGroup()]
+        [LabelWidth(100)]
+        [LabelText("world :")]
+        [ValueDropdown(valuesGetter:nameof(GetWorlds),IsUniqueList = true,AppendNextDrawer = true)]
+        public string worldId = string.Empty;
+        
         [Space(8)]
         [HorizontalGroup()]
         [LabelWidth(60)]
@@ -74,7 +81,19 @@ namespace UniGame.LeoEcs.Debug.Editor
 
         public bool HasProtoWorld => World != null;
 
-        public ProtoWorld World => LeoEcsGlobalData.World;
+        public ProtoWorld World
+        {
+            get
+            {
+                if(LeoEcsGlobalData.Service == null) return null;
+                var service = LeoEcsGlobalData.Service;
+                var isDefault = string.IsNullOrEmpty(worldId);
+                if (isDefault) return service.DefaultWorld.CurrentValue?.World;
+                if (!service.Worlds.TryGetValue(worldId, out var worldData))
+                    return null;
+                return worldData.World;
+            }
+        }
         
         [PropertyOrder(-1)]
         [ResponsiveButtonGroup()]
@@ -83,7 +102,7 @@ namespace UniGame.LeoEcs.Debug.Editor
         public void Refresh()
         {
             view = new EntitiesEditorView();
-            view.Initialize(LeoEcsGlobalData.World);
+            view.Initialize(World,worldId);
             
             Clear();
             
@@ -93,7 +112,7 @@ namespace UniGame.LeoEcs.Debug.Editor
         public void UpdateFilter()
         {
             if(!EntitiesEditorView.IsInitialized)
-                view.Initialize(World);
+                view.Initialize(World,worldId);
             
             gridEditorView.items.Clear();
             
@@ -104,6 +123,16 @@ namespace UniGame.LeoEcs.Debug.Editor
             World.AliveEntities(Entities);
 
             totalEntities = Entities.Len();
+        }
+
+        public IEnumerable<string> GetWorlds()
+        {
+            var service = LeoEcsGlobalData.Service;
+            if(service == null) yield break;
+            foreach (var world in service.Worlds)
+            {
+                yield return world.Key;
+            }
         }
 
 
@@ -132,6 +161,7 @@ namespace UniGame.LeoEcs.Debug.Editor
                 var id = j;
                 var item = ClassPool.Spawn<EntityIdEditorView>();
                 item.id = id;
+                item.world = World;
                 item.name = testName.Substring(0,Random.Range(1,testName.Length));
                 items.Add(item);
             }

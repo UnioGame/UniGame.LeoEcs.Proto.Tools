@@ -1,14 +1,13 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap.Runtime
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Bootstrap;
     using Ecs.Bootstrap.Runtime.Config;
-    using Converter.Runtime;
     using Core.Runtime;
     using Cysharp.Threading.Tasks;
     using Context.Runtime;
+    using Proto;
+    using R3;
     using UnityEngine;
 
 #if ODIN_INSPECTOR
@@ -53,30 +52,29 @@ using Sirenix.OdinInspector;
 
         protected override async UniTask<IEcsService> CreateServiceInternalAsync(IContext context)
         {
-            LeoEcsGlobalData.World = null;
-
+            LeoEcsGlobalData.Service = null;
+            
             var config = Instantiate(features);
             _updateMapData = config.ecsUpdateMap;
             _runtimeConfiguration = config;
 
-            var plugins = config
-                .systemsPlugins
-                .Select(x => x.Create())
-                .ToList();
-            
             var ecsService = new EcsService(context,
                 config,
                 this, 
-                plugins,
                 featureTimeout);
 
-            var world = ecsService.World;
-            context.Publish(ecsService.World);
-            
             //start ecs service update
-            await ecsService.InitializeAsync();
-            ecsService.Execute();
-            ecsService.SetDefaultWorld(world);
+            await ecsService.CreateWorldAsync(string.Empty);
+            var world = ecsService.DefaultWorld.CurrentValue;
+            
+            context.Publish(world);
+            ecsService.DefaultWorld
+                .Subscribe(context,(x,y) =>
+                {
+                    y.Publish(x.World);
+                });
+            
+            LeoEcsGlobalData.Service = ecsService;
             
             context.LifeTime.AddDispose(ecsService);
             return ecsService;
