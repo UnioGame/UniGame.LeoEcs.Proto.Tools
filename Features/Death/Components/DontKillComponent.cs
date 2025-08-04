@@ -15,5 +15,6 @@
     [Serializable]
     public struct DontKillComponent
     {
+        public int blockers;
     }
 }
