@@ -23,6 +23,7 @@
     using UniGame.Runtime.DataFlow;
     using UniGame.Runtime.Rx;
     using UniGame.Runtime.Utils;
+    using UnityEngine;
 
     public class EcsService : GameService, IEcsService
     {
@@ -335,10 +336,13 @@
         [Conditional("DEBUG")]
         private void LogServiceTime(string message, Stopwatch timer, bool stop = true)
         {
+            if(_defaultConfig.UseFeaturesLoadingLog == false)
+                return;
+            
             var elapsed = timer.ElapsedMilliseconds;
             timer.Restart();
             if (stop) timer.Stop();
-            GameLog.Log($"ECS FEATURE SOURCE: LOAD {message} TIME = {elapsed} ms");
+            GameLog.Log($"ECS FEATURE: LOAD {message} TIME = {elapsed} ms",Color.cyan);
         }
 
         private async UniTask InitializeEcsService(EcsWorldData world,IEcsSystemsConfig config)
