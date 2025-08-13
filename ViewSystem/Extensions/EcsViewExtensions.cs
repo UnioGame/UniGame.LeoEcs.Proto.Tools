@@ -129,6 +129,19 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
             return MakeViewRequest(world, viewType.Name,ref target,ref target, layoutType, 
                 parent, tag, viewName, stayWorld);
         }
+
+        public static ProtoEntity MakeViewRequest<TView>(
+            this ProtoWorld world,
+            ProtoPackedEntity target,
+            ViewType layoutType = ViewType.None,
+            Transform parent = null,
+            string tag = null,
+            string viewName = null,
+            bool stayWorld = false)
+        {
+            return MakeViewRequest(world, typeof(TView),ref target,ref target, layoutType,
+                parent, tag, viewName, stayWorld);
+        }
         
         public static ProtoEntity MakeViewRequest(
             this ProtoWorld world,
@@ -154,6 +167,43 @@ namespace UniGame.LeoEcs.ViewSystem.Extensions
             bool stayWorld = false)
         {
             return world.MakeViewInContainerRequest(typeof(TView).Name, useBusyContainer, owner, tag, viewName, stayWorld);
+        }
+
+        public static ProtoEntity MakeViewInContainerRequest<TView>(
+            this ProtoWorld world,
+            bool useBusyContainer = false,
+            ProtoPackedEntity target = default,
+            ProtoPackedEntity owner = default,
+            string tag = null,
+            string viewName = null,
+            bool stayWorld = false)
+        {
+            return world.MakeViewInContainerRequest(typeof(TView).Name, useBusyContainer, target, owner, tag, viewName, stayWorld);
+        }
+
+        public static ProtoEntity MakeViewInContainerRequest(
+            this ProtoWorld world,
+            string view,
+            bool useBusyContainer = false,
+            ProtoPackedEntity target = default,
+            ProtoPackedEntity owner = default,
+            string tag = null,
+            string viewName = null,
+            bool stayWorld = false)
+        {
+            target.Unpack(world, out var entity);
+
+            ref var component = ref world
+                .GetOrAddComponent<CreateViewInContainerRequest>(entity);
+
+            component.Tag = tag;
+            component.View = view;
+            component.ViewName = viewName;
+            component.StayWorld = stayWorld;
+            component.UseBusyContainer = useBusyContainer;
+            component.Owner = owner;
+
+            return entity;
         }
         
         public static ProtoEntity MakeViewInContainerRequest(
