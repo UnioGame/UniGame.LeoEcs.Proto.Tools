@@ -37,6 +37,9 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [Tooltip("If true, enable ECS Proto Unity module")]
         public bool enableUnityModule = true;
         
+        [Tooltip("if true, use features loading log in the console")]
+        public bool useFeaturesLoadingLog = true;
+        
         [Space(8)]
         [SerializeField]
 #if ODIN_INSPECTOR
@@ -92,11 +95,14 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         public List<IEcsSystemsPluginProvider> systemsPlugins = new();
 
 
+
         public bool EnableUnityModules => enableUnityModule;
         public WorldConfiguration WorldConfiguration => worldConfiguration;
 
         public AspectsData AspectsData => aspectsData;
-        
+
+        public bool UseFeaturesLoadingLog => useFeaturesLoadingLog;
+
         public IReadOnlyList<EcsPlugin> Plugins => plugins;
 
         public IReadOnlyList<EcsConfigGroup> FeatureGroups => ecsUpdateGroups;

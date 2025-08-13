@@ -3,7 +3,9 @@
     using System;
     using Components;
     using Leopotam.EcsProto;
+    using Leopotam.EcsProto.QoL;
     using UniGame.LeoEcs.Bootstrap;
+    using UniGame.LeoEcs.Shared.Extensions;
 
     /// <summary>
     /// destroy entity aspect
@@ -33,5 +35,26 @@
         public ProtoPool<DeadEvent> DeadEvent;
         public ProtoPool<DisabledEvent> DisabledEvent;
         public ProtoPool<KillEvent> KillEvent;
+
+        public void BlockDeath(ProtoPackedEntity entity)
+        {
+            entity.TryUnpack(world, out var unpackedEntity);
+
+            if (!DontKill.Has(unpackedEntity))
+                DontKill.Add(unpackedEntity);
+            
+            ref var dontKillComponent = ref DontKill.Get(unpackedEntity);
+            
+            dontKillComponent.blockers++;
+        }
+
+        public void UnblockDeath(ProtoPackedEntity entity)
+        {
+            entity.TryUnpack(world, out var unpackedEntity);
+            
+            ref var dontKillComponent = ref DontKill.Get(unpackedEntity);
+            
+            dontKillComponent.blockers--;
+        }
     }
 }

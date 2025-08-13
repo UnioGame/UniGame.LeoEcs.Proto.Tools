@@ -46,6 +46,7 @@
             ecsSystems.DelHere<DisabledEvent>();
             ecsSystems.DelHere<KillEvent>();
             
+            ecsSystems.Add(new ProcessBlockDeathSystem());
             ecsSystems.Add(new ProcessKillRequestSystem());
             
             ecsSystems.DelHere<KillSelfRequest>();
