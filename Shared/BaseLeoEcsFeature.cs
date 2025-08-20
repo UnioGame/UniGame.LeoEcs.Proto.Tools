@@ -19,7 +19,7 @@ namespace UniGame.LeoEcs.Bootstrap.Runtime
     using UniModules.Editor;
 #endif
     
-    public class BaseLeoEcsFeature : ScriptableObject, ILeoEcsFeature
+    public class BaseLeoEcsFeature : ScriptableObject, IEcsFeature
     {
         public const string DefaultFeatureName = "EMPTY Feature";
         

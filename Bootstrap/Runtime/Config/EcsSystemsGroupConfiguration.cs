@@ -67,7 +67,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [Searchable]
 #endif
         [SerializeReference]
-        public List<ILeoEcsFeature> serializableFeatures = new();
+        public List<IEcsFeature> serializableFeatures = new();
 
         
         public string FeatureName => name;

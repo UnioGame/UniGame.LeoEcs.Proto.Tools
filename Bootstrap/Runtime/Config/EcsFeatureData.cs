@@ -18,7 +18,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
 #endif
     
     [Serializable]
-    public class EcsFeatureData : ILeoEcsFeature
+    public class EcsFeatureData : IEcsFeature
     {
 #if ODIN_INSPECTOR
         [FoldoutGroup("$"+nameof(FeatureName))]
@@ -38,7 +38,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         [HideLabel]
         [ShowIf(nameof(UseSerializedGroup))]
 #endif
-        public ILeoEcsFeature featureGroup = null;
+        public IEcsFeature featureGroup = null;
 
         public string FeatureName => Feature is null or EmptyFeature
             ? EmptyFeature.EcsEmptyFeatureName 
@@ -52,7 +52,7 @@ namespace UniGame.Ecs.Bootstrap.Runtime.Config
         public bool UseAssetGroup => featureGroupAsset != null || 
                                      (featureGroupAsset == null && IsEmptySerializedEmpty);
 
-        public ILeoEcsFeature Feature => UseAssetGroup 
+        public IEcsFeature Feature => UseAssetGroup 
             ? featureGroupAsset
             : featureGroup ;
 

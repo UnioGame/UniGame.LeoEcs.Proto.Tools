@@ -7,7 +7,7 @@
     using Leopotam.EcsProto;
 
     [Serializable]
-    public abstract class LeoEcsSystemAsyncFeature : IEcsSystem, ILeoEcsFeature
+    public abstract class LeoEcsSystemAsyncFeature : IEcsSystem, IEcsFeature
     {
         public bool enabled = true;
         public string featureName = string.Empty;

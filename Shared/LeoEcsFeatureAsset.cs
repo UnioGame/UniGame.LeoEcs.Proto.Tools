@@ -12,7 +12,7 @@
 #endif
 
     [CreateAssetMenu(menuName = "ECS Proto/ECS Features Configuration", fileName = "Ecs Feature Asset")]
-    public class LeoEcsFeatureAsset : BaseLeoEcsFeature , ILeoEcsFeature
+    public class LeoEcsFeatureAsset : BaseLeoEcsFeature , IEcsFeature
     {
         #region inspector
 
@@ -22,7 +22,7 @@
         public List<LeoEcsFeatureAsset> subFeatures = new List<LeoEcsFeatureAsset>();
 
         [SerializeReference]
-        public List<ILeoEcsFeature> serializableFeatures = new List<ILeoEcsFeature>();
+        public List<IEcsFeature> serializableFeatures = new List<IEcsFeature>();
 
         #endregion
 
@@ -78,7 +78,7 @@
     }
 
     public class LeoEcsFeatureAssetT<TFeature> : LeoEcsFeatureAsset
-        where TFeature : ILeoEcsFeature
+        where TFeature : IEcsFeature
     {
 #if ODIN_INSPECTOR
         [HideLabel]

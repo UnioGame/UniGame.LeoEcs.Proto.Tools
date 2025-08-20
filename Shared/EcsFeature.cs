@@ -6,7 +6,7 @@
     using Leopotam.EcsProto;
 
     [Serializable]
-    public abstract class EcsFeature : ILeoEcsFeature
+    public abstract class EcsFeature : IEcsFeature
     {
         public string name;
         public bool isEnabled = true;

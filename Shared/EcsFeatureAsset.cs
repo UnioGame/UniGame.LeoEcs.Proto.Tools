@@ -5,7 +5,7 @@
     using Leopotam.EcsProto;
 
     public class EcsFeatureAsset<TFeature> : BaseLeoEcsFeature
-        where TFeature : ILeoEcsFeature, new()
+        where TFeature : IEcsFeature, new()
     {
         public TFeature feature = new TFeature();
         

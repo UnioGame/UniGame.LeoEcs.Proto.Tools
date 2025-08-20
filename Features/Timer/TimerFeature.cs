@@ -22,7 +22,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 #endif
     [Serializable]
-    public class TimerFeature : ILeoEcsFeature
+    public class TimerFeature : IEcsFeature
     {
         public bool enabled = true;
 

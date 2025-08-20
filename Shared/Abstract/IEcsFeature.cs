@@ -1,5 +1,6 @@
 ﻿namespace UniGame.LeoEcs.Bootstrap
 {
+    using UnityEngine.Scripting.APIUpdating;
 #if ODIN_INSPECTOR
     using Sirenix.OdinInspector;
 #endif
@@ -8,7 +9,8 @@
     using TriInspector;
 #endif
 
-    public interface ILeoEcsFeature : ILeoEcsInitializableFeature
+    [MovedFrom(true,sourceClassName:"ILeoEcsFeature")]
+    public interface IEcsFeature : IEcsInitializableFeature
 #if ODIN_INSPECTOR
         , ISearchFilterable
 #endif

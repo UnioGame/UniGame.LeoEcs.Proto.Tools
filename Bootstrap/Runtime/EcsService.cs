@@ -354,9 +354,9 @@
             await UniTask.WhenAll(groups);
         }
 
-        private List<ILeoEcsFeature> CollectFeatures(EcsConfigGroup ecsGroup)
+        private List<IEcsFeature> CollectFeatures(EcsConfigGroup ecsGroup)
         {
-            var features = new List<ILeoEcsFeature>();
+            var features = new List<IEcsFeature>();
             foreach (var feature in ecsGroup.features)
                 features.Add(feature.Feature);
             return features;
@@ -410,7 +410,7 @@
         private async UniTask CreateEcsGroup(
             string updateType,
             EcsWorldData worldData,
-            IReadOnlyList<ILeoEcsFeature> runnerFeatures)
+            IReadOnlyList<IEcsFeature> runnerFeatures)
         {
             var systemsMap = worldData.SystemsMap;
             var world = worldData.World;
@@ -427,7 +427,7 @@
             await UniTask.WhenAll(asyncFeatures);
         }
 
-        public async UniTask InitializeFeatureAsync(IProtoSystems ecsSystems, ILeoEcsFeature feature)
+        public async UniTask InitializeFeatureAsync(IProtoSystems ecsSystems, IEcsFeature feature)
         {
             if (!feature.IsFeatureEnabled) return;
 
@@ -436,7 +436,7 @@
             timer.Restart();
 #endif
 
-            if (feature is ILeoEcsInitializableFeature initializeFeature)
+            if (feature is IEcsInitializableFeature initializeFeature)
             {
                 var featureLifeTime = new LifeTime();
 
@@ -466,7 +466,7 @@
                 }
 
                 var featureLifeTime = new LifeTime();
-                if (leoEcsSystem is ILeoEcsInitializableFeature initFeature)
+                if (leoEcsSystem is IEcsInitializableFeature initFeature)
                 {
 #if DEBUG
                     timer.Restart();
@@ -486,9 +486,9 @@
             }
         }
 
-        private string GetErrorMessage(ILeoEcsInitializableFeature feature)
+        private string GetErrorMessage(IEcsInitializableFeature feature)
         {
-            var featureName = feature is ILeoEcsFeature ecsFeature
+            var featureName = feature is IEcsFeature ecsFeature
                 ? ecsFeature.FeatureName
                 : feature.GetType().Name;
 

@@ -2,7 +2,7 @@
 {
     using Bootstrap;
 
-    public interface IAutoInitFeature : ILeoEcsFeature
+    public interface IAutoInitFeature : IEcsFeature
     {
         
     }

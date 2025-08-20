@@ -2,8 +2,10 @@
 {
     using Cysharp.Threading.Tasks;
     using Leopotam.EcsProto;
+    using UnityEngine.Scripting.APIUpdating;
 
-    public interface ILeoEcsInitializableFeature
+    [MovedFrom(true,sourceClassName:"ILeoEcsInitializableFeature")]
+    public interface IEcsInitializableFeature
     {
         UniTask InitializeAsync(IProtoSystems ecsSystems);
     }
