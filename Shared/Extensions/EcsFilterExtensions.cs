@@ -16,6 +16,15 @@
             return new FirstEntity(){Entity = InvalidEntity, Found = false};
         }
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static FirstEntity  First(this ProtoItExc filter)
+        {
+            foreach (var entity in filter)
+                return new FirstEntity(){Entity = entity, Found = true};
+
+            return new FirstEntity(){Entity = InvalidEntity, Found = false};
+        }
+        
         public struct FirstEntity
         {
             public bool Found;
